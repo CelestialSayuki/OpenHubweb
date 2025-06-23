@@ -459,10 +459,6 @@
         <li><span><b>其他参数：</b></span></li>
         <li><span>iPhone 摄像头：收集了 iPhone 的摄像头型号、镜头参数、CIS 参数、防抖等信息。</span></li>
         <li><span>电池详细信息：收集了电池的电芯能量、电池能量、标称电压、额定容量、充电限制电压、电芯规格等信息。</span></li>
-        <li><span><b>测试对比：</b></span></li>
-        <li><span>iOS 程序崩溃对比：通过 iOS Memory Budget Test，让系统分配尽可能多的内存以达到 App 崩溃，从而记录发生崩溃所需要的内存大小。</span></li>
-        <li><span>CPU 频率测试：通过性能计数器对 CPU 最大频率进行测试，得出每个 CPU 最大频率与每核加载线程数最大 MHz。</span></li>
-        <li><span>DFVS 频率电压表：收集了芯片在运行时其频率及电压的对应关系。</span></li>
         <li><span><b>苹果工具：</b></span></li>
         <li><span>系统兼容情况：收集了 Apple 设备支持的操作系统信息，系统包括 iOS、iPadOS、macOS、watchOS、tvOS、visionOS。</span></li>
         <li><span>系统发布历史汇总：收集了操作系统的历史版本发布信息，系统包括 iOS、iPadOS、macOS、watchOS、tvOS、visionOS。</span></li>
@@ -478,6 +474,8 @@
         <li><span>Disk 读写性能：收集了 Apple 各设备的磁盘各项性能数值，包括顺序读写速度性能、随机测试存储器的 4k (Q1T1) 性能。</span></li>
         <li><span>充电峰值功耗：收集了苹果设备在有线充电或无线充电时充电头输出的峰值充电功率。</span></li>
         <li><span>随机访问延迟：展示了内存读写的性能，通过测量不同数据块的操作时间计算平均延迟。</span></li>
+        <li><span>内存占用限制：通过 iOS Memory Budget Test，让系统分配尽可能多的内存以达到 App 崩溃，从而记录发生崩溃所需要的内存大小。</span></li>
+        <li><span>DFVS 频率电压表：收集了芯片在运行时其频率及电压的对应关系。</span></li>
         <li><span><b>壁纸中心：</b></span></li>
         <li><span>收集了包括节日、零售店开业以及各类活动的壁纸、动画、增强现实模型等供您欣赏，可免费下载。</span></li>
         <li><span><b>参数解读：</b></span></li>
