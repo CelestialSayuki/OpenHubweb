@@ -1,0 +1,71 @@
+body {
+  font-family: SF Pro SC,SF Pro Text,SF Pro Icons,PingFang SC,Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+h4{color: #7a7a7a;}
+table {
+    table-layout:fixed;
+    font-size: 12px;
+    min-width: 500px;
+}
+table th{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+table td{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+table img{
+    float: left;
+    margin: 0 3px;
+    width: 30px;
+    height: 30px;
+    border-width: 1px;
+    border-radius:8px;
+    border-style: solid;
+    border-color: #eeeeee;
+}
+span{
+    font-size: 12px;
+}
+.a_dashang{
+    color:#7a7a7a;
+    text-decoration:none;
+}
+.span12 table tbody tr td a{font-size: 12px;color: rgb(34, 34, 34);}
+.round_img{
+    border-radius:16px;
+}
+.img_null{
+    font-size: 14px;
+    text-align: center;
+    line-height: 28px;
+    color: #525252;
+    float: left;
+    margin: 0 3px;
+    width: 30px;
+    height: 30px;
+    border-width: 1px;
+    border-radius:8px;
+    border-style: solid;
+    border-color: #eeeeee;
+}
+.img_null_other{
+    font-size: 10px;
+    text-align: center;
+    line-height: 28px;
+    float: left;
+    margin: 0 3px;
+    width: 42px;
+    height: 30px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #e6e6e6;
+    border-radius:7px;
+}
+.img_null_other_g{
+    background-color: #e6e6e6;
+}z

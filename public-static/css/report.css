@@ -1,0 +1,12 @@
+.retext{
+  text-align:center;
+  height:12px;
+  font-size:12px;
+  font-family: SF Pro SC,SF Pro Text,SF Pro Icons,PingFang SC,Helvetica Neue,Helvetica,Arial,sans-serif;
+  color: rgb(172, 172, 172);
+  padding-bottom: 28px;
+}
+/* dark模式样式 */
+@media (prefers-color-scheme: dark) {
+  body{background-color: rgb(29, 29, 29);}
+} 

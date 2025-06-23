@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="height: 100%">
+<head>
+  <meta charset="utf-8">
+   <title>CPU 跑分报表｜ Apple 苹果产品参数中心</title> 
+    <meta name='description' content="本站收集了 Apple 苹果公司的各产品信息，通过点击图片选中产品进行参数对比，让您更了解自己手上的产品信息。 ">
+    <meta name='keywords' content="Apple苹果产品参数中心,Apple Silicon,iPad Pro,iPad Air,iPad Mini,iPad,iPhone,airpods,silicon">
+    <link rel="stylesheet" type="text/css" href="./../../public-static/css/report.css" /> 
+    <link rel="stylesheet" href="../../public-static/css/style-min.css?54183">
+    <style type="text/css">
+      div{
+        max-width: 1500px;
+        margin: 0 auto;
+      }
+      hr{
+        max-width: 1500px;
+      }
+      .width_float{
+        width: 100%;
+        /*float: left;*/
+      }
+    </style>
+</head>
+
+<body style="margin: 20px;min-width: 650px;" id="mainLayout">
+  <div style="max-width: 1500px;margin: 0 auto;">
+    <div class="width_float" id="GeekBench6_iphone" style="height:270px;"></div>
+    <div class="retext width_float">iPhone</div>
+    <div class="width_float" id="GeekBench6_ipad" style="height:380px;"></div>
+    <div class="retext width_float">iPad</div>
+    <div class="width_float" id="GeekBench6_mac" style="height:570px;"></div>
+    <div class="retext width_float" style="width: 50%;">Mac</div>
+    <hr style="color: rgba(237, 237, 237, 0.3);" size="1">
+  </div>
+
+  <div style="max-width: 1500px;margin: 0 auto;">
+    <div class="width_float" id="CineBench_mac" style="height:520px;"></div>
+    <div class="retext width_float">Mac</div>
+    <hr style="color: rgba(237, 237, 237, 0.3);" size="1">
+  </div>
+
+  <div style="max-width: 1500px;margin: 0 auto;">
+    <div class="width_float" id="Xcode_mac" style="height:520px;"></div>
+    <div class="retext width_float">Mac</div>
+    <hr style="color: rgba(237, 237, 237, 0.3);" size="1">
+  </div>
+
+  <div style="max-width: 1570px;margin: 0 auto;">
+    <div class="width_float" id="SPEC_2017_m_p_int" style="height:770px;width: 34%;float: left;"></div>
+    <div class="width_float" id="SPEC_2017_a_p_int" style="height:770px;width: 33%;float: left;"></div>
+    <div class="width_float" id="SPEC_2017_a_e_int" style="height:770px;width: 33%;float: left;"></div>
+    <div class="retext width_float" style="float: left;">左：M 芯片 P-Core 跑分数据，中：A 芯片 P-Core 跑分数据，右：A 芯片 E-Core 跑分数据。</div>
+    <hr style="color: rgba(237, 237, 237, 0.3);" size="1">
+  </div>
+
+  <!--<div style="max-width: 1500px;margin: 0 auto;">
+    <div class="width_float" id="CPU_Full_Random_Latency" style="height: 750px;"></div>
+  </div>-->
+
+  <!--<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>-->
+  <script type="text/javascript" src="../echarts.min.js"></script>
+  <script type="text/javascript"> //GeekBench6_iphone
+    var dom = document.getElementById('GeekBench6_iphone');
+    if (window.matchMedia("(prefers-color-scheme: light)").matches) {var myChart = echarts.init(dom, 'light');} else {var myChart = echarts.init(dom, 'dark');}
+    var myChart = echarts.init(dom, null, {renderer: 'svg',useDirtyRect: false});var app = {};var option;
+    option = {
+      backgroundColor: 'transparent',
+      color:["#4fa3bf","#87c7dc"],
+      title: {text: 'GeekBench 6 性能跑分',subtext: '软件版本 6.4.0 / 系统版本 iOS 18.4+, iPadOS 18.4+, macOS 15.4+ / 图表数据为设备性能巅峰表现 / 更新日期 2025.06.11'},
+      tooltip: {trigger: 'axis',axisPointer: {type: 'shadow'}},
+      legend: {bottom:30,right:0,type:'scroll',orient:'vertical',textStyle:{fontSize:11},selected: {
+            'CPU 单核': true,'CPU 多核': true
+        }},
+      grid: {left: '3%',right: '4%',bottom: '10',containLabel: true},
+      xAxis: {type: 'value',boundaryGap: [0, 0],axisLabel:{textStyle:{fontSize:"11"}}},
+      yAxis: {
+        type: 'category',scale: false,
+        data: [
+          '(2P+4E) A12 Bionic','(2P+4E) A13 Bionic','(2P+4E) A14 Bionic','(2P+4E) A15 Bionic','(2P+4E) A16 Bionic','(2P+4E) A17 Pro','(2P+4E) A18','(2P+4E) A18 Pro',          ],
+        axisLabel:{textStyle:{fontSize:"11"}}
+      },
+      series: [
+        {
+          name: 'CPU 单核',type: 'bar',z: 2,barGap: "-100%",
+          data: [
+            '1345','1780','2202','2495','2719','3042','3567','3658',            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 11,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'CPU 多核',type: 'bar',z: 1,
+          data: [
+            '3142','4340','5513','6433','7301','7949','9165','9518',            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 11,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+      ]
+    };
+    if (option && typeof option === 'object') {myChart.setOption(option);}
+    window.addEventListener('resize', myChart.resize);
+  </script>
+
+  <script type="text/javascript"> //GeekBench6_ipad
+    var dom = document.getElementById('GeekBench6_ipad');
+    if (window.matchMedia("(prefers-color-scheme: light)").matches) {var myChart_gb_ipad = echarts.init(dom, 'light');} else {var myChart_gb_ipad = echarts.init(dom, 'dark');}
+    var myChart_gb_ipad = echarts.init(dom, null, {renderer: 'svg',useDirtyRect: false});var app = {};var option_gb_ipad;
+    option_gb_ipad = {
+      backgroundColor: 'transparent',
+      color:["#4fa3bf","#87c7dc"],
+      //color:["#85c2d6","#5470C6"],
+      tooltip: {trigger: 'axis',axisPointer: {type: 'shadow'}},
+      legend: {bottom:30,right:0,type:'scroll',orient:'vertical',textStyle:{fontSize:11}},
+      grid: {top:'0%',left: '3%',right: '4%',bottom: '10',containLabel: true},
+      xAxis: {type: 'value',boundaryGap: [0, 0],axisLabel:{textStyle:{fontSize:"11"}}},
+      yAxis: {
+        type: 'category',
+        data: [
+          '(2P+2E) A10 Fusion','(2P+4E) A12 Bionic','(2P+4E) A13 Bionic','(4P+4E) A12X Bionic','(4P+4E) A12Z Bionic','(2P+4E) A14 Bionic','(2P+4E) A15 Bionic','(2P+3E) A16 Bionic','(2P+4E) A17 Pro','(Vision Pro, 4P+4E) M2','(4P+4E) M1','(4P+4E) M2','(4P+4E) M3','(3P+6E) M4','(4P+6E) M4',          ],
+        axisLabel:{textStyle:{fontSize:"11"}}
+      },
+      series: [
+        {
+          name: 'CPU 单核',type: 'bar',z: 2,barGap: "-100%",
+          data: [
+            '894','1355','1802','1347','1351','2135','2200','2627','3041','2486','2453','2720','3242','3982','4004',            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 11,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'CPU 多核',type: 'bar',z: 1,
+          data: [
+            '1498','3183','4227','4788','4801','5270','5833','6377','7805','8205','8668','10270','12071','13577','15032',            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 11,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        }
+      ]
+    };
+    if (option && typeof option === 'object') {myChart.setOption(option);}
+
+    // Function to update chart based on selected legend
+    function updateChart_gb_ipad(selectedLegend) {
+      var seriesData = [];
+      if (selectedLegend === 'CPU 单核') {
+        seriesData = option_gb_ipad.series[0].data;
+      } else if (selectedLegend === 'CPU 多核') {
+        seriesData = option_gb_ipad.series[1].data;
+      }
+
+      // Sort categories based on the selected legend's data
+      var sortedIndices = seriesData
+        .map((value, index) => ({ value, index }))
+        .sort((a, b) => a.value - b.value) // Ensure descending order
+        .map(item => item.index);
+
+      var sortedCategories = sortedIndices.map(i => option_gb_ipad.yAxis.data[i]);
+      var sortedSeriesData1 = sortedIndices.map(i => option_gb_ipad.series[0].data[i]);
+      var sortedSeriesData2 = sortedIndices.map(i => option_gb_ipad.series[1].data[i]);
+
+      option_gb_ipad.yAxis.data = sortedCategories;
+      option_gb_ipad.series[0].data = sortedSeriesData1;
+      option_gb_ipad.series[1].data = sortedSeriesData2;
+
+      myChart_gb_ipad.setOption(option_gb_ipad);
+    }
+    // Listen for legend selection change
+    myChart_gb_ipad.on('legendselectchanged', function (params) {
+      var selected = params.selected;
+      // Update the legend state in the option
+      option_gb_ipad.legend.selected = selected;
+      // Determine which legend is active and update the chart accordingly
+      if (selected['CPU 单核'] && selected['CPU 多核']) {
+        // If both legends are selected, sort by 'CPU 多核'
+        updateChart_gb_ipad('CPU 多核');
+      } else if (!selected['CPU 单核'] && selected['CPU 多核']) {
+        // If only 'CPU 多核' is selected, sort by 'CPU 多核'
+        updateChart_gb_ipad('CPU 多核');
+      } else if (selected['CPU 单核']) {
+        // If only 'CPU 单核' is selected, sort by 'CPU 单核'
+        updateChart_gb_ipad('CPU 单核');
+      }
+    });
+    // Initial sorting by CPU 多核
+    updateChart_gb_ipad('CPU 多核');
+
+    window.addEventListener('resize', myChart_gb_ipad.resize);
+  </script>
+
+  <script type="text/javascript"> //GeekBench6_mac
+    var dom = document.getElementById('GeekBench6_mac');
+    if (window.matchMedia("(prefers-color-scheme: light)").matches) {var myChart_gb_mac = echarts.init(dom, 'light');} else {var myChart_gb_mac = echarts.init(dom, 'dark');}
+    var myChart_gb_mac = echarts.init(dom, null, {renderer: 'svg',useDirtyRect: false});var app = {};var option_gb_mac;
+    option_gb_mac = {
+      backgroundColor: 'transparent',
+      color:["#4fa3bf","#87c7dc"], //color:["#85c2d6","#5470C6"],
+      tooltip: {trigger: 'axis',axisPointer: {type: 'shadow'}},
+      legend: {bottom:30,right:0,type:'scroll',orient:'vertical',textStyle:{fontSize:11}},
+      grid: {top:'0%',left: '3%',right: '4%',bottom: '10',containLabel: true},
+      xAxis: {type: 'value',boundaryGap: [0, 0],axisLabel:{textStyle:{fontSize:"11"}}},
+      yAxis: {
+        type: 'category',
+        data: [
+          '(4P+4E) M1','(4P+4E) M2','(6P+2E) M1 Pro','(4P+4E) M3','(8P+2E) M1 Pro','(6P+4E) M2 Pro','(8P+2E) M1 Max','(4P+4E) M4','(5P+6E) M3 Pro','(8P+4E) M2 Pro','(4P+6E) M4','(8P+4E) M2 Max','(6P+6E) M3 Pro','(16P+4E) M1 Ultra','(10P+4E) M3 Max','(8P+4E) M4 Pro','(12P+4E) M3 Max','(16P+8E) M2 Ultra','(10P+4E) M4 Pro','(10P+4E) M4 Max','(12P+4E) M4 Max','(20P+8E) M3 Ultra','(24P+8E) M3 Ultra',          ],
+        axisLabel:{textStyle:{fontSize:"11"}}
+      },
+      series: [
+        {
+          name: 'CPU 单核',type: 'bar',z: 2,barGap: "-100%",
+          data: [
+            '2422','2709','2447','3216','2450','2724','2476','3832','3217','2725','3952','2887','3224','2460','3257','4004','3267','2885','4017','4089','4129','3259','3267',            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 11,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'CPU 多核',type: 'bar',z: 1,
+          data: [
+            '8896','10244','11047','12184','12960','13214','13263','13906','14602','15190','15291','15556','15942','19241','19696','21058','21835','22367','23552','24213','27093','27707','28693',            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 11,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        }
+      ]
+    };
+    if (option_gb_mac && typeof option_gb_mac === 'object') {myChart_gb_mac.setOption(option_gb_mac);}
+
+    // Function to update chart based on selected legend
+    function updateChart_gb_mac(selectedLegend) {
+      var seriesData = [];
+      if (selectedLegend === 'CPU 单核') {
+        seriesData = option_gb_mac.series[0].data;
+      } else if (selectedLegend === 'CPU 多核') {
+        seriesData = option_gb_mac.series[1].data;
+      }
+
+      // Sort categories based on the selected legend's data
+      var sortedIndices = seriesData
+        .map((value, index) => ({ value, index }))
+        .sort((a, b) => a.value - b.value) // Ensure descending order
+        .map(item => item.index);
+
+      var sortedCategories = sortedIndices.map(i => option_gb_mac.yAxis.data[i]);
+      var sortedSeriesData1 = sortedIndices.map(i => option_gb_mac.series[0].data[i]);
+      var sortedSeriesData2 = sortedIndices.map(i => option_gb_mac.series[1].data[i]);
+
+      option_gb_mac.yAxis.data = sortedCategories;
+      option_gb_mac.series[0].data = sortedSeriesData1;
+      option_gb_mac.series[1].data = sortedSeriesData2;
+
+      myChart_gb_mac.setOption(option_gb_mac);
+    }
+    // Listen for legend selection change
+    myChart_gb_mac.on('legendselectchanged', function (params) {
+      var selected = params.selected;
+      // Update the legend state in the option
+      option_gb_mac.legend.selected = selected;
+      // Determine which legend is active and update the chart accordingly
+      if (selected['CPU 单核'] && selected['CPU 多核']) {
+        // If both legends are selected, sort by 'CPU 多核'
+        updateChart_gb_mac('CPU 多核');
+      } else if (!selected['CPU 单核'] && selected['CPU 多核']) {
+        // If only 'CPU 多核' is selected, sort by 'CPU 多核'
+        updateChart_gb_mac('CPU 多核');
+      } else if (selected['CPU 单核']) {
+        // If only 'CPU 单核' is selected, sort by 'CPU 单核'
+        updateChart_gb_mac('CPU 单核');
+      }
+    });
+    // Initial sorting by CPU 多核
+    updateChart_gb_mac('CPU 多核');
+
+    window.addEventListener('resize', myChart_gb_mac.resize);
+  </script>
+
+  <script type="text/javascript"> //CineBench_mac
+    var dom = document.getElementById('CineBench_mac');
+    if (window.matchMedia("(prefers-color-scheme: light)").matches) {var myChart_cb = echarts.init(dom, 'light');} else {var myChart_cb = echarts.init(dom, 'dark');}
+    var myChart_cb = echarts.init(dom, null, {renderer: 'svg',useDirtyRect: false});var app = {};var option_cb;
+    option_cb = {
+      backgroundColor: 'transparent',
+      color:["#ab9df4","#f5c5a5"],
+      title: {text: 'CineBench 性能跑分',subtext: '软件版本 CineBench 2024 / CPU 渲染 / 单位: pts / 图表数据为设备性能巅峰表现 / 更新日期 2025.03.21'},
+      tooltip: {trigger: 'axis',axisPointer: {type: 'shadow'}},
+      legend: {bottom:30,right:0,type:'scroll',orient:'vertical',textStyle:{fontSize:11},selected: {
+            'CPU 单核': true,'CPU 多核': true
+        }},
+      grid: {left: '3%',right: '4%',bottom: '10',containLabel: true},
+      xAxis: {type: 'value',boundaryGap: [0, 0],axisLabel:{textStyle:{fontSize:"11"}}},
+      yAxis: {
+        type: 'category',scale: false,
+        data: [
+          '(20P+8E) M3 Ultra','(4P+4E) M1','(4P+4E) M2','(6P+2E) M1 Pro','(4P+4E) M3','(6P+4E) M2 Pro','(8P+2E) M1 Max','(8P+2E) M1 Pro','(5P+6E) M3 Pro','(4P+4E) M4','(4P+6E) M4','(8P+4E) M2 Pro','(8P+4E) M2 Max','(6P+6E) M3 Pro','(8P+4E) M4 Pro','(10P+4E) M3 Max','(16P+4E) M1 Ultra','(12P+4E) M3 Max','(10P+4E) M4 Max','(10P+4E) M4 Pro','(16P+8E) M2 Ultra','(12P+4E) M4 Max','(24P+8E) M3 Ultra',          ],
+        axisLabel:{textStyle:{fontSize:"11"}}
+      },
+      series: [
+        {
+          name: 'CPU 单核',type: 'bar',z: 2,barGap: "-100%",
+          data: [
+            '','113','125','112','148','120','114','113','141','173','185','122','128','144','185','148','114','150','185','187','131','192','151',            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 11,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'CPU 多核',type: 'bar',z: 1,
+          data: [
+            '','509','603','628','712','806','836','844','897','911','993','1018','1050','1055','1455','1476','1625','1708','1741','1779','1924','2107','3076',            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 11,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+      ]
+    };
+    if (option_cb && typeof option_cb === 'object') {myChart_cb.setOption(option_cb);}
+
+    // Function to update chart based on selected legend
+    function updateChart_cb(selectedLegend) {
+      var seriesData = [];
+      if (selectedLegend === 'CPU 单核') {
+        seriesData = option_cb.series[0].data;
+      } else if (selectedLegend === 'CPU 多核') {
+        seriesData = option_cb.series[1].data;
+      }
+
+      // Sort categories based on the selected legend's data
+      var sortedIndices = seriesData
+        .map((value, index) => ({ value, index }))
+        .sort((a, b) => a.value - b.value) // Ensure descending order
+        .map(item => item.index);
+
+      var sortedCategories = sortedIndices.map(i => option_cb.yAxis.data[i]);
+      var sortedSeriesData1 = sortedIndices.map(i => option_cb.series[0].data[i]);
+      var sortedSeriesData2 = sortedIndices.map(i => option_cb.series[1].data[i]);
+
+      option_cb.yAxis.data = sortedCategories;
+      option_cb.series[0].data = sortedSeriesData1;
+      option_cb.series[1].data = sortedSeriesData2;
+
+      myChart_cb.setOption(option_cb);
+    }
+    // Listen for legend selection change
+    myChart_cb.on('legendselectchanged', function (params) {
+      var selected = params.selected;
+      // Update the legend state in the option
+      option_cb.legend.selected = selected;
+      // Determine which legend is active and update the chart accordingly
+      if (selected['CPU 单核'] && selected['CPU 多核']) {
+        // If both legends are selected, sort by 'CPU 多核'
+        updateChart_cb('CPU 多核');
+      } else if (!selected['CPU 单核'] && selected['CPU 多核']) {
+        // If only 'CPU 多核' is selected, sort by 'CPU 多核'
+        updateChart_cb('CPU 多核');
+      } else if (selected['CPU 单核']) {
+        // If only 'CPU 单核' is selected, sort by 'CPU 单核'
+        updateChart_cb('CPU 单核');
+      }
+    });
+    // Initial sorting by CPU 多核
+    updateChart_cb('CPU 多核');
+
+    window.addEventListener('resize', myChart_cb.resize);
+  </script>
+
+  <script type="text/javascript"> //Xcode_mac
+    var dom = document.getElementById('Xcode_mac');
+    if (window.matchMedia("(prefers-color-scheme: light)").matches) {var myChart_xcode = echarts.init(dom, 'light');} else {var myChart_xcode = echarts.init(dom, 'dark');}
+    var myChart_xcode = echarts.init(dom, null, {renderer: 'svg',useDirtyRect: false});var app = {};var option_xcode;
+    option_xcode = {
+      backgroundColor: 'transparent',
+      color:["#53AEE8"],
+      title: {text: 'Xcode 基准测试',subtext: '软件版本 Xcode 16 / 编译项目: devMEremenko/XcodeBenchmark / 图表数据为芯片在 Xcode 16 的编译时间 / 更新日期 2025.04.02'},
+      tooltip: {trigger: 'axis',axisPointer: {type: 'shadow'}},
+      legend: {bottom:30,right:0,type:'scroll',orient:'vertical',textStyle:{fontSize:11},selected: {}},
+      grid: {left: '3%',right: '4%',bottom: '10',containLabel: true},
+      xAxis: {type: 'value',boundaryGap: [0, 0],axisLabel:{textStyle:{fontSize:"11"}}},
+      yAxis: {
+        type: 'category',scale: false,
+        data: [
+          '(8P+4E) M2 Pro','(4P+4E) M4','(4P+4E) M1','(6P+2E) M1 Pro','(4P+4E) M2','(8P+2E) M1 Pro','(4P+4E) M3','(8P+2E) M1 Max','(6P+4E) M2 Pro','(4P+6E) M4','(5P+6E) M3 Pro','(6P+6E) M3 Pro','(8P+4E) M2 Max','(10P+4E) M3 Max','(16P+4E) M1 Ultra','(8P+4E) M4 Pro','(10P+4E) M4 Max','(10P+4E) M4 Pro','(12P+4E) M3 Max','(16P+8E) M2 Ultra','(12P+4E) M4 Max','(20P+8E) M3 Ultra','(24P+8E) M3 Ultra',          ],
+        axisLabel:{textStyle:{fontSize:"11"}}
+      },
+      series: [
+        {
+          name: '编译时间 (秒)',type: 'bar',z: 2,barGap: "-100%",
+          data: [
+            '','','242.107','232.428','202','184','184','152','147','141','140','134','123.376','110','109','103','97','92.061','90','87','77.59','69','66',            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 11,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        }
+      ]
+    };
+    if (option_xcode && typeof option_xcode === 'object') {myChart_xcode.setOption(option_xcode);}
+    window.addEventListener('resize', myChart_xcode.resize);
+  </script>
+
+  <script type="text/javascript"> //SPEC_2017_m_p_int
+    var dom = document.getElementById('SPEC_2017_m_p_int');
+    if (window.matchMedia("(prefers-color-scheme: light)").matches) {var myChart = echarts.init(dom, 'light');} else {var myChart = echarts.init(dom, 'dark');}
+    var myChart = echarts.init(dom, null, {renderer: 'svg',useDirtyRect: false});
+    var app = {};
+    var option;
+    option = {
+      backgroundColor: 'transparent',
+      color:["#1E90FF","#00BFFF","#00CED1","#B0C4DE"],
+      title: {text: 'SPEC 2017 整数 Integer 性能跑分',subtext: '编译器 Apple Clang14 -Ofast / 更新日期 2025.02.20',},
+      tooltip: {trigger: 'axis',axisPointer: {type: 'shadow'}},
+      legend: {bottom:30,right:0,type:'scroll',orient:'vertical',textStyle:{fontSize:11},itemGap:4},
+      grid: {left: '3%',right: '4%',bottom: '10',containLabel: true},
+      xAxis: {
+        type: 'value',//('value''category''time''log')
+        boundaryGap: [0, 0.1],
+        axisLabel:{textStyle:{fontSize:"11"}}
+      },
+      yAxis: {
+        type: 'category',
+        scale: false,
+        data: [
+           '557.xz_r'
+          ,'548.exchange2_r'
+          ,'541.leela_r'
+          ,'531.deepsjeng_r'
+          ,'525.x264_r'
+          ,'523.xalancbmk_r'
+          ,'520.omnetpp_r'
+          ,'505.mcf_r'
+          ,'502.gcc_r'
+          ,'500.perlbench_r'
+          ],
+        axisLabel:{textStyle:{fontSize:"11"}}
+      },
+      series: [
+        {
+          name: 'M4 (P)',
+          type: 'bar',
+          data: [
+               5.7 //557.xz_r
+              ,17.23 //548.exchange2_r
+              ,8.77 //541.leela_r
+              ,9.1 //531.deepsjeng_r
+              ,22.27 //525.x264_r
+              ,13.35 //523.xalancbmk_r
+              ,9.15 //520.omnetpp_r
+              ,10.80 //505.mcf_r
+              ,17.91 //502.gcc_r
+              ,12.01 //500.perlbench_r
+            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 10,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'M3 (P)',
+          type: 'bar',
+          data: [
+               5.06 //557.xz_r
+              , //548.exchange2_r
+              ,7.68 //541.leela_r
+              ,7.65 //531.deepsjeng_r
+              ,18.32 //525.x264_r
+              ,11.06 //523.xalancbmk_r
+              ,7.8 //520.omnetpp_r
+              ,9.71 //505.mcf_r
+              ,15.29 //502.gcc_r
+              ,9.8 //500.perlbench_r
+            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 10,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'M2 (P)',
+          type: 'bar',
+          data: [
+               4.57 //557.xz_r
+              , //548.exchange2_r
+              ,6.16 //541.leela_r
+              ,6.45 //531.deepsjeng_r
+              ,15.45 //525.x264_r
+              ,9.63 //523.xalancbmk_r
+              ,6.95 //520.omnetpp_r
+              ,8.66 //505.mcf_r
+              ,13.54 //502.gcc_r
+              ,8.33 //500.perlbench_r
+            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 10,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'M1 (P)',
+          type: 'bar',
+          data: [
+               3.96 //557.xz_r
+              ,10.75 //548.exchange2_r
+              ,5.62 //541.leela_r
+              ,5.34 //531.deepsjeng_r
+              ,13.84 //525.x264_r
+              ,9.04 //523.xalancbmk_r
+              ,5.21 //520.omnetpp_r
+              ,7.75 //505.mcf_r
+              ,11.79 //502.gcc_r
+              ,7.82 //500.perlbench_r
+            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 10,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        }
+      ]
+    };
+    if (option && typeof option === 'object') {myChart.setOption(option);}
+    window.addEventListener('resize', myChart.resize);
+  </script>
+
+  <script type="text/javascript"> //SPEC_2017_a_p_int
+    var dom = document.getElementById('SPEC_2017_a_p_int');
+    if (window.matchMedia("(prefers-color-scheme: light)").matches) {var myChart = echarts.init(dom, 'light');} else {var myChart = echarts.init(dom, 'dark');}
+    var myChart = echarts.init(dom, null, {renderer: 'svg',useDirtyRect: false});
+    var app = {};
+    var option;
+    option = {
+      backgroundColor: 'transparent',
+      color:["#1E90FF","#00BFFF","#87CEEB","#00CED1","#B0C4DE"],
+      title: {},
+      tooltip: {trigger: 'axis',axisPointer: {type: 'shadow'}},
+      legend: {bottom:30,right:0,type:'scroll',orient:'vertical',textStyle:{fontSize:11},itemGap:4},
+      grid: {left: '3%',right: '4%',bottom: '10',containLabel: true},
+      xAxis: {
+        type: 'value',//('value''category''time''log')
+        boundaryGap: [0, 0.1],
+        axisLabel:{textStyle:{fontSize:"11"}}
+      },
+      yAxis: {
+        type: 'category',
+        scale: false,
+        data: [
+           '557.xz_r'
+          ,'548.exchange2_r'
+          ,'541.leela_r'
+          ,'531.deepsjeng_r'
+          ,'525.x264_r'
+          ,'523.xalancbmk_r'
+          ,'520.omnetpp_r'
+          ,'505.mcf_r'
+          ,'502.gcc_r'
+          ,'500.perlbench_r'
+          ],
+        axisLabel:{textStyle:{fontSize:"11"}}
+      },
+      series: [
+        {
+          name: 'A18 (P)',
+          type: 'bar',
+          data: [
+               5.43 //557.xz_r
+              ,15.89 //548.exchange2_r
+              ,7.93 //541.leela_r
+              ,8.27 //531.deepsjeng_r
+              ,19.85 //525.x264_r
+              ,12.05 //523.xalancbmk_r
+              ,8.97 //520.omnetpp_r
+              ,9.12 //505.mcf_r
+              ,15.99 //502.gcc_r
+              ,10.66 //500.perlbench_r
+            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 10,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'A17 (P)',
+          type: 'bar',
+          data: [
+               5.12 //557.xz_r
+              ,12.57 //548.exchange2_r
+              ,6.99 //541.leela_r
+              ,7.33 //531.deepsjeng_r
+              ,17.14 //525.x264_r
+              ,10.88 //523.xalancbmk_r
+              ,7.4 //520.omnetpp_r
+              ,8.92 //505.mcf_r
+              ,14.49 //502.gcc_r
+              ,9.3 //500.perlbench_r
+            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 10,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'A16 (P)',
+          type: 'bar',
+          data: [
+               4.63 //557.xz_r
+              ,11.88 //548.exchange2_r
+              ,6.14 //541.leela_r
+              ,6.43 //531.deepsjeng_r
+              ,14.83 //525.x264_r
+              ,10.12 //523.xalancbmk_r
+              ,7.05 //520.omnetpp_r
+              ,8.32 //505.mcf_r
+              ,13.38 //502.gcc_r
+              ,8.25 //500.perlbench_r
+            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 10,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'A15 (P)',
+          type: 'bar',
+          data: [
+               4.36 //557.xz_r
+              ,10.46 //548.exchange2_r
+              ,5.67 //541.leela_r
+              ,6 //531.deepsjeng_r
+              ,14.31 //525.x264_r
+              ,9.38 //523.xalancbmk_r
+              ,6.75 //520.omnetpp_r
+              ,7.39 //505.mcf_r
+              ,12.52 //502.gcc_r
+              ,7.53 //500.perlbench_r
+            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 10,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'A14 (P)',
+          type: 'bar',
+          data: [
+               3.78 //557.xz_r
+              ,10.04 //548.exchange2_r
+              ,5.3 //541.leela_r
+              ,5.07 //531.deepsjeng_r
+              ,13.21 //525.x264_r
+              ,8.27 //523.xalancbmk_r
+              ,4.88 //520.omnetpp_r
+              ,7.21 //505.mcf_r
+              ,11.1 //502.gcc_r
+              ,6.54 //500.perlbench_r
+            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 10,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'A12 (P)',
+          type: 'bar',
+          data: [
+               2.91 //557.xz_r
+              ,6.42 //548.exchange2_r
+              ,3.93 //541.leela_r
+              ,4.39 //531.deepsjeng_r
+              ,8.96 //525.x264_r
+              ,6.08 //523.xalancbmk_r
+              ,3.45 //520.omnetpp_r
+              ,5.58 //505.mcf_r
+              , //502.gcc_r
+              ,4.67 //500.perlbench_r
+            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 10,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        }
+      ]
+    };
+    if (option && typeof option === 'object') {myChart.setOption(option);}
+    window.addEventListener('resize', myChart.resize);
+  </script>
+
+  <script type="text/javascript"> //SPEC_2017_a_e_int
+    var dom = document.getElementById('SPEC_2017_a_e_int');
+    if (window.matchMedia("(prefers-color-scheme: light)").matches) {var myChart = echarts.init(dom, 'light');} else {var myChart = echarts.init(dom, 'dark');}
+    var myChart = echarts.init(dom, null, {renderer: 'svg',useDirtyRect: false});
+    var app = {};
+    var option;
+    option = {
+      backgroundColor: 'transparent',
+      color:["#00BFFF","#87CEEB","#00CED1","#B0C4DE"],
+      tooltip: {trigger: 'axis',axisPointer: {type: 'shadow'}},
+      legend: {bottom:30,right:0,type:'scroll',orient:'vertical',textStyle:{fontSize:11},itemGap:4},
+      grid: {left: '3%',right: '4%',bottom: '10',containLabel: true},
+      xAxis: {
+        type: 'value',//('value''category''time''log')
+        boundaryGap: [0, 0.1],
+        axisLabel:{textStyle:{fontSize:"11"}}
+      },
+      yAxis: {
+        type: 'category',
+        scale: false,
+        data: [
+           '557.xz_r'
+          ,'548.exchange2_r'
+          ,'541.leela_r'
+          ,'531.deepsjeng_r'
+          ,'525.x264_r'
+          ,'523.xalancbmk_r'
+          ,'520.omnetpp_r'
+          ,'505.mcf_r'
+          ,'502.gcc_r'
+          ,'500.perlbench_r'
+          ],
+        axisLabel:{textStyle:{fontSize:"11"}}
+      },
+      series: [
+        {
+          name: 'A17 (E)',
+          type: 'bar',
+          data: [
+               1.67 //557.xz_r
+              ,3.89 //548.exchange2_r
+              ,3.02 //541.leela_r
+              ,2.09 //531.deepsjeng_r
+              ,5.54 //525.x264_r
+              ,3.58 //523.xalancbmk_r
+              ,1.52 //520.omnetpp_r
+              ,3.33 //505.mcf_r
+              ,4.37 //502.gcc_r
+              ,2.4 //500.perlbench_r
+            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 10,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'A16 (E)',
+          type: 'bar',
+          data: [
+               1.52 //557.xz_r
+              ,3.58 //548.exchange2_r
+              ,2.74 //541.leela_r
+              ,1.27 //531.deepsjeng_r
+              ,4.51 //525.x264_r
+              ,3.18 //523.xalancbmk_r
+              ,1.27 //520.omnetpp_r
+              ,2.92 //505.mcf_r
+              ,3.71 //502.gcc_r
+              ,2.06 //500.perlbench_r
+            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 10,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'A15 (E)',
+          type: 'bar',
+          data: [
+               1.69 //557.xz_r
+              ,3.37 //548.exchange2_r
+              ,2.58 //541.leela_r
+              ,1.84 //531.deepsjeng_r
+              ,4.03 //525.x264_r
+              ,3.3 //523.xalancbmk_r
+              ,1.48 //520.omnetpp_r
+              ,2.86 //505.mcf_r
+              ,3.84 //502.gcc_r
+              ,2.12 //500.perlbench_r
+            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 10,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        },
+        {
+          name: 'A14 (E)',
+          type: 'bar',
+          data: [
+               1.34 //557.xz_r
+              ,2.82 //548.exchange2_r
+              ,2.14 //541.leela_r
+              ,1.78 //531.deepsjeng_r
+              ,3.28 //525.x264_r
+              ,2.74 //523.xalancbmk_r
+              ,1.01 //520.omnetpp_r
+              ,2.3 //505.mcf_r
+              ,2.84 //502.gcc_r
+              ,1.68 //500.perlbench_r
+            ],
+          itemStyle:{normal:{label:{show: true,color: '#808080',fontSize: 10,fontWeight: 'bold',position: 'right'},barBorderRadius: [0, 20, 20, 0]}}
+        }
+      ]
+    };
+    if (option && typeof option === 'object') {myChart.setOption(option);}
+    window.addEventListener('resize', myChart.resize);
+  </script>
+
+  <!--<script type="text/javascript"> //CPU_Full_Random_Latency
+    var dom = document.getElementById('CPU_Full_Random_Latency');
+    if (window.matchMedia("(prefers-color-scheme: light)").matches) {var myChart = echarts.init(dom, 'light');} else {var myChart = echarts.init(dom, 'dark');}
+    var myChart = echarts.init(dom, null, {renderer: 'canvas',useDirtyRect: false});
+    var app = {};
+    var option;
+    option = {
+      backgroundColor: 'transparent',
+      title: {text: 'CPU Full Random Latency',subtext: 'X 坐标: Test Depth (Transfer Size) / Y 坐标: Latency (单位：ns) / 更新日期 2025.02.28'},
+      tooltip: {trigger: 'axis'},
+      grid: {left: '3%',right: '4%',bottom: '5%',containLabel: true},
+      toolbox: {feature: {saveAsImage: {}}},
+      xAxis: {
+        axisTick: {alignWithLabel: true},
+        type: 'category',boundaryGap: [0, 0.01],axisLabel:{textStyle:{fontSize:"11"}},
+        data: ['1K', '4K', '16K', '64K', '128K', '256K', '512K', '1M', '2M', '4M', '8M', '16M', '32M', '64M', '128M', '256M', '512M', '1G']
+      },
+      yAxis: {
+        min: 0,
+        max: 240,
+        splitNumber: 8,
+        //interval: 'auto',
+        type: 'value',
+        axisLabel:{
+          textStyle:{
+            fontSize:"11"
+          }
+        }
+    },
+      legend: {
+        data: [
+           'S1 (Cortex-A7)'
+          ,'A4 (Cortex-A8)'
+          ,'A5X (Cortex-A9)'
+          ,'A6 (Swift)'
+          ,'A7 (Cyclone)'
+          ,'A8 (Typhoon)'
+          ,'A8X (Typhoon)'
+          ,'A9 (Twister)'
+          ,'A9X (Twister)'
+          ,'A11 (Monsoon)'
+          ,'A11 (Mistral)'
+          ,'A12 (Vortex)'
+          ,'A12 (Tempest)'
+          ,'A13 (Lightning)'
+          ,'A14 (Firestorm)'
+          ,'A14 (Icestorm)'
+          ,'A15 (Avalanche)'
+          ,'A15 (Blizzard)'
+          ,'A17 (Coll-P)'
+          ,'A18 (Tupai-P)'
+          ,'A18 Pro (Tahiti-P)'
+          ,'M1 (Firestorm)'
+          ,'M1 Max (Firestorm)'
+          ,'M2 (Avalanche)'
+          ,'M3 (Ibiza-P)'
+          ,'M3 Max (Ibiza-P)'
+          ,'M4 (Donan-P)'
+          ],
+        selected: {
+           'S1 (Cortex-A7)':false
+          ,'A4 (Cortex-A8)':false
+          ,'A5X (Cortex-A9)':false
+          ,'A6 (Swift)':false
+          ,'A7 (Cyclone)':false
+          ,'A8 (Typhoon)':false
+          ,'A8X (Typhoon)':false
+          ,'A9 (Twister)':false
+          ,'A9X (Twister)':false
+          ,'A11 (Monsoon)':false
+          ,'A11 (Mistral)':false
+          ,'A12 (Vortex)':false
+          ,'A12 (Tempest)':false
+          ,'A13 (Lightning)':false
+          ,'A14 (Firestorm)':false
+          ,'A14 (Icestorm)':false
+          ,'A15 (Avalanche)':false
+          ,'A15 (Blizzard)':false
+          ,'A17 (Coll-P)':false
+          ,'A18 (Tupai-P)':false
+          ,'A18 Pro (Tahiti-P)':false
+          ,'M1 (Firestorm)':false
+          ,'M1 Max (Firestorm)':false
+          ,'M2 (Avalanche)':false
+          ,'M3 (Ibiza-P)':false
+          ,'M3 Max (Ibiza-P)':false
+          ,'M4 (Donan-P)':false
+          },
+        itemWidth:15, //设置宽度
+        itemHeight:10, //设置高度
+        itemGap:10, //设置间距
+        left:"5%",
+        right:"5%",
+        top:"9%",
+        textStyle:{fontSize:11}
+        },
+        series: [
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'S1 (Cortex-A7)',
+            type: 'line',
+            data: [
+               5 //1K
+              ,5 //4K
+              ,5 //16K
+              ,24 //64K
+              ,30 //128K
+              ,59 //256K
+              ,140 //512K
+              ,170 //1M
+            ]
+
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A4 (Cortex-A8)',
+            type: 'line',
+            data: [
+               18 //1K
+              ,10 //4K
+              ,9 //16K
+              ,19 //64K
+              ,32 //128K
+              ,45 //256K
+              ,88 //512K
+              ,130 //1M
+              ,134 //2M
+              ,138 //4M
+              ,135 //8M
+              ,132 //16M
+              , //32M
+              , //64M
+              , //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A5X (Cortex-A9)',
+            type: 'line',
+            data: [
+               18 //1K
+              ,11 //4K
+              ,10 //16K
+              ,27 //64K
+              ,30 //128K
+              ,32 //256K
+              ,35 //512K
+              ,37 //1M
+              ,84 //2M
+              ,131 //4M
+              ,135 //8M
+              ,139 //16M
+              , //32M
+              , //64M
+              , //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A6 (Swift)',
+            type: 'line',
+            data: [
+               10 //1K
+              ,8 //4K
+              ,5 //16K
+              ,15 //64K
+              ,15 //128K
+              ,15 //256K
+              ,17 //512K
+              ,18 //1M
+              ,55 //2M
+              ,92 //4M
+              ,92 //8M
+              ,93 //16M
+              , //32M
+              , //64M
+              , //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A7 (Cyclone)',
+            type: 'line',
+            data: [
+               4 //1K
+              ,4 //4K
+              ,4 //16K
+              ,4 //64K
+              ,16 //128K
+              ,16 //256K
+              ,18 //512K
+              ,55 //1M
+              ,100 //2M
+              ,115 //4M
+              ,199 //8M
+              ,210 //16M
+              , //32M
+              , //64M
+              , //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A8 (Typhoon)',
+            type: 'line',
+            data: [
+               4 //1K
+              ,4 //4K
+              ,4 //16K
+              ,4 //64K
+              ,16 //128K
+              ,16 //256K
+              ,18 //512K
+              ,43 //1M
+              ,78 //2M
+              ,85 //4M
+              ,180 //8M
+              ,185 //16M
+              , //32M
+              , //64M
+              , //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A8X (Typhoon)',
+            type: 'line',
+            data: [
+               4 //1K
+              ,4 //4K
+              ,4 //16K
+              ,4 //64K
+              ,16 //128K
+              ,16 //256K
+              ,18 //512K
+              ,18 //1M
+              ,50 //2M
+              ,78 //4M
+              ,177 //8M
+              ,180 //16M
+              , //32M
+              , //64M
+              , //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A9 (Twister)',
+            type: 'line',
+            data: [
+               3 //1K
+              ,3 //4K
+              ,3 //16K
+              ,3 //64K
+              ,10 //128K
+              ,10 //256K
+              ,10 //512K
+              ,10 //1M
+              ,10 //2M
+              ,50 //4M
+              ,180 //8M
+              ,180 //16M
+              , //32M
+              , //64M
+              , //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A9X (Twister)',
+            type: 'line',
+            data: [
+               3 //1K
+              ,3 //4K
+              ,3 //16K
+              ,3 //64K
+              ,8 //128K
+              ,8 //256K
+              ,8 //512K
+              ,9 //1M
+              ,9 //2M
+              ,165 //4M
+              ,165 //8M
+              ,165 //16M
+              , //32M
+              , //64M
+              , //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A11 (Monsoon)',
+            type: 'line',
+            data: [
+               3 //1K
+              ,3 //4K
+              ,3 //16K
+              ,3 //64K
+              ,10 //128K
+              ,12 //256K
+              ,12 //512K
+              ,12 //1M
+              ,12 //2M
+              ,13 //4M
+              ,20 //8M
+              ,70 //16M
+              ,99 //32M
+              ,115 //64M
+              , //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A11 (Mistral)',
+            type: 'line',
+            data: [
+               4 //1K
+              ,4 //4K
+              ,4 //16K
+              ,14 //64K
+              ,14 //128K
+              ,14 //256K
+              ,30 //512K
+              ,37 //1M
+              ,69 //2M
+              ,70 //4M
+              ,88 //8M
+              ,176 //16M
+              ,218 //32M
+              ,241 //64M
+              , //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A12 (Vortex)',
+            type: 'line',
+            data: [
+               2 //1K
+              ,2 //4K
+              ,2 //16K
+              ,2 //64K
+              ,2 //128K
+              ,9 //256K
+              ,9 //512K
+              ,9 //1M
+              ,9 //2M
+              ,10 //4M
+              ,22 //8M
+              ,63 //16M
+              ,89 //32M
+              ,104 //64M
+              , //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A12 (Tempest)',
+            type: 'line',
+            data: [
+               5 //1K
+              ,5 //4K
+              ,5 //16K
+              ,14 //64K
+              ,14 //128K
+              ,14 //256K
+              ,14 //512K
+              ,14 //1M
+              ,30 //2M
+              ,60 //4M
+              ,85 //8M
+              ,148 //16M
+              ,170 //32M
+              ,190 //64M
+              , //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A13 (Lightning)',
+            type: 'line',
+            data: [
+               1 //1K
+              ,1 //4K
+              ,1 //16K
+              ,1 //64K
+              ,1 //128K
+              ,5 //256K
+              ,5 //512K
+              ,5 //1M
+              ,5 //2M
+              ,6 //4M
+              ,20 //8M
+              ,35 //16M
+              ,80 //32M
+              ,100 //64M
+              , //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A14 (Firestorm)',
+            type: 'line',
+            data: [
+               1 //1K
+              ,1 //4K
+              ,1 //16K
+              ,1 //64K
+              ,1 //128K
+              ,5 //256K
+              ,5 //512K
+              ,5 //1M
+              ,5 //2M
+              ,7 //4M
+              ,15 //8M
+              ,30 //16M
+              ,83 //32M
+              ,98 //64M
+              ,102 //128M
+              ,110 //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A14 (Icestorm)',
+            type: 'line',
+            data: [
+               2 //1K
+              ,2 //4K
+              ,2 //16K
+              ,2 //64K
+              ,8 //128K
+              ,8 //256K
+              ,8 //512K
+              ,8 //1M
+              ,8 //2M
+              ,30 //4M
+              ,45 //8M
+              ,60 //16M
+              ,200 //32M
+              ,200 //64M
+              ,201 //128M
+              ,201 //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A15 (Avalanche)',
+            type: 'line',
+            data: [
+               1 //1K
+              ,1 //4K
+              ,1 //16K
+              ,1 //64K
+              ,1 //128K
+              ,5 //256K
+              ,5 //512K
+              ,5 //1M
+              ,5 //2M
+              ,5 //4M
+              ,10 //8M
+              ,19 //16M
+              ,44 //32M
+              ,94 //64M
+              ,105 //128M
+              ,111 //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A15 (Blizzard)',
+            type: 'line',
+            data: [
+               2 //1K
+              ,2 //4K
+              ,2 //16K
+              ,2 //64K
+              ,7 //128K
+              ,7 //256K
+              ,7 //512K
+              ,7 //1M
+              ,7 //2M
+              ,18 //4M
+              ,39 //8M
+              ,44 //16M
+              ,90 //32M
+              ,120 //64M
+              ,141 //128M
+              ,140 //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A17 (Coll-P)',
+            type: 'line',
+            data: [
+               1 //1K
+              ,1 //4K
+              ,1 //16K
+              ,1 //64K
+              ,1 //128K
+              ,3 //256K
+              ,4 //512K
+              ,5 //1M
+              ,5 //2M
+              ,6 //4M
+              ,7.5 //8M
+              ,15 //16M
+              ,44 //32M
+              ,85 //64M
+              ,90 //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A18 (Tupai-P)',
+            type: 'line',
+            data: [
+               1 //1K
+              ,1 //4K
+              ,1 //16K
+              ,1 //64K
+              ,1 //128K
+              ,4 //256K
+              ,5 //512K
+              ,6 //1M
+              ,6 //2M
+              ,7 //4M
+              ,15 //8M
+              ,46 //16M
+              ,87 //32M
+              ,105 //64M
+              ,107 //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'A18 Pro (Tahiti-P)',
+            type: 'line',
+            data: [
+               1 //1K
+              ,1 //4K
+              ,1 //16K
+              ,1 //64K
+              ,1 //128K
+              ,4 //256K
+              ,5 //512K
+              ,6 //1M
+              ,6 //2M
+              ,7 //4M
+              ,8 //8M
+              ,16 //16M
+              ,55 //32M
+              ,100 //64M
+              ,104 //128M
+              , //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'M1 (Firestorm)',
+            type: 'line',
+            data: [
+               1 //1K
+              ,1 //4K
+              ,1 //16K
+              ,1 //64K
+              ,1 //128K
+              ,5 //256K
+              ,5 //512K
+              ,5 //1M
+              ,5 //2M
+              ,6 //4M
+              ,8 //8M
+              ,22 //16M
+              ,87 //32M
+              ,90 //64M
+              ,97 //128M
+              ,103 //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'M1 Max (Firestorm)',
+            type: 'line',
+            data: [
+               1 //1K
+              ,1 //4K
+              ,1 //16K
+              ,1 //64K
+              ,1 //128K
+              ,5 //256K
+              ,5 //512K
+              ,5 //1M
+              ,5 //2M
+              ,6 //4M
+              ,10 //8M
+              ,30 //16M
+              ,67 //32M
+              ,102 //64M
+              ,116 //128M
+              ,120 //256M
+              ,130 //512M
+              ,135 //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'M2 (Avalanche)',
+            type: 'line',
+            data: [
+               1 //1K
+              ,1 //4K
+              ,1 //16K
+              ,1 //64K
+              ,1 //128K
+              ,5 //256K
+              ,5 //512K
+              ,5 //1M
+              ,5 //2M
+              ,6 //4M
+              ,10 //8M
+              ,16 //16M
+              ,50 //32M
+              ,87 //64M
+              ,100 //128M
+              ,105 //256M
+              ,107 //512M
+              ,110 //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'M3 (Ibiza-P)',
+            type: 'line',
+            data: [
+               0.99 //1K
+              ,0.99 //4K
+              ,0.99 //16K
+              ,0.99 //64K
+              ,0.99 //128K
+              ,3.74 //256K
+              ,5.05 //512K
+              ,5.65 //1M
+              ,5.96 //2M
+              ,7.34 //4M
+              ,8.30 //8M
+              ,10.10 //16M
+              ,43.30 //32M
+              ,76.50 //64M
+              ,97.00 //128M
+              ,120.00 //256M
+              , //512M
+              , //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'M3 Max (Ibiza-P)',
+            type: 'line',
+            data: [
+               1 //1K
+              ,1 //4K
+              ,1 //16K
+              ,1 //64K
+              ,1 //128K
+              ,5 //256K
+              ,5 //512K
+              ,5 //1M
+              ,5 //2M
+              ,6 //4M
+              ,10 //8M
+              ,10 //16M
+              ,35 //32M
+              ,79 //64M
+              ,105 //128M
+              ,117 //256M
+              ,119 //512M
+              ,121 //1G
+            ]
+          },
+          {
+            symbol:'none', //去除曲线图节点
+            smooth:true, //ture为平滑线，false为直线
+            name: 'M4 (Donan-P)',
+            type: 'line',
+            data: [
+               0.89 //1K
+              ,0.89 //4K
+              ,0.90 //16K
+              ,0.90 //64K
+              ,0.90 //128K
+              ,3.59 //256K
+              ,4.86 //512K
+              ,5.49 //1M
+              ,5.76 //2M
+              ,7.09 //4M
+              ,8.10 //8M
+              ,12.20 //16M
+              ,28.10 //32M
+              ,68.40 //64M
+              ,99.00 //128M
+              ,120.00 //256M
+              , //512M
+              , //1G
+            ]
+          }
+        ]
+      };
+    if (option && typeof option === 'object') {myChart.setOption(option);}
+    window.addEventListener('resize', myChart.resize);
+  </script>-->
+
+  <script type="text/javascript" src="../echarts.min.js"></script>
+  
+  </body>
+</html>

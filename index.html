@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+  <meta name="robots" content="noarchive" />
+  <title>开源的 Apple 苹果产品参数中心 / OpenHubweb</title>
+  <!--Web APP Start-->
+  <!--添加到主屏后的标题（IOS）-->
+  <meta name="apple-mobile-web-app-title" content="苹果产品参数">
+  <!--启用 WebApp 全屏模式（IOS）-->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-touch-fullscreen" content="yes" />
+  <!--设置状态栏的背景颜色（IOS）-->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <!--添加到主屏后的APP图标-->
+  <link href="./public-static/img/apple-touch-icon.jpg?2556" rel="apple-touch-icon-precomposed"><!-- 设计原图 -->
+  <link href="./public-static/img/apple-touch-icon.jpg?2556" rel="apple-touch-icon"><!-- 添加高光效果 -->
+  <!--Web APP End-->
+  <meta name='description' content="本站收集了 Apple 苹果公司的各产品信息，通过点击图片选中产品进行参数对比，让您更了解自己手上的产品信息。 ">
+  <meta name='keywords' content="Apple苹果产品参数中心,Apple Silicon,iPad Pro,iPad Air,iPad Mini,iPad,iPhone,airpods,silicon">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2f2f2" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#181e21">
+  <link rel="shortcut icon" href="./public-static/img/favicon.ico" /> 
+  <link rel="bookmark" href="./public-static/img/favicon.ico" />
+  <style type="text/css">
+        ::-webkit-scrollbar{
+          width: 4px;
+          height: 4px;
+          background-color: #F5F5F5;
+        }
+        ::-webkit-scrollbar-track{
+          -webkit-box-shadow:inset 0 0 3px rgba(0,0,0,0.1);
+          border-radius:5px;
+          background-color: #F5F5F5;
+        }
+        ::-webkit-scrollbar-thumb{
+          border-radius:5px;
+          -webkit-box-shadow:inset 0 0 3px rgba(0,0,0,0.1);
+          background-color: #bbbbbb;
+        }
+        .admin_menu{
+          border-right:1px solid #e3e3e3;
+        }
+        @media (prefers-color-scheme: dark) {
+          ::-webkit-scrollbar{
+            background-color: rgb(29, 29, 29);
+          }
+          ::-webkit-scrollbar-track{
+            background-color: rgb(29, 29, 29);
+          }
+          ::-webkit-scrollbar-thumb{
+            background-color: rgb(66, 66, 66);
+          }
+        .frame_style{
+          background-color: rgb(29, 29, 29);
+        }
+        .admin_menu{
+          border-right:1px solid rgb(66, 66, 66);;
+        }
+      }
+  </style>
+ </head>
+ <frameset class="frame_style" rows="40,*" cols="*" frameborder="no" border="0" framespacing="0"> 
+  <frame src="./index_head.php" name="admin_head" frameborder="no" scrolling="no" noresize="noresize" id="admin_head" title="admin_head"> 
+  <frameset class="frame_style" rows="*" cols="126,*" framespacing="0" frameborder="no" border="0"> 
+   <frame src="./index_menu.php" name="admin_menu" frameborder="no" scrolling="auto" noresize="noresize" class="admin_menu" id="admin_menu" title="admin_menu"> 
+   <frame class="frame_style" src="./index_main.php" name="admin_main" frameborder="no" id="admin_main" title="admin_main"> 
+  </frameset>
+ </frameset> 
+ <noframes>
+  &lt;body&gt;&lt;/body&gt;
+ </noframes> 
+</html>

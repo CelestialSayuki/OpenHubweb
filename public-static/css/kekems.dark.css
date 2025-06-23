@@ -1,0 +1,29 @@
+/* dark模式样式 */
+@media (prefers-color-scheme: dark) {
+	body{background-color: rgb(29, 29, 29);}
+	.list {border-bottom:solid 1px rgb(66, 66, 66);}
+	.list ul li {background-color: rgb(29, 29, 29);border-top-color: rgb(66, 66, 66);}
+	.list ul li a{color: rgb(172, 172, 172);}
+	.list ul li ul li {background-color: rgb(19, 19, 19);}
+	.list ul li ul li ul li {border-top-color: rgb(66, 66, 66);}
+	.list ul li ul li ul li a {background-color: rgb(9, 9, 9);}
+
+	.top_max {background-color: rgb(29, 29, 29);border-bottom-color: rgb(66, 66, 66);}
+	.top_title {color: rgb(172, 172, 172);}
+	.top_right_menu {color: rgb(172, 172, 172);}
+	.top_right_menu a {color: rgb(172, 172, 172);}
+	.top_right_menu a:hover {color: rgb(245, 245, 245);}
+
+	.title {background-color: rgb(35, 35, 35);color: rgb(172, 172, 172);}
+	.title span {color: rgb(172, 172, 172);}
+	.category-content {color: rgb(172, 172, 172);}
+	.div {color: rgb(172, 172, 172);}
+	.div a {color: rgb(172, 172, 172);}
+	.spen_ab {color: rgb(172, 172, 172);}
+	.category-content {color: rgb(172, 172, 172);}
+	.btn {color: rgb(209, 205, 199);}
+	#post-category a.show-more-btn {color: rgb(172, 172, 172);}
+	#post-category a.show-more-btn:hover {background-color: rgb(35, 35, 35);}
+	#post-category a.show-more-btn-about {color: rgb(172, 172, 172);}
+	#post-category a.show-more-btn-about:hover {background-color: rgb(35, 35, 35);}
+} 

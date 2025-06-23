@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>参数名词解读</title>
+    <meta name='description' content="本站收集了 Apple 苹果公司的各产品信息，通过点击图片选中产品进行参数对比，让您更了解自己手上的产品信息。 ">
+    <meta name='keywords' content="Apple苹果产品参数中心,iPad Pro,iPad Air,iPad Mini,iPad,iPhone,airpods,silicon">
+    <link rel="stylesheet" href="../public-static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../public-static/css/view.css?2558">
+    <link rel="stylesheet" href="../public-static/css/view.dark.css?2558">
+    <style type="text/css">
+        table tbody {border-top-width: 2px;border-style:solid;}
+        table td{white-space:normal;}
+    table {
+        border-collapse: collapse;
+    }
+    thead {
+        position: sticky;
+        top: 0;
+        background-color: rgba(255, 255, 255, 0.8); /* 设置半透明背景 */
+        z-index: 1;
+        backdrop-filter: blur(5px); /* 添加毛玻璃模糊效果 */
+        border-bottom-width: 3px;   
+    }
+    @media (prefers-color-scheme: dark){
+        thead {
+            background-color: rgba(29, 29, 29, 0.8); /* 设置半透明背景 */
+        }
+    }
+    </style>
+</head>
+<body>
+<div class="container" style="margin-top: 30px;min-width: 820px;">
+    <div class="row-fluid">
+        <div class="span12">
+            <h1>
+                参数解读
+            </h1>
+            <p class="lead">
+                本页对 Apple 苹果产品参数中心的各项参数进行解读，让你可以更好理解参数所代表的含义。
+            </p>
+            <table class="table table-hover" id="Money">
+                <thead>
+                    <tr>
+                        <th width="18%">参数名称</th>
+                        <th>参数说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+<tr><td>型号</td><td>表示 Apple 自研 CPU 的名称与型号。</td></tr><tr><td>型号标识</td><td>英文名：Device Identify。指示当前设备内部机器识别号。</td></tr><tr><td>支持系统</td><td>表示支持的系统版本。</td></tr><tr><td>CPU 参数</td><td>表示 CPU 的信息。其中核心频率苹果公司（Apple Inc.）从 Apple A10 处理器开始采用了 ARM 独有的 big.LITTLE 技术，即大小核异构架构。一个处理器中可以包含几个高性能核心以及几个高能效核心。其中，一组高性能核心的运行频率都是一致的；而一组高能效核心的运行频率也一致的，但高性能核心与高能效核心之间的频率显然不会相同。在处理一般事务时，操作系统将会调度使用频率较低但更省电的高能效核心运行，以达到省电的目的。而当设备在处理密集计算时，操作系统将会调度使用高性能核心，使得当前任务能被快速执行完，从而不仅能达到应用流畅的目的，而且也能获得省电的功效。各位在使用 App Store 的测试软件测试频率时，尤其当各位使用 Apple A11 处理器或更高版本的处理器的 iOS 设备时，往往可能测量到的是高能效核的频率。<br><br>
+                        英文名：Number of Cores。 表示 Apple CPU 所拥有的核心个数。一个 CPU 可能会有多个核心，每个核心一般都能独立执行一个完整的任务，因此一般来说，核心数越多，能同时执行的任务数也就越多。当然，对于一个独立任务的执行除了要有 CPU 执行单元之外，还需要存储器带宽、总线带宽等资源，因此如果某些核心把这些资源全都占用了，那么其余核心上的任务也得不到执行。这也就是为什么当一个 CPU 的核心数达到一定数量时，其性能不会再有明显提升的道理。另外苹果公司（AppleInc.）从 Apple A10 处理器开始采 big.LITTLE 技术，即大小核异构架构。一个处理器中可以包含几个高性能核心以及几个高能效核心。对于 Apple A10 处理器而言，当前能执行的要么是两个高性能核，要么是两个高能效核，而这两对异构核心不会同时工作。而对于 Apple A11 它包含了两个高性能核与四个高能效核。官方解释称高能效核会辅助高性能核协同执行，从而使得处理器在保证高性能的情况下还能起到一定的节能作用。不过对于 App 开发者而言，我们可以把 Apple A11 处理器的辅助执行的高能效核看作为协处理器，像系统驱动层上的网络通信、音视频等多媒体处理的字节流传输、3D 图像渲染的些数据传输等系统任务有些可以交给辅助核去完成。这些系统线程反正对于应用程序而言是透明的，App 开发者也不需要太过关心。</td></tr><tr><td>GPU 参数</td><td>包含 GPU 规格信息、型号信息以及支持的特性。</td></tr><tr><td>神经引擎</td><td>英文名：Neural Engine。是苹果在芯片中专门用于机器学习的硬件，苹果搭载首款 Neural Engine 的芯片为 A11，它在半精度浮点数据格式（float16 或 FP16）中具有 0.6 teraflops （TFlops） 的峰值吞吐量，并且能够有效地支持设备端 ML 功能，例如 Face ID 和 Memoji 等。2021 年发布的 A15 芯片采用第五代 16 核 ANE 的处理能力是初代的 26 倍，即 15.8 TFlops。<br>GFlops = Giga Floating-point Operations Per Second，每秒十亿次浮点运算（10^9）。<br>TFlops = Tera Floating-point Operations Per Second，每秒一万亿次浮点运算（10^12）。<br><br>Apple A17 Pro 的 ANE 运行频率为 2160 MHz，由 16颗 NE 核心组成，每颗 NE 颗有 256 MACs 核，一共就是 4096 MACs，MAC 接受的数据类型为 FP16，因此理论最大算力为 4096*2160*2/1000/1000≈17.695TOPS，而苹果的 ANE 从 Apple H16 开始具备 2:1 的稀疏矩阵功能，在稀疏情况下，等效算力则为 35.389TOPS，符合发布会上说的 35TOPS。</td></tr><tr><td>ML 加速器</td><td>Apple ML 加速器 AMX 矩阵运算单元，专门为机器学习（ML）任务进行深度优化，可大幅提升设备处理复杂 ML 运算的效率和速度。AMX ML 加速器能够高效地处理诸如图像识别、自然语言处理、语音识别等各类机器学习工作负载。</td></tr><tr><td>技术工艺</td><td>芯片生产的工艺程度及工艺技术。</td></tr><tr><td>内核架构</td><td>英文名：Architecture。 这是当前 CPU 的具体架构名称。比如对于 ARM 架构处理器有 ARMv7、ARMv7s、ARMv8 等等。v 后面的数字则表示当前 ARM 处理器的具体架构版本。ARMv8.x 系列实际上也是一直在进化的产物，目前 ARMv9 更多的是 ARM 自己的 CPU，不过苹果已经在 M4、A18 系列等芯片上也采用基于 ARMv9.x 架构进行设计自己的微架构了。</td></tr><tr><td>微架构</td><td>苹果从 A6 开始不再使用 ARM 公版的 Cortex-A 系列架构，而是改用苹果基于 ARMv7s 指令集自主研发的 Swift 架构核心发布的 A6 处理器，之后所发布的所有 Apple 处理器均采用自研架构模式，从 Apple A7 开始逐渐展现压倒 ARM Cortex 家族公版架构。</td></tr><tr><td>晶体管数</td><td>芯片内晶体管数量。</td></tr><tr><td>裸片尺寸</td><td>芯片的 Die 裸片尺寸大小。</td></tr><tr><td>L1 指令缓存</td><td>英文名：L1 Instruction Cache，指示当前 L1 指令 Cache 大小。L1 Cache 是在 CPU 内部的一级高速缓存，由于它在每个核心内，因此其访问速度非常快，甚至能对指令做并行发射处理。而 L1 指令 Cache 则专用于对指令读取的高速缓存。Apple A、M、S 系列 CPU 的每个核心都拥有自己独立的 L1 指令 Cache。</td></tr><tr><td>L1 数据缓存</td><td>英文名：L1 Data Cache，指示当前 L1 数据 Cache 大小。L1 Cache 是在 CPU 内部的一级高速缓存，由于它在每个核心内，因此其访问速度非常快，甚至能对指令做并行发射处理。而 L1 数据 Cache 则专用于对数据读写的高速缓存。Apple A、M、S 系列 CPU 的每个核心都拥有自己独立的 L1 数据 Cache。</td></tr><tr><td>L2 缓存</td><td>英文名：L2 Cache，指示当前 L2 Cache 大小。它被设计成 CPU 内部多个核心共享的高速缓存，并且指令与数据共享。因此它在核外，不过与核心离得很近，所采用的 SRAM（静态随机访问存储器）相对来说速度还算较快，但比 L1 要慢些，不过容量却要比 L1 Cache 大得多。如：Apple A14 处理器，两个高性能核可同时共享高达 8MB 的 L2 Cache，四个高能效核可同时共享 4MB L2 Cache，六个核心可同时进行计算。</td></tr><tr><td>L3 缓存</td><td>英文名：L3 Cache。指示 SoC（System-on-Chip，片上系统）所共享的三级高速缓存。它基本设计在 CPU 的外部，从而可使得 GPU 也能与 CPU 共享此高速缓存。不仅GPU，如果可能的话像一些 DSP（Digital Signal Processor，数字信号处理器）、ISP（Image Signal Processor，图像信号处理器），也可共享此 Cache。有些处理器不具备 L3 Cache，尤其对于采用带宽很高的 LPDDR4 存储器的设备，裁去 L3 Cache 可将节省出来的晶体管用于提升访存带宽，这在一定程度上反而能提升系统的综合性能，尤其像外国芯片较多的 SOC 解决方案。比如 Apple A11 Bionic, 它不仅有 6 个 CPU 核，而且还有威力强劲的 GPU、ISP、DSP，Apple  M11，再加上新引入的神经网络引擎单元（Neural Engine），如果这些硬件单元需要同时运作的话显然提升访存带宽以及总线带宽比增加 L3 Cache 更具性价比。</td></tr><tr><td>SLC 系统级缓存</td><td>英文名：System Level Cache。可以理解为类似 AMD 的 Infinity Cache。由 CPU、GPU、NPU 等进行共享，芯片上的所有 IP 块都应可以访问该缓存，在芯片 die 图上位置往往位于三者之间。</td></tr><tr><td>数据宽度</td><td>这个位数指的是 CPU GPRs（General-Purpose Registers，通用寄存器）的数据宽度，其中 64 位技术是相对于 32 位而言的，64 位指令集就是运行 64 位数据的指令，也就是说处理器一次可以运行 64bit 数据。</td></tr><tr><td>存储技术</td><td>RAM 的内存技术信息。</td></tr><tr><td>内存通道带宽</td><td>英文名：Memory Bandwidth，即最大内存带宽，是处理器从半导体内存读取数据或向其存储数据的最大速率（以 GB/秒计）。</td></tr><tr><td>ROM 传输协议</td><td>目前手机 ROM 传输协议主要有 eMMC、UFS 和 NVMe 三种，区别主要在于主控、接口标准以及更底层的 Flash 芯片标准。如果将传输协议比作高速公路上限速不同的车道，那颗粒类型就是不同马力的车辆，由此产生的组合自然也就跑出了不同速度。<br><br>eMMC 是一个起源较早的技术，英文名：embedded MultiMedia Card。资深的手机玩家或许还记得过去部分手机上使用过的 MMC 存储卡，跟 SD 卡很类似。没错，eMMC 就是在 MMC 基础上发展而来，和 MMC 一样沿用了8 bit 的并行接口。iPhone 6 及之前的智能手机都采用 eMMC 传输协议。<br><br>NVMe（NVM Express）本是为了 SSD 而生，用以替代 SSD 上的 SATA 接口。2015 年，苹果在 iPhone 6s / iPhone 6s Plus 上引入了 MacBook 上备受好评的 NVMe 协议，大容量版本更支持 TLC / SLC 混合缓存加速，让 iPhone 上的 NAND 闪存获得了媲美 SSD 的性能。和 eMMC 所用的 SDIO 接口不同，NVMe 使用的是 PCIe 接口，这个 PCIe 并不是 PC 上的那个，而是基于 MIPI M-PHY 物理层的 PCIe。相较传统的 SCSI 接口协议，NVMe  协议具有高效率、低负载的特性，因此性能更高而且低延时。</td></tr><tr><td>RAM</td><td>英文名：Random Access Memory。是指当前设备在当前系统环境下一共可用多大字节的存储器空间。所谓存储器一般是指计算机系统中用来存放当前正在运行的程序和数据的记忆设备。存储器的主要功能存储程序和各种数据，并能在计算机运行过程中高速、自动完成程序或数据的存取。目前 iOS 设备上使用的存储器类型一半为 LPDDR3（较老的机型，iPhone 6 以及更早的设备）与 LPDDR4（较新的机型，iPhone 6s 以及此后的设备）。存储器与贮存器（Storage，像老式的机械硬盘，固态硬盘，移动设备上用的闪存都属于贮存器）有所不同。存储器在计算机系统中与处理器距离很近，像移动设备中都直接设计在芯片上，非常贴近 CPU。存储器的访问速度非常快，尤其对随机数据的访问，但是它制作成本较高，因此容量比贮存器要小，而且断电后，里面的数据就全都没了。而贮存器容量大，制作成本相对低廉，而且掉电后数据仍然能被保存，但读写速度比存储器要慢很多，尤其是写数据的速度。</td></tr><tr><td>屏幕分辨率</td><td>英文名：Screen Resolution。是指当前 iOS 设备的屏幕分辨率。屏幕分辨率用于判定屏幕上显示多少信息，以水平和垂直像素来衡量。比如 750 × 1334 表示手机在竖屏模式下，水平方向含有 750 个像素，垂直方向上有 1334 个像素。对于相同尺寸的屏幕，分辦率越高，则所包含的像素越多，每个像素的面积也就越小，这就使得画面越为细腻。当前 iOS 设备基本都配备了视网膜屏（RetinaDisplay）。视网膜屏幕是指分辨率超过人眼识别极限的高分辨率屏幕，由苹果公司（AppleInc.）在 2010 年 iPhone 4 的发布会上首次推出的技术术语。当时将 640 x 960 的分辨率压缩到个 3.5 英寸的显示屏内，使得该屏幕的像素密度达到 326 像素/英寸（ppi），而称之为「视网膜屏幕」。</td></tr>                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
