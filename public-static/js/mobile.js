@@ -11,7 +11,3 @@ if(applejudge=='已提示'){}else{
 		sessionStorage.setItem('applejudge', '已提示');
 	}else{}
 }
-//禁止右键
-document.addEventListener("contextmenu", function(e) {
-    e.preventDefault();
-});

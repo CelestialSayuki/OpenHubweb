@@ -20,442 +20,529 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style type="text/css">
+<style type="text/css">
+    .main-content {
+        position: relative;
+    }
+
+    /* 1. 修改后的浮动层样式 */
+    .dynamic-content-overlay {
+        position: absolute;
+        /* 使用 top, right, bottom, left 来控制与父容器边缘的距离，营造悬浮感 */
+        top: 20px;
+        right: 20px;
+        bottom: 20px;
+        left: 20px;
+        /* 移除 width 和 height，让其自适应大小 */
+
+        padding: 40px; /* 卡片内部的留白 */
+        background-color: var(--light-glass-bg, rgba(255, 255, 255, 0.65));
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: var(--border-radius, 12px);
+        border: 1px solid var(--light-border, rgba(0, 0, 0, 0.1));
+        box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        z-index: 100;
+        overflow-y: auto; /* 当内容超长时可以滚动 */
+        box-sizing: border-box;
+        animation: shrink-and-settle 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    /* 2. 保持这个样式，防止“卡片套卡片” */
+    .dynamic-content-overlay .cd-products-comparison-table {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+@keyframes shrink-and-settle {
+  0% {
+    /* 开始时“非常大”：尺寸很大，完全透明，且带模糊效果，增强“失焦”感 */
+    opacity: 0;
+    transform: scale(1.5);
+    filter: blur(10px);
+  }
+  40% {
+    /* “收束到中间”：尺寸快速缩小到最终状态，变得清晰且不透明 */
+    opacity: 1;
+    transform: scale(0.75);
+    filter: blur(0);
+  }
+  100% {
+    /* “再慢慢放大”：为了增加质感，在最后有一个极其微小的“呼吸”放大效果 */
+    transform: scale(1.01);
+  }
+}
+    /* 3. 关闭浮动层时的“云散”动画定义 */
+    @keyframes dissipate-like-smoke {
+        0% {
+            /* 动画开始状态：完全不透明，无形变 */
+            opacity: 1;
+            transform: translate(0, 0) scale(1) rotate(0deg);
+            filter: blur(0);
+        }
+        100% {
+            /* 动画结束状态：完全透明，向上和向右漂移，同时轻微放大和旋转，并变得模糊 */
+            opacity: 0;
+            transform: scale(1.25);
+            filter: blur(5px);
+        }
+    }
+
+    /* 2. 将新动画应用到正在关闭的浮动层上 */
+    .dynamic-content-overlay.is-closing {
+        /* 使用新动画，调整时长和缓动函数以获得更自然、轻柔的效果 */
+        /* cubic-bezier 提供了一个“缓出”的效果，开始快，然后慢慢结束 */
+        animation: dissipate-like-smoke 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+
+    /* --- 以下是您原有的其他样式，保持不变 --- */
+    
+    /* 暗黑模式适配 */
+    @media (prefers-color-scheme: dark) {
+        .dynamic-content-overlay {
+            background-color: var(--dark-glass-bg, rgba(22, 27, 34, 0.75));
+            border-color: var(--dark-border, rgba(255, 255, 255, 0.15));
+            box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+        }
+    }
+
     :root {
-            --light-bg: #f8f9fa;
-            --dark-bg: #0d1117;
-        
-            --light-glass-bg: rgba(255, 255, 255, 0.5);
-            --dark-glass-bg: rgba(22, 27, 34, 0.6);
-        
-            --light-text: #212529;
-            --dark-text: #c9d1d9;
-            --light-text-secondary: #586069;
-            --dark-text-secondary: #8b949e;
-            --light-border: rgba(0, 0, 0, 0.1);
-            --dark-border: rgba(255, 255, 255, 0.15);
-            --accent-color: #007aff;
-            --accent-color-hover: #0056b3;
-            --sidebar-width: 260px;
-            --header-height: 60px;
-            --border-radius: 12px;
-            --transition-speed: 0.3s;
-        
-            --light-glass-shadow: 0 8px 16px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.05);
-            --dark-glass-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
+        --light-bg: #f8f9fa;
+        --dark-bg: #0d1117;
+    
+        --light-glass-bg: rgba(255, 255, 255, 0.5);
+        --dark-glass-bg: rgba(22, 27, 34, 0.6);
+    
+        --light-text: #212529;
+        --dark-text: #c9d1d9;
+        --light-text-secondary: #586069;
+        --dark-text-secondary: #8b949e;
+        --light-border: rgba(0, 0, 0, 0.1);
+        --dark-border: rgba(255, 255, 255, 0.15);
+        --accent-color: #007aff;
+        --accent-color-hover: #0056b3;
+        --sidebar-width: 260px;
+        --header-height: 60px;
+        --border-radius: 12px;
+        --transition-speed: 0.3s;
+    
+        --light-glass-shadow: 0 8px 16px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.05);
+        --dark-glass-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        font-family: 'SF Pro SC', 'SF Pro Text', 'PingFang SC', sans-serif;
+        background: linear-gradient(135deg, #e0e5ec, #f0f5f9);
+        color: var(--light-text);
+        transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+        overflow-x: hidden;
+        font-size: 14px;
+    }
+    
+    a {
+        color: var(--accent-color);
+        text-decoration: none;
+        transition: color var(--transition-speed);
+    }
+    a:hover {
+        color: var(--accent-color-hover);
+    }
+    ul { list-style: none; }
+    
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background-color: rgba(0,0,0,0.05); }
+    ::-webkit-scrollbar-thumb { background-color: #c1c1c1; border-radius: 6px; }
+    ::-webkit-scrollbar-thumb:hover { background-color: #a8a8a8; }
+            
+    #app-container {
+        display: grid;
+        grid-template-columns: var(--sidebar-width) 1fr;
+        grid-template-rows: var(--header-height) 1fr;
+        height: 100vh;
+        width: 100vw;
+    }
+            
+    .sidebar {
+        grid-row: 1 / 3;
+        background: var(--light-glass-bg);
+        border-right: 1px solid var(--light-border);
+        padding: 20px 0;
+        overflow-y: auto;
+        transition: all var(--transition-speed) ease-in-out;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        z-index: 10;
+        border-top-left-radius: var(--border-radius);
+        border-bottom-left-radius: var(--border-radius);
+        box-shadow: var(--light-glass-shadow);
+    }
+    .sidebar-menu { list-style: none; }
+            
+    .sidebar-menu li.has-submenu {
+        display: block;
+    }
+    
+    .sidebar-menu li.has-submenu.open {
+        /* 此处无需额外样式 */
+    }
+    .sidebar-menu li.has-submenu > a {
+        align-self: unset;
+    }
+    .sidebar-menu ul {
+        list-style: none;
+        padding-left: 25px;
+        overflow: hidden;
+    }
+    
+    .sidebar-menu li.has-submenu > ul {
+        max-height: 0;
+        opacity: 0;
+        padding-top: 0;
+        transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out, padding-top 0.5s ease-in-out;
+    }
+    
+    .sidebar-menu li.has-submenu.open > ul {
+        opacity: 1;
+        padding-top: 4px;
+    }
+    
+    
+    .sidebar-menu ul ul {
+        padding-left: 20px;
+    }
+    
+    .sidebar-menu li a {
+        display: flex;
+        align-items: center;
+        padding: 12px 20px;
+        text-decoration: none;
+        color: var(--light-text);
+        font-weight: 500;
+        font-size: 14px;
+        transition: color var(--transition-speed), background-color var(--transition-speed);
+        border-radius: 8px;
+        margin: 0px 10px;
+    }
+    
+    .sidebar-menu ul a {
+        color: var(--light-text-secondary);
+        font-weight: 400;
+        padding: 11px 15px;
+        border-radius: 6px;
+        transition: all 0.2s ease-out;
+    }
+    .sidebar-menu ul a:hover {
+        background-color: rgba(0, 122, 255, 0.1);
+        transform: translateX(5px);
+        color: var(--accent-color);
+    }
+    .sidebar-menu > li > a:hover {
+        background-color: var(--accent-color);
+        color: white !important;
+    }
+    .sidebar-menu > li > a.active {
+        background-color: var(--accent-color);
+        color: white !important;
+    }
+    .sidebar-menu > li > a.active .bi, .sidebar-menu > li > a:hover .bi {
+        color: white;
+    }
+    .sidebar .bi {
+        font-size: 1.2rem;
+        margin-right: 15px;
+        width: 20px;
+        text-align: center;
+        transition: transform var(--transition-speed) ease, color var(--transition-speed) ease;
+    }
+    .sidebar-menu > li > a.active .bi {
+        transform: scale(1.1);
+    }
+    
+    .main-header {
+        grid-column: 2 / 3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 25px;
+        background: var(--light-glass-bg);
+        border-bottom: 1px solid var(--light-border);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        z-index: 5;
+        box-shadow: var(--light-glass-shadow);
+    }
+    .main-header .top_left_logo { display: flex; align-items: center; gap: 15px; }
+    .main-header .top_left_logo img { transition: transform 0.4s ease; }
+    .main-header .top_left_logo:hover img { transform: rotate(360deg); }
+    .main-header .top_title { font-size: 1.1rem; font-weight: 600; color: var(--light-text) }
+    .main-header .top_right_menu a {
+        text-decoration:none;
+        color: var(--light-text-secondary);
+        font-weight: 500;
+        margin: 0 8px;
+        transition: color var(--transition-speed);
+    }
+            
+    .main-content {
+        grid-column: 2 / 3;
+        overflow-y: auto;
+        padding: 40px;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(255,255,255,0));
+    }
+    
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+            
+    .card, .title, .div {
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 0;
+    }
+    
+    .hero-banner {
+        width: 100%;
+        height: 350px;
+        border-radius: var(--border-radius);
+        margin-bottom: 40px;
+        background-image: url('./public-static/img/2025-hubweb-devices.webp');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        animation: fadeIn 1s ease-out;
+        box-shadow: var(--light-glass-shadow);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .hero-banner::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: linear-gradient(45deg, rgba(0,0,0,0.3), rgba(0,0,0,0.05));
+        border-radius: var(--border-radius);
+        z-index: 0;
+    }
+    .hero-banner h1 {
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 700;
+        z-index: 1;
+        text-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
+    
+    .title {
+        margin-top: 40px;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--light-border);
+    }
+    .title strong {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--light-text);
+    }
+    .title span {
+        font-size: 0.9rem;
+        color: var(--light-text-secondary);
+    }
+    
+    .card {
+        background-color: var(--light-glass-bg);
+        border: 1px solid var(--light-border);
+        border-radius: var(--border-radius);
+        padding: 25px;
+        margin-bottom: 20px;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        box-shadow: var(--light-glass-shadow);
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.1), 0 6px 12px rgba(0,0,0,0.08);
+    }
+    
+    .card ul {
+        list-style-type: none;
+        padding-left: 5px;
+        line-height: 1.8;
+    }
+    .card ul li {
+        padding: 6px 0;
+        position: relative;
+        padding-left: 25px;
+    }
+    .card ul li::before {
+        content: '\F28A';
+        font-family: 'bootstrap-icons';
+        position: absolute;
+        left: 0;
+        color: var(--accent-color);
+        font-weight: bold;
+    }
+    
+    #update-history-list {
+        overflow-y: hidden;
+        position: relative;
+        transition: height 0.8s ease-in-out;
+    }
+    #update-history-list li::before {
+        content: '\F633';
+    }
+    .more-btn-li {
+        list-style: none !important;
+        padding: 15px 0 !important;
+        text-align: center;
+    }
+    .more-btn-li::before { content: '' !important; }
+    .show-more-btn {
+        background: var(--accent-color);
+        color: white !important;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
+        box-shadow: 0 4px 8px rgba(0, 122, 255, 0.3);
+    }
+    .show-more-btn:hover {
+        background: var(--accent-color-hover);
+        box-shadow: 0 6px 12px rgba(0, 122, 255, 0.4);
+    }
+    
+    .div {
+        padding: 15px;
+        border-radius: var(--border-radius);
+        font-size: 0.95rem;
+        line-height: 1.8;
+        background-color: var(--light-glass-bg);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: var(--light-glass-shadow);
+        border: 1px solid var(--light-border);
+        margin-bottom: 20px;
+    }
+    #divdown2 {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: var(--accent-color);
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .spen_ab, .spen_ab a {
+        color: var(--light-text-secondary);
+        font-size: 12px;
+    }
+    .spen_ab {font-style:oblique;}
+    
+    @media (prefers-color-scheme: dark) {
         body {
-            font-family: 'SF Pro SC', 'SF Pro Text', 'PingFang SC', sans-serif;
-            background: linear-gradient(135deg, #e0e5ec, #f0f5f9);
-            color: var(--light-text);
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-            overflow-x: hidden;
-            font-size: 14px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: var(--dark-text);
         }
-        
-        a {
-            color: var(--accent-color);
-            text-decoration: none;
-            transition: color var(--transition-speed);
+        .card {
+            background-color: var(--dark-glass-bg);
+            border: 1px solid var(--dark-border);
+            box-shadow: var(--dark-glass-shadow);
         }
-        a:hover {
-            color: var(--accent-color-hover);
+        .sidebar, .main-header {
+            background: var(--dark-glass-bg);
+            border-color: var(--dark-border);
+            box-shadow: var(--dark-glass-shadow);
         }
-        ul { list-style: none; }
-        
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background-color: rgba(0,0,0,0.05); }
-        ::-webkit-scrollbar-thumb { background-color: #c1c1c1; border-radius: 6px; }
-        ::-webkit-scrollbar-thumb:hover { background-color: #a8a8a8; }
-                
-        #app-container {
-            display: grid;
-            grid-template-columns: var(--sidebar-width) 1fr;
-            grid-template-rows: var(--header-height) 1fr;
-            height: 100vh;
-            width: 100vw;
-        }
-                
         .sidebar {
-            grid-row: 1 / 3;
-            background: var(--light-glass-bg);
-            border-right: 1px solid var(--light-border);
-            padding: 20px 0;
-            overflow-y: auto;
-            transition: all var(--transition-speed) ease-in-out;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            z-index: 10;
             border-top-left-radius: var(--border-radius);
             border-bottom-left-radius: var(--border-radius);
-            box-shadow: var(--light-glass-shadow);
         }
-        .sidebar-menu { list-style: none; }
-                
-        .sidebar-menu li.has-submenu {
-            display: block;
+        .sidebar-menu li a { color: var(--dark-text); }
+        .sidebar-menu ul a { color: var(--dark-text-secondary); }
+        .main-header .top_title { color: var(--dark-text); }
+        .main-header .top_right_menu a { color: var(--dark-text-secondary); }
+        .main-header .top_right_menu a:hover, .div a:hover { color: #8ab4f8; }
+        a { color: #8ab4f8; }
+        .title strong { color: var(--dark-text); }
+        .title span { color: var(--dark-text-secondary); }
+        .div, .spen_ab, .spen_ab a {
+            color: var(--dark-text-secondary);
+            background-color: var(--dark-glass-bg);
+            box-shadow: var(--dark-glass-shadow);
+            border: 1px solid var(--dark-border);
         }
-        
-        .sidebar-menu li.has-submenu.open {
-            /* 此处无需额外样式 */
-        }
-        .sidebar-menu li.has-submenu > a {
-            align-self: unset;
-        }
-        .sidebar-menu ul {
-            list-style: none;
-            padding-left: 25px;
-            overflow: hidden;
-        }
-        
-        .sidebar-menu li.has-submenu > ul {
-            max-height: 0;
-            opacity: 0;
-            padding-top: 0;
-            transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out, padding-top 0.5s ease-in-out;
-        }
-        
-        .sidebar-menu li.has-submenu.open > ul {
-            max-height: 500px;
-            opacity: 1;
-            padding-top: 4px;
-        }
-        
-        
-        .sidebar-menu ul ul {
-            padding-left: 20px;
-        }
-        
-        .sidebar-menu li a {
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
-            text-decoration: none;
-            color: var(--light-text);
-            font-weight: 500;
-            font-size: 14px;
-            transition: color var(--transition-speed), background-color var(--transition-speed);
-            border-radius: 8px;
-            margin: 0px 10px;
-        }
-        
-        .sidebar-menu ul a {
-            color: var(--light-text-secondary);
-            font-weight: 400;
-            padding: 11px 15px;
-            border-radius: 6px;
-            transition: all 0.2s ease-out;
-        }
-        .sidebar-menu ul a:hover {
-            background-color: rgba(0, 122, 255, 0.1);
-            transform: translateX(5px);
-            color: var(--accent-color);
-        }
-        .sidebar-menu > li > a:hover {
-            background-color: var(--accent-color);
-            color: white !important;
-        }
-        .sidebar-menu > li > a.active {
-            background-color: var(--accent-color);
-            color: white !important;
-        }
-        .sidebar-menu > li > a.active .bi, .sidebar-menu > li > a:hover .bi {
-            color: white;
-        }
-        .sidebar .bi {
-            font-size: 1.2rem;
-            margin-right: 15px;
-            width: 20px;
-            text-align: center;
-            transition: transform var(--transition-speed) ease, color var(--transition-speed) ease;
-        }
-        .sidebar-menu > li > a.active .bi {
-            transform: scale(1.1);
-        }
-        
-        .main-header {
-            grid-column: 2 / 3;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 25px;
-            background: var(--light-glass-bg);
-            border-bottom: 1px solid var(--light-border);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            z-index: 5;
-            box-shadow: var(--light-glass-shadow);
-        }
-        .main-header .top_left_logo { display: flex; align-items: center; gap: 15px; }
-        .main-header .top_left_logo img { transition: transform 0.4s ease; }
-        .main-header .top_left_logo:hover img { transform: rotate(360deg); }
-        .main-header .top_title { font-size: 1.1rem; font-weight: 600; color: var(--light-text) }
-        .main-header .top_right_menu a {
-            text-decoration:none;
-            color: var(--light-text-secondary);
-            font-weight: 500;
-            margin: 0 8px;
-            transition: color var(--transition-speed);
-        }
-                
-        .main-content {
-            grid-column: 2 / 3;
-            overflow-y: auto;
-            padding: 40px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(255,255,255,0));
-        }
-        
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
-                
-        .card, .title, .div {
-            animation: fadeInUp 0.6s ease-out forwards;
-            opacity: 0;
-        }
-        
+        ::-webkit-scrollbar-track { background-color: rgba(255,255,255,0.05); }
+        ::-webkit-scrollbar-thumb { background-color: #444; }
+        .card:hover { box-shadow: 0 12px 24px rgba(0,0,0,0.4), 0 6px 12px rgba(0,0,0,0.3); }
         .hero-banner {
-            width: 100%;
-            height: 350px;
-            border-radius: var(--border-radius);
-            margin-bottom: 40px;
-            background-image: url('./public-static/img/2025-hubweb-devices.webp');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            animation: fadeIn 1s ease-out;
-            box-shadow: var(--light-glass-shadow);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--dark-glass-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .hero-banner::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: linear-gradient(45deg, rgba(0,0,0,0.3), rgba(0,0,0,0.05));
-            border-radius: var(--border-radius);
-            z-index: 0;
+            background: linear-gradient(45deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2));
         }
-        .hero-banner h1 {
-            color: white;
-            font-size: 2.5rem;
-            font-weight: 700;
-            z-index: 1;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.6);
-        }
-        
-        .title {
-            margin-top: 40px;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--light-border);
-        }
-        .title strong {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--light-text);
-        }
-        .title span {
-            font-size: 0.9rem;
-            color: var(--light-text-secondary);
-        }
-        
-        .card {
-            background-color: var(--light-glass-bg);
-            border: 1px solid var(--light-border);
-            border-radius: var(--border-radius);
-            padding: 25px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-            box-shadow: var(--light-glass-shadow);
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.1), 0 6px 12px rgba(0,0,0,0.08);
-        }
-        
-        .card ul {
-            list-style-type: none;
-            padding-left: 5px;
-            line-height: 1.8;
-        }
-        .card ul li {
-            padding: 6px 0;
-            position: relative;
-            padding-left: 25px;
-        }
-        .card ul li::before {
-            content: '\F28A';
-            font-family: 'bootstrap-icons';
-            position: absolute;
-            left: 0;
-            color: var(--accent-color);
-            font-weight: bold;
-        }
-        
-        #update-history-list {
-            overflow-y: hidden;
-            position: relative;
-            transition: height 0.8s ease-in-out;
-        }
-        #update-history-list li::before {
-            content: '\F633';
-        }
-        .more-btn-li {
-            list-style: none !important;
-            padding: 15px 0 !important;
-            text-align: center;
-        }
-        .more-btn-li::before { content: '' !important; }
         .show-more-btn {
-            background: var(--accent-color);
-            color: white !important;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
-            box-shadow: 0 4px 8px rgba(0, 122, 255, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 122, 255, 0.4);
         }
         .show-more-btn:hover {
-            background: var(--accent-color-hover);
-            box-shadow: 0 6px 12px rgba(0, 122, 255, 0.4);
+            box-shadow: 0 6px 12px rgba(0, 122, 255, 0.5);
         }
-        
-        .div {
-            padding: 15px;
-            border-radius: var(--border-radius);
-            font-size: 0.95rem;
-            line-height: 1.8;
-            background-color: var(--light-glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: var(--light-glass-shadow);
-            border: 1px solid var(--light-border);
-            margin-bottom: 20px;
+        .main-content {
+            background: linear-gradient(to bottom, rgba(13,17,23,0.05), rgba(13,17,23,0));
         }
-        #divdown2 {
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: var(--accent-color);
-            text-align: center;
-            padding: 20px;
+    }
+    
+    @media (max-width: 1024px) {
+        :root { --sidebar-width: 220px; }
+        .main-content { padding: 25px; }
+    }
+    
+    @media (max-width: 768px) {
+        #app-container {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto 1fr;
+            height: auto;
         }
-        
-        .spen_ab, .spen_ab a {
-            color: var(--light-text-secondary);
-            font-size: 12px;
+        .sidebar {
+            grid-row: 2;
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid var(--light-border);
+            padding: 10px;
+            border-radius: 0;
+            box-shadow: none;
         }
-        .spen_ab {font-style:oblique;}
-        
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: linear-gradient(135deg, #1a1a2e, #16213e);
-                color: var(--dark-text);
-            }
-            .card {
-                background-color: var(--dark-glass-bg);
-                border: 1px solid var(--dark-border);
-                box-shadow: var(--dark-glass-shadow);
-            }
-            .sidebar, .main-header {
-                background: var(--dark-glass-bg);
-                border-color: var(--dark-border);
-                box-shadow: var(--dark-glass-shadow);
-            }
-            .sidebar {
-                border-top-left-radius: var(--border-radius);
-                border-bottom-left-radius: var(--border-radius);
-            }
-            .sidebar-menu li a { color: var(--dark-text); }
-            .sidebar-menu ul a { color: var(--dark-text-secondary); }
-            .main-header .top_title { color: var(--dark-text); }
-            .main-header .top_right_menu a { color: var(--dark-text-secondary); }
-            .main-header .top_right_menu a:hover, .div a:hover { color: #8ab4f8; }
-            a { color: #8ab4f8; }
-            .title strong { color: var(--dark-text); }
-            .title span { color: var(--dark-text-secondary); }
-            .div, .spen_ab, .spen_ab a {
-                color: var(--dark-text-secondary);
-                background-color: var(--dark-glass-bg);
-                box-shadow: var(--dark-glass-shadow);
-                border: 1px solid var(--dark-border);
-            }
-            ::-webkit-scrollbar-track { background-color: rgba(255,255,255,0.05); }
-            ::-webkit-scrollbar-thumb { background-color: #444; }
-            .card:hover { box-shadow: 0 12px 24px rgba(0,0,0,0.4), 0 6px 12px rgba(0,0,0,0.3); }
-            .hero-banner {
-                box-shadow: var(--dark-glass-shadow);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
-            .hero-banner::after {
-                background: linear-gradient(45deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2));
-            }
-            .show-more-btn {
-                box-shadow: 0 4px 8px rgba(0, 122, 255, 0.4);
-            }
-            .show-more-btn:hover {
-                box-shadow: 0 6px 12px rgba(0, 122, 255, 0.5);
-            }
-            .main-content {
-                background: linear-gradient(to bottom, rgba(13,17,23,0.05), rgba(13,17,23,0));
-            }
+        .main-header {
+            grid-row: 1;
+            grid-column: 1;
+            box-shadow: none;
         }
-        
-        @media (max-width: 1024px) {
-            :root { --sidebar-width: 220px; }
-            .main-content { padding: 25px; }
+        .main-content {
+            grid-row: 3;
+            grid-column: 1;
         }
-        
-        @media (max-width: 768px) {
-            #app-container {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto auto 1fr;
-                height: auto;
-            }
-            .sidebar {
-                grid-row: 2;
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid var(--light-border);
-                padding: 10px;
-                border-radius: 0;
-                box-shadow: none;
-            }
-            .main-header {
-                grid-row: 1;
-                grid-column: 1;
-                box-shadow: none;
-            }
-            .main-content {
-                grid-row: 3;
-                grid-column: 1;
-            }
-            .hero-banner {
-                height: 250px;
-                box-shadow: none;
-            }
-            .hero-banner h1 { font-size: 1.8rem; }
-            body { font-size: 90%; }
-            .card, .div {
-                box-shadow: none;
-            }
+        .hero-banner {
+            height: 250px;
+            box-shadow: none;
         }
-    </style>
+        .hero-banner h1 { font-size: 1.8rem; }
+        body { font-size: 90%; }
+        .card, .div {
+            box-shadow: none;
+        }
+    }
+</style>
 </head>
 
 <body>
@@ -467,34 +554,34 @@
                         <i class="bi bi-cpu"></i>Apple Silicon</a>
                     <ul>
                         <li>
-                            <a href="./apple-silicon/chip-a/" target="_blank">苹果 A 系列</a>
+                            <a href="./apple-silicon/chip-a/">苹果 A 系列</a>
                         </li>
                         <li>
-                            <a href="./apple-silicon/chip-s/" target="_blank">苹果 S 系列</a>
+                            <a href="./apple-silicon/chip-s/">苹果 S 系列</a>
                         </li>
                         <li>
-                            <a href="./apple-silicon/chip-m/" target="_blank">苹果 M 系列</a>
+                            <a href="./apple-silicon/chip-m/">苹果 M 系列</a>
                         </li>
                         <li>
-                            <a href="./apple-silicon/chip-r/" target="_blank">苹果 R 系列</a>
+                            <a href="./apple-silicon/chip-r/">苹果 R 系列</a>
                         </li>
                         <li>
-                            <a href="./apple-silicon/chip-t/" target="_blank">苹果 T 系列</a>
+                            <a href="./apple-silicon/chip-t/">苹果 T 系列</a>
                         </li>
                         <li>
-                            <a href="./apple-silicon/chip-u/" target="_blank">苹果 U 系列</a>
+                            <a href="./apple-silicon/chip-u/">苹果 U 系列</a>
                         </li>
                         <li>
-                            <a href="./apple-silicon/chip-w/" target="_blank">苹果 W 系列</a>
+                            <a href="./apple-silicon/chip-w/">苹果 W 系列</a>
                         </li>
                         <li>
-                            <a href="./apple-silicon/chip-h/" target="_blank">苹果 H 系列</a>
+                            <a href="./apple-silicon/chip-h/">苹果 H 系列</a>
                         </li>
                         <li>
-                            <a href="./apple-silicon/chip-c/" target="_blank">苹果 C 系列</a>
+                            <a href="./apple-silicon/chip-c/">苹果 C 系列</a>
                         </li>
                         <li>
-                            <a href="./apple-silicon/chip-coprocessor/" target="_blank">协处理器</a>
+                            <a href="./apple-silicon/chip-coprocessor/">协处理器</a>
                         </li>
                     </ul>
                 </li>
@@ -506,25 +593,25 @@
                             <a href="#">Mac 系列</a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a href="./apple-device/mac/macbook/" target="_blank">MacBook</a>
+                                    <a href="./apple-device/mac/macbook/">MacBook</a>
                                 </li>
                                 <li>
-                                    <a href="./apple-device/mac/macbook-air/" target="_blank">MacBook Air</a>
+                                    <a href="./apple-device/mac/macbook-air/">MacBook Air</a>
                                 </li>
                                 <li>
-                                    <a href="./apple-device/mac/macbook-pro/" target="_blank">MacBook Pro</a>
+                                    <a href="./apple-device/mac/macbook-pro/">MacBook Pro</a>
                                 </li>
                                 <li>
-                                    <a href="./apple-device/mac/mac-imac/" target="_blank">iMac</a>
+                                    <a href="./apple-device/mac/mac-imac/">iMac</a>
                                 </li>
                                 <li>
-                                    <a href="./apple-device/mac/mac-mini/" target="_blank">Mac mini</a>
+                                    <a href="./apple-device/mac/mac-mini/">Mac mini</a>
                                 </li>
                                 <li>
-                                    <a href="./apple-device/mac/mac-studio/" target="_blank">Mac Studio</a>
+                                    <a href="./apple-device/mac/mac-studio/">Mac Studio</a>
                                 </li>
                                 <li>
-                                    <a href="./apple-device/mac/mac-pro/" target="_blank">Mac Pro</a>
+                                    <a href="./apple-device/mac/mac-pro/">Mac Pro</a>
                                 </li>
                             </ul>
                         </li>
@@ -532,16 +619,16 @@
                             <a href="#">iPad 系列</a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a href="./apple-device/ipad/ipad-pro/" target="_blank">iPad Pro</a>
+                                    <a href="./apple-device/ipad/ipad-pro/">iPad Pro</a>
                                 </li>
                                 <li>
-                                    <a href="./apple-device/ipad/ipad-air/" target="_blank">iPad Air</a>
+                                    <a href="./apple-device/ipad/ipad-air/">iPad Air</a>
                                 </li>
                                 <li>
-                                    <a href="./apple-device/ipad/ipad/" target="_blank">iPad</a>
+                                    <a href="./apple-device/ipad/ipad/">iPad</a>
                                 </li>
                                 <li>
-                                    <a href="./apple-device/ipad/ipad-mini/" target="_blank">iPad mini</a>
+                                    <a href="./apple-device/ipad/ipad-mini/">iPad mini</a>
                                 </li>
                             </ul>
                         </li>
@@ -549,33 +636,33 @@
                             <a href="#">Watch 系列</a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a href="./apple-device/watch/watch-ultra/" target="_blank">AW Ultra</a>
+                                    <a href="./apple-device/watch/watch-ultra/">AW Ultra</a>
                                 </li>
                                 <li>
-                                    <a href="./apple-device/watch/watch-series/" target="_blank">AW Series</a>
+                                    <a href="./apple-device/watch/watch-series/">AW Series</a>
                                 </li>
                                 <li>
-                                    <a href="./apple-device/watch/watch-se/" target="_blank">AW SE</a>
+                                    <a href="./apple-device/watch/watch-se/">AW SE</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <a href="./apple-device/iphone/" target="_blank">iPhone</a>
+                            <a href="./apple-device/iphone/">iPhone</a>
                         </li>
                         <li>
-                            <a href="./apple-device/vision/" target="_blank">Vision</a>
+                            <a href="./apple-device/vision/">Vision</a>
                         </li>
                         <li>
-                            <a href="./apple-device/airpods/" target="admin_main">AirPods</a>
+                            <a href="./apple-device/airpods/" onclick="loadDynamicContent(event, './apple-device/airpods/')">AirPods</a>
                         </li>
                         <li>
-                            <a href="./apple-device/homepod/" target="_blank">HomePod</a>
+                            <a href="./apple-device/homepod/">HomePod</a>
                         </li>
                         <li>
-                            <a href="./apple-device/tv/" target="_blank">Apple TV</a>
+                            <a href="./apple-device/tv/">Apple TV</a>
                         </li>
                         <li>
-                            <a href="./apple-device/ipod/" target="_blank">iPod touch</a>
+                            <a href="./apple-device/ipod/">iPod touch</a>
                         </li>
                     </ul>
                 </li>
@@ -584,10 +671,10 @@
                         <i class="bi bi-motherboard"></i>其他参数</a>
                     <ul>
                         <li>
-                            <a href="./apple-device/iphone/cmos.php" target="_blank">iPhone 摄像头</a>
+                            <a href="./apple-device/iphone/cmos.php">iPhone 摄像头</a>
                         </li>
                         <li>
-                            <a href="./apple-other/battery/" target="_blank">电池详细信息</a>
+                            <a href="./apple-other/battery/">电池详细信息</a>
                         </li>
                     </ul>
                 </li>
@@ -596,22 +683,22 @@
                         <i class="bi bi-tools"></i>苹果工具</a>
                     <ul>
                         <li>
-                            <a href="./apple-tools/support/" target="_blank">系统兼容情况</a>
+                            <a href="./apple-tools/support/">系统兼容情况</a>
                         </li>
                         <li>
-                            <a href="./apple-tools/os-version/" target="_blank">系统发布历史</a>
+                            <a href="./apple-tools/os-version/">系统发布历史</a>
                         </li>
                         <li>
-                            <a href="./apple-tools/price/" target="_blank">设备发售价格</a>
+                            <a href="./apple-tools/price/">设备发售价格</a>
                         </li>
                         <li>
-                            <a href="./apple-tools/document/" target="_blank">苹果文档汇总</a>
+                            <a href="./apple-tools/document/">苹果文档汇总</a>
                         </li>
                         <li>
-                            <a href="https://checkcoverage.apple.com" target="_blank">官网序列号查询</a>
+                            <a href="https://checkcoverage.apple.com">官网序列号查询</a>
                         </li>
                         <li>
-                            <a href="./apple-tools/memory-latency/" target="_blank">内存延迟测试</a>
+                            <a href="./apple-tools/memory-latency/">内存延迟测试</a>
                         </li>
                     </ul>
                 </li>
@@ -620,41 +707,41 @@
                         <i class="bi bi-bar-chart-line"></i>统计报表</a>
                     <ul>
                         <li>
-                            <a href="./apple-report/cpu/" target="_blank">CPU 跑分报表</a>
+                            <a href="./apple-report/cpu/">CPU 跑分报表</a>
                         </li>
                         <li>
-                            <a href="./apple-report/gpu/" target="_blank">GPU 跑分报表</a>
+                            <a href="./apple-report/gpu/">GPU 跑分报表</a>
                         </li>
                         <li>
-                            <a href="./apple-report/ai/" target="_blank">AI 跑分报表</a>
+                            <a href="./apple-report/ai/">AI 跑分报表</a>
                         </li>
                         <li>
-                            <a href="./apple-report/disk/" target="_blank">Disk 读写性能</a>
+                            <a href="./apple-report/disk/">Disk 读写性能</a>
                         </li>
                         <li>
-                            <a href="./apple-report/battery/" target="_blank">充电峰值功率</a>
+                            <a href="./apple-report/battery/">充电峰值功率</a>
                         </li>
                         <li>
-                            <a href="./apple-report/random-latency/" target="_blank">随机访问延迟</a>
+                            <a href="./apple-report/random-latency/">随机访问延迟</a>
                         </li>
                         <li>
-                            <a href="./apple-report/ios-memory-budget/" target="_blank">内存占用限制</a>
+                            <a href="./apple-report/ios-memory-budget/">内存占用限制</a>
                         </li>
                         <li>
-                            <a href="./apple-report/frequency-voltage/" target="_blank">DFVS 频率电压表</a>
+                            <a href="./apple-report/frequency-voltage/">DFVS 频率电压表</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="./top-wallpaper/" target="_blank">
+                    <a href="./top-wallpaper/">
                         <i class="bi bi-image"></i>壁纸中心</a>
                 </li>
                 <li>
-                    <a href="./top-description/" target="_blank">
+                    <a href="./top-description/">
                         <i class="bi bi-journal-text"></i>参数解读</a>
                 </li>
                 <li>
-                    <a href="./top-discuss/" target="_blank">
+                    <a href="./top-discuss/">
                         <i class="bi bi-chat-quote"></i>QQ讨论群</a>
                 </li>
             </ul>
@@ -669,7 +756,7 @@
             <div class="top_right_menu">
                 <a href="javascript:void(0);" onclick="location.reload();">首页</a>-
                 <a href="javascript:void(0);" onclick="location.reload();">刷新</a>-
-                <a href="https://www.github.com/CelestialSayuki/OpenHubweb" target="_blank">源码</a>
+                <a href="https://www.github.com/CelestialSayuki/OpenHubweb">源码</a>
             </div>
         </header>
         <main class="main-content">
@@ -1642,23 +1729,23 @@
             </div>
             <div class="card">
                 <b style="font-style:oblique;">维护者Bilibili：</b>
-                <a href="https://space.bilibili.com/514518697" target="_blank">Celestial紗雪</a>
+                <a href="https://space.bilibili.com/514518697">Celestial紗雪</a>
                 <br>
                 <b style="font-style:oblique;">维护者Twitter：</b>
-                <a href="https://x.com/CelestialSayuki" target="_blank">@CelestialSayuki</a>
+                <a href="https://x.com/CelestialSayuki">@CelestialSayuki</a>
                 <br>
                 <b style="font-style:oblique;">维护者E-mail：</b>CelestialSayuki@qq.com
                 <br>
                 <b style="font-style:oblique;">维护者Telegram：</b>
-                <a href="https://t.me/CelestialSayuki" target="_blank">@CelestialSayuki</a>
+                <a href="https://t.me/CelestialSayuki">@CelestialSayuki</a>
                 <br>
                 <b style="font-style:oblique;">原维护者IT之家：</b>番茄炒西红柿（ID：877388）
                 <br>
                 <b style="font-style:oblique;">原维护者Bilibili：</b>
-                <a href="https://space.bilibili.com/211929380" target="_blank">白饭炒白米饭</a>（UID：211929380）
+                <a href="https://space.bilibili.com/211929380">白饭炒白米饭</a>（UID：211929380）
                 <br>
                 <b style="font-style:oblique;">原维护者新浪微博：</b>
-                <a href="https://weibo.com/u/7215797790" target="_blank">白饭炒白米饭</a>（ID：7215797790）</div>
+                <a href="https://weibo.com/u/7215797790">白饭炒白米饭</a>（ID：7215797790）</div>
             <div style="text-align: center; margin-top: 50px; padding-bottom: 30px;">
                 <spen class="spen_ab">数据参考来源：Apple、Intel、Sony、Geekbench、Anandtech、Wikipedia 等</spen>
                 <br>
@@ -1666,85 +1753,286 @@
             </div>
         </main>
     </div>
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.sidebar-menu li').forEach(li => {
-            if (li.querySelector('ul')) {
-                li.classList.add('has-submenu');
-            }
-        });
-        document.querySelectorAll('.sidebar-menu li.has-submenu > a').forEach(menuItem => {
-            menuItem.addEventListener('click', (e) => {
-                e.preventDefault();
-                const parentLi = menuItem.parentElement;
-                parentLi.classList.toggle('open');
-                menuItem.classList.toggle('active');
-                const parentUl = parentLi.parentElement;
-                Array.from(parentUl.children).forEach(siblingLi => {
-                    if (siblingLi !== parentLi && siblingLi.classList.contains('has-submenu')) {
-                        siblingLi.classList.remove('open');
-                        siblingLi.querySelector('a').classList.remove('active');
-                    }
-                });
-            });
-        });
-        const updatesList = document.getElementById('update-history-list');
-        const showMoreBtn = document.getElementById('show-more-updates');
-        const moreButtonListItem = document.querySelector('.more-btn-li');
-        const template = document.getElementById('more-updates-template');
-        if (updatesList && showMoreBtn && moreButtonListItem && template) {
-            if (!template.content.firstElementChild) {
-                moreButtonListItem.style.display = 'none';
-            } else {
-                const updateCollapsedHeight = () => {
-                    if (updatesList.classList.contains('expanded')) return;
-                    let initialHeight = 0;
-                    updatesList.querySelectorAll('li:not(.more-btn-li)').forEach(li => {
-                        initialHeight += li.offsetHeight;
-                    });
-                    initialHeight += moreButtonListItem.offsetHeight;
-                    updatesList.style.height = initialHeight + 'px';
-                };
-                updateCollapsedHeight();
-                window.addEventListener('resize', updateCollapsedHeight);
-                showMoreBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    window.removeEventListener('resize', updateCollapsedHeight);
-                    updatesList.classList.add('expanded');
-                    const contentToInsert = template.content.cloneNode(true);
-                    updatesList.insertBefore(contentToInsert, moreButtonListItem);
-                    const fullHeight = updatesList.scrollHeight;
-                    updatesList.style.height = fullHeight + 'px';
-                    moreButtonListItem.remove();
-                    updatesList.addEventListener('transitionend', () => {
-                        updatesList.style.height = 'auto';
-                    }, { once: true });
-                });
-            }
-        }
-        const interval = 1000;
-        function ShowCountDown(year, month, day, hh, mm, ss, divname) {
-            const now = new Date();
-            const endDate = new Date(year, month - 1, day, hh, mm, ss);
-            const leftTime = endDate.getTime() - now.getTime();
-            const div1 = document.getElementById("divdown1");
-            const div2 = document.getElementById(divname);
-            if (leftTime > 0 && div1 && div2) {
-                div1.style.display = 'block';
-                div2.style.display = 'block';
-                const leftsecond = parseInt(leftTime / 1000);
-                const day1 = Math.floor(leftsecond / (60 * 60 * 24));
-                const hour = Math.floor((leftsecond - day1 * 24 * 60 * 60) / 3600);
-                const minute = Math.floor((leftsecond - day1 * 24 * 60 * 60 - hour * 3600) / 60);
-                const second = Math.floor(leftsecond - day1 * 24 * 60 * 60 - hour * 3600 - minute * 60);
-                div2.innerHTML = "倒计时：" + day1 + " 天 " + hour + " 小时 " + minute + " 分 " + second + " 秒";
-            } else if (div1 && div2) {
-                div1.style.display = 'none';
-                div2.style.display = 'none';
-            }
-        }
-        window.setInterval(() => ShowCountDown(2025, 6, 10, 1, 0, 0, 'divdown2'), interval);
-    });
-    </script>
+                                                                         <script>
+                                                                         document.addEventListener('DOMContentLoaded', () => {
+                                                                             // ... [您菜单的折叠代码保持不变] ...
+                                                                             document.querySelectorAll('.sidebar-menu li').forEach(li => {
+                                                                                 if (li.querySelector('ul')) {
+                                                                                     li.classList.add('has-submenu');
+                                                                                 }
+                                                                             });
+                                                                             document.querySelectorAll('.sidebar-menu li.has-submenu > a').forEach(menuItem => {
+                                                                             menuItem.addEventListener('click', (e) => {
+                                                                                 e.preventDefault();
+                                                                                 const parentLi = menuItem.parentElement;
+                                                                                 const submenu = parentLi.querySelector('ul');
+                                                                                 if (!submenu) return;
+                                                                                 function adjustAncestorHeight(element, heightChange) {
+                                                                                     const ancestorLi = element.parentElement.closest('li.has-submenu.open');
+                                                                                     if (ancestorLi) {
+                                                                                         const ancestorUl = ancestorLi.querySelector('ul');
+                                                                                         if (ancestorUl) {
+                                                                                             const currentMaxHeight = parseFloat(ancestorUl.style.maxHeight || 0);
+                                                                                             const newMaxHeight = currentMaxHeight + heightChange;
+                                                                                             ancestorUl.style.maxHeight = newMaxHeight + 'px';
+                                                                                             adjustAncestorHeight(ancestorLi, heightChange);
+                                                                                         }
+                                                                                     }
+                                                                                 }
+                                                                                 const wasOpen = parentLi.classList.contains('open');
+                                                                                 if (wasOpen) {
+                                                                                     const heightToSubtract = submenu.scrollHeight;
+                                                                                     parentLi.classList.remove('open');
+                                                                                     menuItem.classList.remove('active');
+                                                                                     submenu.style.maxHeight = null;
+                                                                                     adjustAncestorHeight(parentLi, -heightToSubtract);
+                                                                                     return;
+                                                                                 }
+                                                                                 const siblings = [...parentLi.parentElement.children];
+                                                                                 siblings.forEach(sibling => {
+                                                                                     if (sibling.classList.contains('open')) {
+                                                                                         const siblingSubmenu = sibling.querySelector('ul');
+                                                                                         const heightToSubtract = siblingSubmenu.scrollHeight;
+                                                                                         sibling.classList.remove('open');
+                                                                                         sibling.querySelector('a')?.classList.remove('active');
+                                                                                         siblingSubmenu.style.maxHeight = null;
+                                                                                         adjustAncestorHeight(sibling, -heightToSubtract);
+                                                                                     }
+                                                                                 });
+                                                                                 parentLi.classList.add('open');
+                                                                                 menuItem.classList.add('active');
+                                                                                 let heightToAdd = submenu.scrollHeight;
+                                                                                 const paddingCorrection = 4;
+                                                                                 heightToAdd += paddingCorrection;
+                                                                                 submenu.style.maxHeight = heightToAdd + "px";
+                                                                                 adjustAncestorHeight(parentLi, heightToAdd);
+                                                                             });
+                                                                         });
+                                                                             const updatesList = document.getElementById('update-history-list');
+                                                                             const showMoreBtn = document.getElementById('show-more-updates');
+                                                                             const moreButtonListItem = document.querySelector('.more-btn-li');
+                                                                             const template = document.getElementById('more-updates-template');
+                                                                             if (updatesList && showMoreBtn && moreButtonListItem && template) {
+                                                                                 if (!template.content.firstElementChild) {
+                                                                                     moreButtonListItem.style.display = 'none';
+                                                                                 } else {
+                                                                                     const updateCollapsedHeight = () => {
+                                                                                         if (updatesList.classList.contains('expanded')) return;
+                                                                                         let initialHeight = 0;
+                                                                                         updatesList.querySelectorAll('li:not(.more-btn-li)').forEach(li => {
+                                                                                             initialHeight += li.offsetHeight;
+                                                                                         });
+                                                                                         initialHeight += moreButtonListItem.offsetHeight;
+                                                                                         updatesList.style.height = initialHeight + 'px';
+                                                                                     };
+                                                                                     updateCollapsedHeight();
+                                                                                     window.addEventListener('resize', updateCollapsedHeight);
+                                                                                     showMoreBtn.addEventListener('click', (e) => {
+                                                                                         e.preventDefault();
+                                                                                         window.removeEventListener('resize', updateCollapsedHeight);
+                                                                                         updatesList.classList.add('expanded');
+                                                                                         const contentToInsert = template.content.cloneNode(true);
+                                                                                         updatesList.insertBefore(contentToInsert, moreButtonListItem);
+                                                                                         const fullHeight = updatesList.scrollHeight;
+                                                                                         updatesList.style.height = fullHeight + 'px';
+                                                                                         moreButtonListItem.remove();
+                                                                                         updatesList.addEventListener('transitionend', () => {
+                                                                                             updatesList.style.height = 'auto';
+                                                                                         }, { once: true });
+                                                                                     });
+                                                                                 }
+                                                                             }
+                                                                             const interval = 1000;
+                                                                             function ShowCountDown(year, month, day, hh, mm, ss, divname) {
+                                                                                 const now = new Date();
+                                                                                 const endDate = new Date(year, month - 1, day, hh, mm, ss);
+                                                                                 const leftTime = endDate.getTime() - now.getTime();
+                                                                                 const div1 = document.getElementById("divdown1");
+                                                                                 const div2 = document.getElementById(divname);
+                                                                                 if (leftTime > 0 && div1 && div2) {
+                                                                                     div1.style.display = 'block';
+                                                                                     div2.style.display = 'block';
+                                                                                     const leftsecond = parseInt(leftTime / 1000);
+                                                                                     const day1 = Math.floor(leftsecond / (60 * 60 * 24));
+                                                                                     const hour = Math.floor((leftsecond - day1 * 24 * 60 * 60) / 3600);
+                                                                                     const minute = Math.floor((leftsecond - day1 * 24 * 60 * 60 - hour * 3600) / 60);
+                                                                                     const second = Math.floor(leftsecond - day1 * 24 * 60 * 60 - hour * 3600 - minute * 60);
+                                                                                     div2.innerHTML = "倒计时：" + day1 + " 天 " + hour + " 小时 " + minute + " 分 " + second + " 秒";
+                                                                                 } else if (div1 && div2) {
+                                                                                     div1.style.display = 'none';
+                                                                                     div2.style.display = 'none';
+                                                                                 }
+                                                                             }
+                                                                             window.setInterval(() => ShowCountDown(2025, 6, 10, 1, 0, 0, 'divdown2'), interval);
+                                                                         });
+
+                                                                         // --- 全新 JavaScript 代码开始 (带调试日志) ---
+
+                                                                         const mainContentArea = document.querySelector('.main-content');
+                                                                         let closeOverlayHandler = null;
+
+                                                                         function convertRemToPx(cssText, baseFontSize = 10) {
+                                                                             return cssText.replace(/(\d*\.?\d+)\s*rem/g, (match, remValue) => `${parseFloat(remValue) * baseFontSize}px`);
+                                                                         }
+
+                                                                         function scopeCss(cssText, scopeSelector) {
+                                                                             const ruleRegex = /([^{}]*)(?=\{)/g;
+                                                                             return cssText.replace(ruleRegex, (match, selector) => {
+                                                                                 const trimmedSelector = selector.trim();
+                                                                                 if (trimmedSelector.startsWith('@') || trimmedSelector === '') return selector;
+                                                                                 if (['html', 'body'].includes(trimmedSelector.toLowerCase())) return scopeSelector;
+                                                                                 return trimmedSelector.split(',').map(part => `${scopeSelector} ${part.trim()}`).join(', ');
+                                                                             });
+                                                                         }
+
+                                                                         function rewriteCssUrls(cssText, cssBaseUrl) {
+                                                                             const urlRegex = /url\((?!['"]?data:)(['"]?)(.*?)\1\)/g;
+                                                                             return cssText.replace(urlRegex, (match, quote, url) => {
+                                                                                 const absoluteUrl = new URL(url, cssBaseUrl).href;
+                                                                                 return `url(${quote}${absoluteUrl}${quote})`;
+                                                                             });
+                                                                         }
+
+                                                                         function closeOverlay() {
+                                                                             console.log("[DEBUG] closeOverlay() function was called.");
+                                                                             const existingOverlay = document.querySelector('.dynamic-content-overlay');
+
+                                                                             if (!existingOverlay || existingOverlay.classList.contains('is-closing')) {
+                                                                                 console.log("[DEBUG] Aborting close: No overlay found or it's already closing.");
+                                                                                 return;
+                                                                             }
+
+                                                                             const cleanup = () => {
+                                                                                 console.log("[DEBUG] Animation ended. Running cleanup function.");
+                                                                                 if (existingOverlay) {
+                                                                                     existingOverlay.remove();
+                                                                                     console.log("[DEBUG] Overlay element removed from DOM.");
+                                                                                 }
+                                                                                 document.querySelectorAll('[data-dynamic-style]').forEach(el => el.remove());
+                                                                             };
+
+                                                                             if (closeOverlayHandler) {
+                                                                                 document.removeEventListener('click', closeOverlayHandler);
+                                                                                 closeOverlayHandler = null;
+                                                                                 console.log("[DEBUG] 'Click outside' listener has been removed.");
+                                                                             }
+
+                                                                             console.log("[DEBUG] Adding .is-closing class to trigger animation.");
+                                                                             existingOverlay.classList.add('is-closing');
+                                                                             
+                                                                             console.log("[DEBUG] Attaching 'animationend' event listener.");
+                                                                             existingOverlay.addEventListener('animationend', cleanup, { once: true });
+                                                                         }
+
+                                                                         async function loadInOverlay(event, pageUrl) {
+                                                                             console.log("--- [DEBUG] Starting loadInOverlay ---");
+                                                                             event.preventDefault();
+                                                                             event.stopPropagation();
+
+                                                                             closeOverlay();
+
+                                                                             const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                                                                             
+                                                                             const overlay = document.createElement('div');
+                                                                             overlay.className = 'dynamic-content-overlay';
+                                                                                 
+                                                                             if (isDarkMode) overlay.classList.add('theme-dark');
+
+                                                                             overlay.innerHTML = `<div style="text-align:center; padding: 50px; font-size: 1.2rem;">正在加载...</div>`;
+                                                                             mainContentArea.appendChild(overlay);
+                                                                             console.log("[DEBUG] Overlay element appended to the page.");
+
+                                                                             closeOverlayHandler = (e) => {
+                                                                                 console.log("--- [DEBUG] Document Click Detected ---");
+                                                                                 console.log("Clicked element (e.target):", e.target);
+                                                                                 console.log("Is clicked element the main content area?", e.target === mainContentArea);
+                                                                                 
+                                                                                 if (e.target === mainContentArea) {
+                                                                                     console.log(">>> [DEBUG] Condition MET. Calling closeOverlay().");
+                                                                                     closeOverlay();
+                                                                                 } else {
+                                                                                     console.log(">>> [DEBUG] Condition FAILED. Click was not on the main content area.");
+                                                                                 }
+                                                                             };
+                                                                             document.addEventListener('click', closeOverlayHandler);
+                                                                             console.log("[DEBUG] 'Click outside' listener has been ADDED.");
+
+                                                                             try {
+                                                                                 const response = await fetch(pageUrl);
+                                                                                 if (!response.ok) throw new Error(`网络请求失败: ${response.status}`);
+                                                                                 
+                                                                                 const htmlText = await response.text();
+                                                                                 const parser = new DOMParser();
+                                                                                 const doc = parser.parseFromString(htmlText, 'text/html');
+                                                                                 const newContent = doc.querySelector('.cd-products-comparison-table');
+
+                                                                                 if (newContent) {
+                                                                                     // ... [rest of the content loading logic, which is likely fine] ...
+                                                                                     const baseUrl = response.url;
+                                                                                     newContent.querySelectorAll('img').forEach(img => {
+                                                                                         const relativeSrc = img.getAttribute('src');
+                                                                                         if (relativeSrc) img.setAttribute('src', new URL(relativeSrc, baseUrl).href);
+                                                                                     });
+                                                                                     overlay.innerHTML = '';
+                                                                                     overlay.appendChild(newContent);
+                                                                                     const processAndInjectCss = async (cssText, cssBaseUrl) => {
+                                                                                         let processedCss = convertRemToPx(cssText);
+                                                                                         processedCss = rewriteCssUrls(processedCss, cssBaseUrl);
+                                                                                         let finalScopedCss;
+                                                                                         if (processedCss.includes('@media (prefers-color-scheme: dark)')) {
+                                                                                             const startIndex = processedCss.indexOf('{');
+                                                                                             const endIndex = processedCss.lastIndexOf('}');
+                                                                                             const darkStyles = processedCss.substring(startIndex + 1, endIndex);
+                                                                                             finalScopedCss = scopeCss(darkStyles, '.dynamic-content-overlay.theme-dark');
+                                                                                         } else {
+                                                                                             finalScopedCss = scopeCss(processedCss, '.dynamic-content-overlay');
+                                                                                         }
+                                                                                         const styleTag = document.createElement('style');
+                                                                                         styleTag.textContent = finalScopedCss;
+                                                                                         styleTag.setAttribute('data-dynamic-style', 'true');
+                                                                                         document.head.appendChild(styleTag);
+                                                                                     };
+                                                                                     const cssLinks = Array.from(doc.querySelectorAll('link[rel="stylesheet"]'));
+                                                                                     for (const link of cssLinks) {
+                                                                                         const absoluteUrl = new URL(link.getAttribute('href'), baseUrl).href;
+                                                                                         const cssResponse = await fetch(absoluteUrl);
+                                                                                         const cssText = await cssResponse.text();
+                                                                                         await processAndInjectCss(cssText, absoluteUrl);
+                                                                                     }
+                                                                                     for (const style of doc.querySelectorAll('style')) {
+                                                                                         await processAndInjectCss(style.textContent, baseUrl);
+                                                                                     }
+                                                                                     const scriptsToLoad = Array.from(doc.querySelectorAll('body script[src]'));
+                                                                                     for (const script of scriptsToLoad) {
+                                                                                         const absoluteUrl = new URL(script.getAttribute('src'), baseUrl).href;
+                                                                                         if (!document.querySelector(`script[src="${absoluteUrl}"]`)) {
+                                                                                             await new Promise(resolve => {
+                                                                                                 const newScript = document.createElement('script');
+                                                                                                 newScript.src = absoluteUrl;
+                                                                                                 newScript.onload = resolve;
+                                                                                                 newScript.onerror = resolve;
+                                                                                                 document.body.appendChild(newScript);
+                                                                                             });
+                                                                                         }
+                                                                                     }
+                                                                                 } else {
+                                                                                     throw new Error('无法在目标页面找到所需内容。');
+                                                                                 }
+                                                                             } catch (error) {
+                                                                                 console.error('加载浮层内容时出错:', error);
+                                                                                 overlay.innerHTML = `<div style="color:red; text-align:center; padding: 50px;">内容加载失败。</div>`;
+                                                                             }
+                                                                         }
+
+                                                                         // 自动为左侧菜单链接绑定新的浮层加载函数
+                                                                         document.addEventListener('DOMContentLoaded', () => {
+                                                                             document.querySelectorAll('.sidebar-menu a[href*="./apple-device/"]').forEach(link => {
+                                                                                 if (link.getAttribute('href') !== '#') {
+                                                                                     link.removeAttribute('target');
+                                                                                     link.onclick = (event) => loadInOverlay(event, link.href);
+                                                                                 }
+                                                                             });
+                                                                         });
+                                                                         </script>
 </body>
 </html>
