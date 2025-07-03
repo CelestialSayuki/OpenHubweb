@@ -653,7 +653,7 @@
                             <a href="./apple-device/vision/">Vision</a>
                         </li>
                         <li>
-                            <a href="./apple-device/airpods/" onclick="loadDynamicContent(event, './apple-device/airpods/')">AirPods</a>
+                            <a href="./apple-device/airpods/">AirPods</a>
                         </li>
                         <li>
                             <a href="./apple-device/homepod/">HomePod</a>
@@ -754,8 +754,6 @@
                 <div class="top_title" id="top_title">OpenHubweb / 苹果参数中心</div>
             </div>
             <div class="top_right_menu">
-                <a href="javascript:void(0);" onclick="location.reload();">首页</a>-
-                <a href="javascript:void(0);" onclick="location.reload();">刷新</a>-
                 <a href="https://www.github.com/CelestialSayuki/OpenHubweb">源码</a>
             </div>
         </header>
@@ -1754,285 +1752,291 @@
         </main>
     </div>
                                                                          <script>
-                                                                         document.addEventListener('DOMContentLoaded', () => {
-                                                                             // ... [您菜单的折叠代码保持不变] ...
-                                                                             document.querySelectorAll('.sidebar-menu li').forEach(li => {
-                                                                                 if (li.querySelector('ul')) {
-                                                                                     li.classList.add('has-submenu');
+                                                                             document.addEventListener('DOMContentLoaded', () => {
+                                                                                 // --- 【重构】浮层加载逻辑 ---
+                                                                                 const mainContentArea = document.querySelector('.main-content');
+
+                                                                                 // --- 辅助函数 (保持不变) ---
+                                                                                 function convertRemToPx(cssText, baseFontSize = 10) {
+                                                                                     return cssText.replace(/(\d*\.?\d+)\s*rem/g, (match, remValue) => `${parseFloat(remValue) * baseFontSize}px`);
                                                                                  }
-                                                                             });
-                                                                             document.querySelectorAll('.sidebar-menu li.has-submenu > a').forEach(menuItem => {
-                                                                             menuItem.addEventListener('click', (e) => {
-                                                                                 e.preventDefault();
-                                                                                 const parentLi = menuItem.parentElement;
-                                                                                 const submenu = parentLi.querySelector('ul');
-                                                                                 if (!submenu) return;
-                                                                                 function adjustAncestorHeight(element, heightChange) {
-                                                                                     const ancestorLi = element.parentElement.closest('li.has-submenu.open');
-                                                                                     if (ancestorLi) {
-                                                                                         const ancestorUl = ancestorLi.querySelector('ul');
-                                                                                         if (ancestorUl) {
-                                                                                             const currentMaxHeight = parseFloat(ancestorUl.style.maxHeight || 0);
-                                                                                             const newMaxHeight = currentMaxHeight + heightChange;
-                                                                                             ancestorUl.style.maxHeight = newMaxHeight + 'px';
-                                                                                             adjustAncestorHeight(ancestorLi, heightChange);
-                                                                                         }
-                                                                                     }
-                                                                                 }
-                                                                                 const wasOpen = parentLi.classList.contains('open');
-                                                                                 if (wasOpen) {
-                                                                                     const heightToSubtract = submenu.scrollHeight;
-                                                                                     parentLi.classList.remove('open');
-                                                                                     menuItem.classList.remove('active');
-                                                                                     submenu.style.maxHeight = null;
-                                                                                     adjustAncestorHeight(parentLi, -heightToSubtract);
-                                                                                     return;
-                                                                                 }
-                                                                                 const siblings = [...parentLi.parentElement.children];
-                                                                                 siblings.forEach(sibling => {
-                                                                                     if (sibling.classList.contains('open')) {
-                                                                                         const siblingSubmenu = sibling.querySelector('ul');
-                                                                                         const heightToSubtract = siblingSubmenu.scrollHeight;
-                                                                                         sibling.classList.remove('open');
-                                                                                         sibling.querySelector('a')?.classList.remove('active');
-                                                                                         siblingSubmenu.style.maxHeight = null;
-                                                                                         adjustAncestorHeight(sibling, -heightToSubtract);
-                                                                                     }
-                                                                                 });
-                                                                                 parentLi.classList.add('open');
-                                                                                 menuItem.classList.add('active');
-                                                                                 let heightToAdd = submenu.scrollHeight;
-                                                                                 const paddingCorrection = 4;
-                                                                                 heightToAdd += paddingCorrection;
-                                                                                 submenu.style.maxHeight = heightToAdd + "px";
-                                                                                 adjustAncestorHeight(parentLi, heightToAdd);
-                                                                             });
-                                                                         });
-                                                                             const updatesList = document.getElementById('update-history-list');
-                                                                             const showMoreBtn = document.getElementById('show-more-updates');
-                                                                             const moreButtonListItem = document.querySelector('.more-btn-li');
-                                                                             const template = document.getElementById('more-updates-template');
-                                                                             if (updatesList && showMoreBtn && moreButtonListItem && template) {
-                                                                                 if (!template.content.firstElementChild) {
-                                                                                     moreButtonListItem.style.display = 'none';
-                                                                                 } else {
-                                                                                     const updateCollapsedHeight = () => {
-                                                                                         if (updatesList.classList.contains('expanded')) return;
-                                                                                         let initialHeight = 0;
-                                                                                         updatesList.querySelectorAll('li:not(.more-btn-li)').forEach(li => {
-                                                                                             initialHeight += li.offsetHeight;
-                                                                                         });
-                                                                                         initialHeight += moreButtonListItem.offsetHeight;
-                                                                                         updatesList.style.height = initialHeight + 'px';
-                                                                                     };
-                                                                                     updateCollapsedHeight();
-                                                                                     window.addEventListener('resize', updateCollapsedHeight);
-                                                                                     showMoreBtn.addEventListener('click', (e) => {
-                                                                                         e.preventDefault();
-                                                                                         window.removeEventListener('resize', updateCollapsedHeight);
-                                                                                         updatesList.classList.add('expanded');
-                                                                                         const contentToInsert = template.content.cloneNode(true);
-                                                                                         updatesList.insertBefore(contentToInsert, moreButtonListItem);
-                                                                                         const fullHeight = updatesList.scrollHeight;
-                                                                                         updatesList.style.height = fullHeight + 'px';
-                                                                                         moreButtonListItem.remove();
-                                                                                         updatesList.addEventListener('transitionend', () => {
-                                                                                             updatesList.style.height = 'auto';
-                                                                                         }, { once: true });
+
+                                                                                 function scopeCss(cssText, scopeSelector) {
+                                                                                     const ruleRegex = /([^{}]*)(?=\{)/g;
+                                                                                     return cssText.replace(ruleRegex, (match, selector) => {
+                                                                                         const trimmedSelector = selector.trim();
+                                                                                         if (trimmedSelector.startsWith('@') || trimmedSelector === '') return selector;
+                                                                                         if (['html', 'body'].includes(trimmedSelector.toLowerCase())) return scopeSelector;
+                                                                                         return trimmedSelector.split(',').map(part => `${scopeSelector} ${part.trim()}`).join(', ');
                                                                                      });
                                                                                  }
-                                                                             }
-                                                                             const interval = 1000;
-                                                                             function ShowCountDown(year, month, day, hh, mm, ss, divname) {
-                                                                                 const now = new Date();
-                                                                                 const endDate = new Date(year, month - 1, day, hh, mm, ss);
-                                                                                 const leftTime = endDate.getTime() - now.getTime();
-                                                                                 const div1 = document.getElementById("divdown1");
-                                                                                 const div2 = document.getElementById(divname);
-                                                                                 if (leftTime > 0 && div1 && div2) {
-                                                                                     div1.style.display = 'block';
-                                                                                     div2.style.display = 'block';
-                                                                                     const leftsecond = parseInt(leftTime / 1000);
-                                                                                     const day1 = Math.floor(leftsecond / (60 * 60 * 24));
-                                                                                     const hour = Math.floor((leftsecond - day1 * 24 * 60 * 60) / 3600);
-                                                                                     const minute = Math.floor((leftsecond - day1 * 24 * 60 * 60 - hour * 3600) / 60);
-                                                                                     const second = Math.floor(leftsecond - day1 * 24 * 60 * 60 - hour * 3600 - minute * 60);
-                                                                                     div2.innerHTML = "倒计时：" + day1 + " 天 " + hour + " 小时 " + minute + " 分 " + second + " 秒";
-                                                                                 } else if (div1 && div2) {
-                                                                                     div1.style.display = 'none';
-                                                                                     div2.style.display = 'none';
+
+                                                                                 function rewriteCssUrls(cssText, cssBaseUrl) {
+                                                                                     const urlRegex = /url\((?!['"]?data:)(['"]?)(.*?)\1\)/g;
+                                                                                     return cssText.replace(urlRegex, (match, quote, url) => {
+                                                                                         try {
+                                                                                             const absoluteUrl = new URL(url, cssBaseUrl).href;
+                                                                                             return `url(${quote}${absoluteUrl}${quote})`;
+                                                                                         } catch (e) {
+                                                                                             return match;
+                                                                                         }
+                                                                                     });
                                                                                  }
-                                                                             }
-                                                                             window.setInterval(() => ShowCountDown(2025, 6, 10, 1, 0, 0, 'divdown2'), interval);
-                                                                         });
 
-                                                                         // --- 全新 JavaScript 代码开始 (带调试日志) ---
+                                                                                 // --- 健壮的事件处理和浮层管理 ---
 
-                                                                         const mainContentArea = document.querySelector('.main-content');
-                                                                         let closeOverlayHandler = null;
-
-                                                                         function convertRemToPx(cssText, baseFontSize = 10) {
-                                                                             return cssText.replace(/(\d*\.?\d+)\s*rem/g, (match, remValue) => `${parseFloat(remValue) * baseFontSize}px`);
-                                                                         }
-
-                                                                         function scopeCss(cssText, scopeSelector) {
-                                                                             const ruleRegex = /([^{}]*)(?=\{)/g;
-                                                                             return cssText.replace(ruleRegex, (match, selector) => {
-                                                                                 const trimmedSelector = selector.trim();
-                                                                                 if (trimmedSelector.startsWith('@') || trimmedSelector === '') return selector;
-                                                                                 if (['html', 'body'].includes(trimmedSelector.toLowerCase())) return scopeSelector;
-                                                                                 return trimmedSelector.split(',').map(part => `${scopeSelector} ${part.trim()}`).join(', ');
-                                                                             });
-                                                                         }
-
-                                                                         function rewriteCssUrls(cssText, cssBaseUrl) {
-                                                                             const urlRegex = /url\((?!['"]?data:)(['"]?)(.*?)\1\)/g;
-                                                                             return cssText.replace(urlRegex, (match, quote, url) => {
-                                                                                 const absoluteUrl = new URL(url, cssBaseUrl).href;
-                                                                                 return `url(${quote}${absoluteUrl}${quote})`;
-                                                                             });
-                                                                         }
-
-                                                                         function closeOverlay() {
-                                                                             console.log("[DEBUG] closeOverlay() function was called.");
-                                                                             const existingOverlay = document.querySelector('.dynamic-content-overlay');
-
-                                                                             if (!existingOverlay || existingOverlay.classList.contains('is-closing')) {
-                                                                                 console.log("[DEBUG] Aborting close: No overlay found or it's already closing.");
-                                                                                 return;
-                                                                             }
-
-                                                                             const cleanup = () => {
-                                                                                 console.log("[DEBUG] Animation ended. Running cleanup function.");
-                                                                                 if (existingOverlay) {
-                                                                                     existingOverlay.remove();
-                                                                                     console.log("[DEBUG] Overlay element removed from DOM.");
-                                                                                 }
-                                                                                 document.querySelectorAll('[data-dynamic-style]').forEach(el => el.remove());
-                                                                             };
-
-                                                                             if (closeOverlayHandler) {
-                                                                                 document.removeEventListener('click', closeOverlayHandler);
-                                                                                 closeOverlayHandler = null;
-                                                                                 console.log("[DEBUG] 'Click outside' listener has been removed.");
-                                                                             }
-
-                                                                             console.log("[DEBUG] Adding .is-closing class to trigger animation.");
-                                                                             existingOverlay.classList.add('is-closing');
-                                                                             
-                                                                             console.log("[DEBUG] Attaching 'animationend' event listener.");
-                                                                             existingOverlay.addEventListener('animationend', cleanup, { once: true });
-                                                                         }
-
-                                                                         async function loadInOverlay(event, pageUrl) {
-                                                                             console.log("--- [DEBUG] Starting loadInOverlay ---");
-                                                                             event.preventDefault();
-                                                                             event.stopPropagation();
-
-                                                                             closeOverlay();
-
-                                                                             const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                                                                             
-                                                                             const overlay = document.createElement('div');
-                                                                             overlay.className = 'dynamic-content-overlay';
-                                                                                 
-                                                                             if (isDarkMode) overlay.classList.add('theme-dark');
-
-                                                                             overlay.innerHTML = `<div style="text-align:center; padding: 50px; font-size: 1.2rem;">正在加载...</div>`;
-                                                                             mainContentArea.appendChild(overlay);
-                                                                             console.log("[DEBUG] Overlay element appended to the page.");
-
-                                                                             closeOverlayHandler = (e) => {
-                                                                                 console.log("--- [DEBUG] Document Click Detected ---");
-                                                                                 console.log("Clicked element (e.target):", e.target);
-                                                                                 console.log("Is clicked element the main content area?", e.target === mainContentArea);
-                                                                                 
-                                                                                 if (e.target === mainContentArea) {
-                                                                                     console.log(">>> [DEBUG] Condition MET. Calling closeOverlay().");
+                                                                                 // 统一定义的关闭浮层事件处理器
+                                                                                 function handleDocumentClickForOverlay(event) {
+                                                                                     const overlay = document.querySelector('.dynamic-content-overlay:not(.is-closing)');
+                                                                                     if (!overlay) return;
+                                                                                     if (event.target.closest('.sidebar-menu a[href]')) return;
+                                                                                     if (overlay.contains(event.target)) return;
                                                                                      closeOverlay();
-                                                                                 } else {
-                                                                                     console.log(">>> [DEBUG] Condition FAILED. Click was not on the main content area.");
                                                                                  }
-                                                                             };
-                                                                             document.addEventListener('click', closeOverlayHandler);
-                                                                             console.log("[DEBUG] 'Click outside' listener has been ADDED.");
 
-                                                                             try {
-                                                                                 const response = await fetch(pageUrl);
-                                                                                 if (!response.ok) throw new Error(`网络请求失败: ${response.status}`);
-                                                                                 
-                                                                                 const htmlText = await response.text();
-                                                                                 const parser = new DOMParser();
-                                                                                 const doc = parser.parseFromString(htmlText, 'text/html');
-                                                                                 const newContent = doc.querySelector('.cd-products-comparison-table');
+                                                                                 // 关闭浮层函数
+                                                                                 function closeOverlay() {
+                                                                                     // 精确查找当前活动的、且没有在关闭过程中的浮层
+                                                                                     const existingOverlay = document.querySelector('.dynamic-content-overlay:not(.is-closing)');
+                                                                                     if (!existingOverlay) return;
 
-                                                                                 if (newContent) {
-                                                                                     // ... [rest of the content loading logic, which is likely fine] ...
-                                                                                     const baseUrl = response.url;
-                                                                                     newContent.querySelectorAll('img').forEach(img => {
-                                                                                         const relativeSrc = img.getAttribute('src');
-                                                                                         if (relativeSrc) img.setAttribute('src', new URL(relativeSrc, baseUrl).href);
-                                                                                     });
-                                                                                     overlay.innerHTML = '';
-                                                                                     overlay.appendChild(newContent);
-                                                                                     const processAndInjectCss = async (cssText, cssBaseUrl) => {
-                                                                                         let processedCss = convertRemToPx(cssText);
-                                                                                         processedCss = rewriteCssUrls(processedCss, cssBaseUrl);
-                                                                                         let finalScopedCss;
-                                                                                         if (processedCss.includes('@media (prefers-color-scheme: dark)')) {
-                                                                                             const startIndex = processedCss.indexOf('{');
-                                                                                             const endIndex = processedCss.lastIndexOf('}');
-                                                                                             const darkStyles = processedCss.substring(startIndex + 1, endIndex);
-                                                                                             finalScopedCss = scopeCss(darkStyles, '.dynamic-content-overlay.theme-dark');
-                                                                                         } else {
-                                                                                             finalScopedCss = scopeCss(processedCss, '.dynamic-content-overlay');
+                                                                                     // 找到与这个即将关闭的浮层相关的动态样式
+                                                                                     const dynamicStyles = document.querySelectorAll('[data-dynamic-style]');
+                                                                                     
+                                                                                     const cleanup = () => {
+                                                                                         if (existingOverlay) existingOverlay.remove();
+                                                                                         dynamicStyles.forEach(el => el.remove());
+
+                                                                                         // 【关键】只有当屏幕上再也没有其他浮层时，才移除点击监听器
+                                                                                         if (!document.querySelector('.dynamic-content-overlay')) {
+                                                                                             document.removeEventListener('click', handleDocumentClickForOverlay);
                                                                                          }
-                                                                                         const styleTag = document.createElement('style');
-                                                                                         styleTag.textContent = finalScopedCss;
-                                                                                         styleTag.setAttribute('data-dynamic-style', 'true');
-                                                                                         document.head.appendChild(styleTag);
                                                                                      };
-                                                                                     const cssLinks = Array.from(doc.querySelectorAll('link[rel="stylesheet"]'));
-                                                                                     for (const link of cssLinks) {
-                                                                                         const absoluteUrl = new URL(link.getAttribute('href'), baseUrl).href;
-                                                                                         const cssResponse = await fetch(absoluteUrl);
-                                                                                         const cssText = await cssResponse.text();
-                                                                                         await processAndInjectCss(cssText, absoluteUrl);
-                                                                                     }
-                                                                                     for (const style of doc.querySelectorAll('style')) {
-                                                                                         await processAndInjectCss(style.textContent, baseUrl);
-                                                                                     }
-                                                                                     const scriptsToLoad = Array.from(doc.querySelectorAll('body script[src]'));
-                                                                                     for (const script of scriptsToLoad) {
-                                                                                         const absoluteUrl = new URL(script.getAttribute('src'), baseUrl).href;
-                                                                                         if (!document.querySelector(`script[src="${absoluteUrl}"]`)) {
-                                                                                             await new Promise(resolve => {
-                                                                                                 const newScript = document.createElement('script');
-                                                                                                 newScript.src = absoluteUrl;
-                                                                                                 newScript.onload = resolve;
-                                                                                                 newScript.onerror = resolve;
-                                                                                                 document.body.appendChild(newScript);
-                                                                                             });
-                                                                                         }
-                                                                                     }
-                                                                                 } else {
-                                                                                     throw new Error('无法在目标页面找到所需内容。');
+                                                                                     
+                                                                                     existingOverlay.classList.add('is-closing');
+                                                                                     existingOverlay.addEventListener('animationend', cleanup, { once: true });
                                                                                  }
-                                                                             } catch (error) {
-                                                                                 console.error('加载浮层内容时出错:', error);
-                                                                                 overlay.innerHTML = `<div style="color:red; text-align:center; padding: 50px;">内容加载失败。</div>`;
-                                                                             }
-                                                                         }
 
-                                                                         // 自动为左侧菜单链接绑定新的浮层加载函数
-                                                                         document.addEventListener('DOMContentLoaded', () => {
-                                                                             document.querySelectorAll('.sidebar-menu a[href*="./apple-device/"]').forEach(link => {
-                                                                                 if (link.getAttribute('href') !== '#') {
-                                                                                     link.removeAttribute('target');
-                                                                                     link.onclick = (event) => loadInOverlay(event, link.href);
+                                                                                 // 加载浮层函数
+                                                                                 async function loadInOverlay(event, pageUrl) {
+                                                                                     event.preventDefault();
+                                                                                     event.stopPropagation();
+
+                                                                                     // 【关键】立即触发关闭，但不要等待 (fire and forget)
+                                                                                     closeOverlay();
+                                                                                     
+                                                                                     const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                                                                                     
+                                                                                     const overlay = document.createElement('div');
+                                                                                     overlay.className = 'dynamic-content-overlay';
+                                                                                     if (isDarkMode) overlay.classList.add('theme-dark');
+                                                                                     overlay.innerHTML = `<div style="text-align:center; padding: 50px; font-size: 1.2rem;">正在加载...</div>`;
+                                                                                     mainContentArea.appendChild(overlay);
+                                                                                     
+                                                                                     // 确保事件监听器被添加
+                                                                                     document.removeEventListener('click', handleDocumentClickForOverlay); // 先移除，防止重复
+                                                                                     document.addEventListener('click', handleDocumentClickForOverlay);
+
+                                                                                     try {
+                                                                                         const response = await fetch(pageUrl);
+                                                                                         if (!response.ok) throw new Error(`网络请求失败: ${response.status}`);
+                                                                                         
+                                                                                         const htmlText = await response.text();
+                                                                                         const parser = new DOMParser();
+                                                                                         const doc = parser.parseFromString(htmlText, 'text/html');
+                                                                                         const newContent = doc.querySelector('.cd-products-comparison-table');
+
+                                                                                         if (newContent) {
+                                                                                             const baseUrl = response.url;
+                                                                                             
+                                                                                             newContent.querySelectorAll('img').forEach(img => {
+                                                                                                 const relativeSrc = img.getAttribute('src');
+                                                                                                 if (relativeSrc) img.setAttribute('src', new URL(relativeSrc, baseUrl).href);
+                                                                                             });
+
+                                                                                             overlay.innerHTML = '';
+                                                                                             overlay.appendChild(newContent);
+                                                                                             
+                                                                                             const styledElements = newContent.querySelectorAll('[style]');
+                                                                                             styledElements.forEach(el => {
+                                                                                                 if (el.style.fontSize && el.style.fontSize.includes('rem')) {
+                                                                                                     const remValue = parseFloat(el.style.fontSize);
+                                                                                                     if (!isNaN(remValue)) {
+                                                                                                         el.style.fontSize = (remValue * 10) + 'px';
+                                                                                                     }
+                                                                                                 }
+                                                                                             });
+
+                                                                                             const processAndInjectCss = async (cssText, cssBaseUrl) => {
+                                                                                                 let processedCss = convertRemToPx(cssText);
+                                                                                                 processedCss = rewriteCssUrls(processedCss, cssBaseUrl);
+                                                                                                 let finalScopedCss;
+                                                                                                 if (processedCss.includes('@media (prefers-color-scheme: dark)')) {
+                                                                                                     const startIndex = processedCss.indexOf('{');
+                                                                                                     const endIndex = processedCss.lastIndexOf('}');
+                                                                                                     const darkStyles = processedCss.substring(startIndex + 1, endIndex);
+                                                                                                     finalScopedCss = scopeCss(darkStyles, '.dynamic-content-overlay.theme-dark');
+                                                                                                 } else {
+                                                                                                     finalScopedCss = scopeCss(processedCss, '.dynamic-content-overlay');
+                                                                                                 }
+                                                                                                 const styleTag = document.createElement('style');
+                                                                                                 styleTag.textContent = finalScopedCss;
+                                                                                                 styleTag.setAttribute('data-dynamic-style', 'true');
+                                                                                                 document.head.appendChild(styleTag);
+                                                                                             };
+
+                                                                                             const cssLinks = Array.from(doc.querySelectorAll('link[rel="stylesheet"]'));
+                                                                                             for (const link of cssLinks) {
+                                                                                                 const absoluteUrl = new URL(link.getAttribute('href'), baseUrl).href;
+                                                                                                 const cssResponse = await fetch(absoluteUrl);
+                                                                                                 const cssText = await cssResponse.text();
+                                                                                                 await processAndInjectCss(cssText, absoluteUrl);
+                                                                                             }
+                                                                                             
+                                                                                             for (const style of doc.querySelectorAll('style')) {
+                                                                                                 await processAndInjectCss(style.textContent, baseUrl);
+                                                                                             }
+
+                                                                                             const scriptsToLoad = Array.from(doc.querySelectorAll('body script[src]'));
+                                                                                             for (const script of scriptsToLoad) {
+                                                                                                 const absoluteUrl = new URL(script.getAttribute('src'), baseUrl).href;
+                                                                                                 if (!document.querySelector(`script[src="${absoluteUrl}"]`)) {
+                                                                                                     await new Promise(resolve => {
+                                                                                                         const newScript = document.createElement('script');
+                                                                                                         newScript.src = absoluteUrl;
+                                                                                                         newScript.onload = resolve;
+                                                                                                         newScript.onerror = resolve;
+                                                                                                         document.body.appendChild(newScript);
+                                                                                                     });
+                                                                                                 }
+                                                                                             }
+
+                                                                                         } else {
+                                                                                             throw new Error('无法在目标页面找到所需内容。');
+                                                                                         }
+                                                                                     } catch (error) {
+                                                                                         console.error('加载浮层内容时出错:', error);
+                                                                                         overlay.innerHTML = `<div style="color:red; text-align:center; padding: 50px;">内容加载失败。</div>`;
+                                                                                     }
                                                                                  }
+
+                                                                                 // --- 页面初始化逻辑 (菜单、加载更多、倒计时) ---
+                                                                                 
+                                                                                 // 菜单折叠功能
+                                                                                 document.querySelectorAll('.sidebar-menu li').forEach(li => {
+                                                                                     if (li.querySelector('ul')) li.classList.add('has-submenu');
+                                                                                 });
+                                                                                 document.querySelectorAll('.sidebar-menu li.has-submenu > a').forEach(menuItem => {
+                                                                                     menuItem.addEventListener('click', (e) => {
+                                                                                         e.preventDefault();
+                                                                                         const parentLi = menuItem.parentElement;
+                                                                                         const submenu = parentLi.querySelector('ul');
+                                                                                         if (!submenu) return;
+                                                                                         function adjustAncestorHeight(element, heightChange) {
+                                                                                             const ancestorLi = element.parentElement.closest('li.has-submenu.open');
+                                                                                             if (ancestorLi) {
+                                                                                                 const ancestorUl = ancestorLi.querySelector('ul');
+                                                                                                 if (ancestorUl) {
+                                                                                                     const currentMaxHeight = parseFloat(ancestorUl.style.maxHeight || 0);
+                                                                                                     const newMaxHeight = currentMaxHeight + heightChange;
+                                                                                                     ancestorUl.style.maxHeight = newMaxHeight + 'px';
+                                                                                                     adjustAncestorHeight(ancestorLi, heightChange);
+                                                                                                 }
+                                                                                             }
+                                                                                         }
+                                                                                         const wasOpen = parentLi.classList.contains('open');
+                                                                                         if (wasOpen) {
+                                                                                             const heightToSubtract = submenu.scrollHeight;
+                                                                                             parentLi.classList.remove('open');
+                                                                                             menuItem.classList.remove('active');
+                                                                                             submenu.style.maxHeight = null;
+                                                                                             adjustAncestorHeight(parentLi, -heightToSubtract);
+                                                                                             return;
+                                                                                         }
+                                                                                         [...parentLi.parentElement.children].forEach(sibling => {
+                                                                                             if (sibling.classList.contains('open')) {
+                                                                                                 const siblingSubmenu = sibling.querySelector('ul');
+                                                                                                 const heightToSubtract = siblingSubmenu.scrollHeight;
+                                                                                                 sibling.classList.remove('open');
+                                                                                                 sibling.querySelector('a')?.classList.remove('active');
+                                                                                                 siblingSubmenu.style.maxHeight = null;
+                                                                                                 adjustAncestorHeight(sibling, -heightToSubtract);
+                                                                                             }
+                                                                                         });
+                                                                                         parentLi.classList.add('open');
+                                                                                         menuItem.classList.add('active');
+                                                                                         let heightToAdd = submenu.scrollHeight + 4;
+                                                                                         submenu.style.maxHeight = heightToAdd + "px";
+                                                                                         adjustAncestorHeight(parentLi, heightToAdd);
+                                                                                     });
+                                                                                 });
+
+                                                                                 // 更新记录 "加载更多"
+                                                                                 const updatesList = document.getElementById('update-history-list');
+                                                                                 const showMoreBtn = document.getElementById('show-more-updates');
+                                                                                 const moreButtonListItem = document.querySelector('.more-btn-li');
+                                                                                 const template = document.getElementById('more-updates-template');
+                                                                                 if (updatesList && showMoreBtn && moreButtonListItem && template) {
+                                                                                     if (!template.content.firstElementChild) {
+                                                                                         moreButtonListItem.style.display = 'none';
+                                                                                     } else {
+                                                                                         const updateCollapsedHeight = () => {
+                                                                                             if (updatesList.classList.contains('expanded')) return;
+                                                                                             let initialHeight = 0;
+                                                                                             updatesList.querySelectorAll('li:not(.more-btn-li)').forEach(li => {
+                                                                                                 initialHeight += li.offsetHeight;
+                                                                                             });
+                                                                                             initialHeight += moreButtonListItem.offsetHeight;
+                                                                                             updatesList.style.height = initialHeight + 'px';
+                                                                                         };
+                                                                                         updateCollapsedHeight();
+                                                                                         window.addEventListener('resize', updateCollapsedHeight);
+                                                                                         showMoreBtn.addEventListener('click', (e) => {
+                                                                                             e.preventDefault();
+                                                                                             window.removeEventListener('resize', updateCollapsedHeight);
+                                                                                             updatesList.classList.add('expanded');
+                                                                                             updatesList.insertBefore(template.content.cloneNode(true), moreButtonListItem);
+                                                                                             updatesList.style.height = updatesList.scrollHeight + 'px';
+                                                                                             moreButtonListItem.remove();
+                                                                                             updatesList.addEventListener('transitionend', () => {
+                                                                                                 updatesList.style.height = 'auto';
+                                                                                             }, { once: true });
+                                                                                         });
+                                                                                     }
+                                                                                 }
+
+                                                                                 // 倒计时功能
+                                                                                 const interval = 1000;
+                                                                                 function ShowCountDown(year, month, day, hh, mm, ss, divname) {
+                                                                                     const now = new Date();
+                                                                                     const endDate = new Date(year, month - 1, day, hh, mm, ss);
+                                                                                     const leftTime = endDate.getTime() - now.getTime();
+                                                                                     const div1 = document.getElementById("divdown1");
+                                                                                     const div2 = document.getElementById(divname);
+                                                                                     if (leftTime > 0 && div1 && div2) {
+                                                                                         div1.style.display = 'block';
+                                                                                         div2.style.display = 'block';
+                                                                                         const leftsecond = parseInt(leftTime / 1000);
+                                                                                         const day1 = Math.floor(leftsecond / (60 * 60 * 24));
+                                                                                         const hour = Math.floor((leftsecond - day1 * 24 * 60 * 60) / 3600);
+                                                                                         const minute = Math.floor((leftsecond - day1 * 24 * 60 * 60 - hour * 3600) / 60);
+                                                                                         const second = Math.floor(leftsecond - day1 * 24 * 60 * 60 - hour * 3600 - minute * 60);
+                                                                                         div2.innerHTML = "倒计时：" + day1 + " 天 " + hour + " 小时 " + minute + " 分 " + second + " 秒";
+                                                                                     } else if (div1 && div2) {
+                                                                                         div1.style.display = 'none';
+                                                                                         div2.style.display = 'none';
+                                                                                     }
+                                                                                 }
+                                                                                 window.setInterval(() => ShowCountDown(2025, 6, 10, 1, 0, 0, 'divdown2'), interval);
+
+                                                                                 // 自动为左侧菜单链接绑定浮层加载函数
+                                                                                 document.querySelectorAll('.sidebar-menu a[href]').forEach(link => {
+                                                                                      const href = link.getAttribute('href');
+                                                                                      if (href && href !== '#' && !href.startsWith('http') && !href.startsWith('javascript:')) {
+                                                                                         link.onclick = (event) => loadInOverlay(event, link.href);
+                                                                                      }
+                                                                                 });
                                                                              });
-                                                                         });
                                                                          </script>
 </body>
 </html>
