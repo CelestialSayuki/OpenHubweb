@@ -25,7 +25,6 @@
     position: relative;
 }
 
-/* --- Dock 栏样式 --- */
 .dock-container {
     position: absolute;
     right: 20px;
@@ -41,8 +40,6 @@
     flex-direction: column;
     gap: 10px;
     z-index: 2000;
-    
-    /* 默认隐藏 */
     opacity: 0;
     transform: translateY(20px);
     pointer-events: none;
@@ -50,7 +47,6 @@
 }
 
 .dock-container.visible {
-    /* 当有窗口最小化时显示 */
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
@@ -72,7 +68,6 @@
     transform: scale(1.15);
 }
 
-/* 暗黑模式下的 Dock 样式 */
 @media (prefers-color-scheme: dark) {
     .dock-container {
         background-color: var(--dark-glass-bg, rgba(30, 30, 30, 0.7));
@@ -80,30 +75,27 @@
         box-shadow: 0 8px 25px rgba(0,0,0,0.4);
     }
 }
-/* --- Dock 标题预览样式 --- */
+
 .dock-preview {
-    position: absolute; /* 使用绝对定位，由JS控制位置 */
+    position: absolute;
     background-color: rgba(20, 20, 20, 0.85);
     color: #fff;
     padding: 6px 12px;
     border-radius: 7px;
     font-size: 13px;
     font-weight: 500;
-    z-index: 10001; /* 确保在最顶层 */
-    white-space: nowrap; /* 防止标题换行 */
-    
-    /* 默认隐藏 */
+    z-index: 10001;
+    white-space: nowrap;
     opacity: 0;
     transform: translateY(10px);
-    pointer-events: none; /* 确保它自身不触发鼠标事件 */
+    pointer-events: none;
     transition: opacity 0.2s ease-out, transform 0.2s ease-out;
 }
 
-/* 使用伪元素创建指向图标的小三角 */
 .dock-preview::after {
     content: '';
     position: absolute;
-    bottom: -5px; /* 定位到气泡下方 */
+    bottom: -5px;
     left: 50%;
     transform: translateX(-50%) rotate(45deg);
     width: 10px;
@@ -111,33 +103,27 @@
     background-color: rgba(20, 20, 20, 0.85);
 }
 
-/* 暗黑模式下的细微调整（如果需要）*/
 @media (prefers-color-scheme: dark) {
     .dock-preview, .dock-preview::after {
         background-color: rgba(40, 40, 40, 0.9);
     }
 }
-/* --- 神奇效果动画 --- */
-.window-ghost {
-    position: absolute; /* 将由 JS 设置 top 和 left */
-    width: 100%; /* 将由 JS 设置 */
-    height: 100%; /* 将由 JS 设置 */
-    background: #ccc; /* 只是一个占位符背景 */
-    border-radius: 12px;
-    z-index: 10000; /* 确保在最顶层 */
-    transform-origin: top left;
-    pointer-events: none; /* 确保它不会捕获鼠标事件 */
 
-    /* 关键：让元素沿着 SVG 路径移动 */
-    offset-path: none; /* 将由 JS 动态设置 */
-    
-    /* 将动画应用到元素上 */
-    animation-fill-mode: forwards; /* 动画结束后保持最后状态 */
+.window-ghost {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #ccc;
+    border-radius: 12px;
+    z-index: 10000;
+    transform-origin: top left;
+    pointer-events: none;
+    offset-path: none;
+    animation-fill-mode: forwards;
     animation-duration: 0.7s;
     animation-timing-function: cubic-bezier(0.6, 0, 0.8, 1);
 }
 
-/* 定义最小化动画的关键帧 */
 @keyframes genie-minimize {
     0% {
         offset-distance: 0%;
@@ -151,7 +137,6 @@
     }
 }
 
-/* 定义恢复动画的关键帧 */
 @keyframes genie-restore {
     0% {
         offset-distance: 100%;
@@ -164,22 +149,16 @@
         opacity: 0.8;
     }
 }
-/* 1. 最终的窗口框架样式 */
+
 .macos-window {
     position: absolute;
     width: 800px;
     height: 600px;
-    
-    /* 将框架背景设置为标题栏的颜色，形成统一材质 */
-    background-color: rgba(0,0,0,0.05);
-    
+    background-color: rgba(240, 240, 240, 0.75);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: var(--border-radius, 12px);
-    
-    /* 使用 padding 在左、右、下侧创建出框架的厚度 */
-    padding: 0 4px 4px 4px;
-
+    padding: 0;
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     z-index: 100;
     overflow: hidden;
@@ -188,36 +167,32 @@
     min-width: 400px;
     min-height: 300px;
     animation: shrink-and-settle 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    
-    /* 外层的 1px 细线边框，增加定义感 */
     border: 1px solid var(--light-border, rgba(0, 0, 0, 0.1));
 }
 
-/* 最终的窗口暗黑模式 */
 @media (prefers-color-scheme: dark) {
     .macos-window {
-        background-color: rgba(255,255,255,0.08); /* 匹配暗黑模式标题栏背景 */
+        background-color: rgba(40, 40, 40, 0.7);
         border-color: var(--dark-border, rgba(255, 255, 255, 0.15));
     }
     .macos-window-header {
         border-bottom-color: var(--dark-border, rgba(255, 255, 255, 0.12));
     }
     .macos-window-body {
-        background-color: var(--dark-glass-bg, rgba(30, 30, 30, 0.8)); /* 内容区独立的暗黑玻璃背景 */
+        background-color: var(--dark-glass-bg, rgba(30, 30, 30, 0.8));
     }
     .macos-window-title {
         color: var(--dark-text-secondary);
     }
 }
-/* 2. 窗口头部 */
+
 .macos-window-header {
     height: 40px;
     display: flex;
     align-items: center;
     padding: 0 12px;
-    background-color: rgba(0,0,0,0.05);
-    border-bottom: 1px solid var(--light-border, rgba(0, 0, 0, 0.08));
-    cursor: move; /* 设置拖动鼠标样式 */
+    background-color: transparent;
+    cursor: move;
     flex-shrink: 0;
 }
 
@@ -240,31 +215,32 @@
     color: var(--light-text-secondary);
     font-weight: 600;
     margin: 0 auto;
-    padding-right: 60px; /* 为右侧按钮留出空间 */
+    padding-right: 60px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
     
 .macos-window.is-closing {
-    animation: dissipate-like-smoke 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation: dissipate-like-smoke 0.3s ease-in forwards;
 }
 
+.macos-window-body {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: var(--light-glass-bg, rgba(255, 255, 255, 0.7));
+    margin: 0 5px 5px 5px;
+    border-radius: 8px;
+}
+    
+.macos-window-body::-webkit-scrollbar {
+    display: none;
+}
 
+.macos-window-body {
+    scrollbar-width: none;
+}
 
-    /* 3. 窗口主体内容区域 */
-    .macos-window-body {
-        flex-grow: 1;
-        overflow-y: auto;
-        
-        /* 为内容区设置独立的玻璃背景 */
-        background-color: var(--light-glass-bg, rgba(240, 240, 240, 0.85));
-        
-        /* 为内容区设置圆角，使其能完美嵌入框架中 */
-        border-radius: calc(var(--border-radius, 12px) - 4px);
-    }
-
-/* 4. 移除被加载内容本身的卡片样式，使其与窗口融为一体 */
 .macos-window-body .cd-products-comparison-table {
     background: transparent !important;
     border: none !important;
@@ -275,50 +251,37 @@
 }
     
 @keyframes shrink-and-settle {
-  0% {
-    /* 开始时“非常大”：尺寸很大，完全透明，且带模糊效果，增强“失焦”感 */
+0% {
     opacity: 0;
     transform: scale(1.5);
     filter: blur(10px);
-  }
-  40% {
-    /* “收束到中间”：尺寸快速缩小到最终状态，变得清晰且不透明 */
-    opacity: 1;
-    transform: scale(0.75);
-    filter: blur(0);
-  }
-  100% {
-    /* “再慢慢放大”：为了增加质感，在最后有一个极其微小的“呼吸”放大效果 */
-    transform: scale(1.01);
-  }
 }
-    /* 3. 关闭浮动层时的“云散”动画定义 */
+40% {
+    opacity: 1;
+    transform: scale(0.85);
+    filter: blur(0);
+}
+100% {
+    transform: scale(1.0);
+}
+}
     @keyframes dissipate-like-smoke {
         0% {
-            /* 动画开始状态：完全不透明，无形变 */
             opacity: 1;
             transform: translate(0, 0) scale(1) rotate(0deg);
             filter: blur(0);
         }
         100% {
-            /* 动画结束状态：完全透明，向上和向右漂移，同时轻微放大和旋转，并变得模糊 */
             opacity: 0;
             transform: scale(1.25);
             filter: blur(5px);
         }
     }
 
-    /* 2. 将新动画应用到正在关闭的浮动层上 */
     .dynamic-content-overlay.is-closing {
-        /* 使用新动画，调整时长和缓动函数以获得更自然、轻柔的效果 */
-        /* cubic-bezier 提供了一个“缓出”的效果，开始快，然后慢慢结束 */
         animation: dissipate-like-smoke 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     }
 
-
-    /* --- 以下是您原有的其他样式，保持不变 --- */
-    
-    /* 暗黑模式适配 */
     @media (prefers-color-scheme: dark) {
         .dynamic-content-overlay {
             background-color: var(--dark-glass-bg, rgba(22, 27, 34, 0.75));
@@ -330,10 +293,8 @@
     :root {
         --light-bg: #f8f9fa;
         --dark-bg: #0d1117;
-    
         --light-glass-bg: rgba(255, 255, 255, 0.5);
         --dark-glass-bg: rgba(22, 27, 34, 0.6);
-    
         --light-text: #212529;
         --dark-text: #c9d1d9;
         --light-text-secondary: #586069;
@@ -346,7 +307,6 @@
         --header-height: 60px;
         --border-radius: 12px;
         --transition-speed: 0.3s;
-    
         --light-glass-shadow: 0 8px 16px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.05);
         --dark-glass-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);
     }
@@ -410,7 +370,6 @@
     }
     
     .sidebar-menu li.has-submenu.open {
-        /* 此处无需额外样式 */
     }
     .sidebar-menu li.has-submenu > a {
         align-self: unset;
@@ -432,7 +391,6 @@
         opacity: 1;
         padding-top: 4px;
     }
-    
     
     .sidebar-menu ul ul {
         padding-left: 20px;
@@ -1973,549 +1931,560 @@
         </main>
     </div>
                                                                          <script>
-                                                                         document.addEventListener('DOMContentLoaded', () => {
+                                                                             document.addEventListener('DOMContentLoaded', () => {
 
-                                                                             // --- 全局变量和DOM引用 ---
-                                                                             const mainContentArea = document.querySelector('.main-content');
-                                                                             let zIndexCounter = 100;
-                                                                             const openWindows = new Map();
-                                                                             let windowIdCounter = 0;
-                                                                             const dockContainer = document.getElementById('dock-container');
-                                                                             const svgContainer = document.getElementById('animation-svg-container');
-                                                                             const dockPreview = document.getElementById('dock-preview'); // 新增：获取标题预览元素的引用
-                                                                             const darkModeMatcher = window.matchMedia('(prefers-color-scheme: dark)');
+                                                                                 // --- 全局变量和DOM引用 ---
+                                                                                 const mainContentArea = document.querySelector('.main-content');
+                                                                                 let zIndexCounter = 100;
+                                                                                 const openWindows = new Map();
+                                                                                 let windowIdCounter = 0;
+                                                                                 const dockContainer = document.getElementById('dock-container');
+                                                                                 const svgContainer = document.getElementById('animation-svg-container');
+                                                                                 const dockPreview = document.getElementById('dock-preview');
+                                                                                 const darkModeMatcher = window.matchMedia('(prefers-color-scheme: dark)');
 
-                                                                                                   const updateAllWindowsTheme = (isDark) => {
-                                                                                                       openWindows.forEach(windowData => {
-                                                                                                           if (isDark) {
-                                                                                                               windowData.element.classList.add('theme-dark');
-                                                                                                           } else {
-                                                                                                               windowData.element.classList.remove('theme-dark');
-                                                                                                           }
-                                                                                                       });
-                                                                                                   };
-darkModeMatcher.addEventListener('change', e => {
-    updateAllWindowsTheme(e.matches);
-});
-                                                                             // --- 辅助函数 ---
-                                                                             function convertRemToPx(cssText, baseFontSize = 10) {
-                                                                                 return cssText.replace(/(\d*\.?\d+)\s*rem/g, (match, remValue) => `${parseFloat(remValue) * baseFontSize}px`);
-                                                                             }
-
-                                                                             function scopeCss(cssText, scopeSelector) {
-                                                                                 const ruleRegex = /([^{}]*)(?=\{)/g;
-                                                                                 return cssText.replace(ruleRegex, (match, selector) => {
-                                                                                     const trimmedSelector = selector.trim();
-                                                                                     if (trimmedSelector.startsWith('@') || trimmedSelector === '') return selector;
-                                                                                     if (['html', 'body'].includes(trimmedSelector.toLowerCase())) return scopeSelector;
-                                                                                     return trimmedSelector.split(',').map(part => `${scopeSelector} ${part.trim()}`).join(', ');
+                                                                                 const updateAllWindowsTheme = (isDark) => {
+                                                                                     openWindows.forEach(windowData => {
+                                                                                         if (isDark) {
+                                                                                             windowData.element.classList.add('theme-dark');
+                                                                                         } else {
+                                                                                             windowData.element.classList.remove('theme-dark');
+                                                                                         }
+                                                                                     });
+                                                                                 };
+                                                                                 darkModeMatcher.addEventListener('change', e => {
+                                                                                     updateAllWindowsTheme(e.matches);
                                                                                  });
-                                                                             }
 
-                                                                             function rewriteCssUrls(cssText, cssBaseUrl) {
-                                                                                 const urlRegex = /url\((?!['"]?data:)(['"]?)(.*?)\1\)/g;
-                                                                                 return cssText.replace(urlRegex, (match, quote, url) => {
-                                                                                     try {
-                                                                                         const absoluteUrl = new URL(url, cssBaseUrl).href;
-                                                                                         return `url(${quote}${absoluteUrl}${quote})`;
-                                                                                     } catch (e) {
-                                                                                         return match;
+                                                                                 // --- 辅助函数 ---
+                                                                                 function convertRemToPx(cssText, baseFontSize = 10) {
+                                                                                     return cssText.replace(/(\d*\.?\d+)\s*rem/g, (match, remValue) => `${parseFloat(remValue) * baseFontSize}px`);
+                                                                                 }
+
+                                                                                 function scopeCss(cssText, scopeSelector) {
+                                                                                     const ruleRegex = /([^{}]*)(?=\{)/g;
+                                                                                     return cssText.replace(ruleRegex, (match, selector) => {
+                                                                                         const trimmedSelector = selector.trim();
+                                                                                         if (trimmedSelector.startsWith('@') || trimmedSelector === '') return selector;
+                                                                                         if (['html', 'body'].includes(trimmedSelector.toLowerCase())) return scopeSelector;
+                                                                                         return trimmedSelector.split(',').map(part => `${scopeSelector} ${part.trim()}`).join(', ');
+                                                                                     });
+                                                                                 }
+
+                                                                                 function rewriteCssUrls(cssText, cssBaseUrl) {
+                                                                                     const urlRegex = /url\((?!['"]?data:)(['"]?)(.*?)\1\)/g;
+                                                                                     return cssText.replace(urlRegex, (match, quote, url) => {
+                                                                                         try {
+                                                                                             const absoluteUrl = new URL(url, cssBaseUrl).href;
+                                                                                             return `url(${quote}${absoluteUrl}${quote})`;
+                                                                                         } catch (e) {
+                                                                                             return match;
+                                                                                         }
+                                                                                     });
+                                                                                 }
+
+                                                                                 // --- Dock 和窗口状态管理 ---
+                                                                                 function updateDockVisibility() {
+                                                                                     const minimizedWindows = Array.from(openWindows.values()).filter(w => w.state === 'minimized');
+                                                                                     if (minimizedWindows.length > 0) {
+                                                                                         dockContainer.classList.add('visible');
+                                                                                     } else {
+                                                                                         dockContainer.classList.remove('visible');
                                                                                      }
-                                                                                 });
-                                                                             }
-
-                                                                             // --- Dock 和窗口状态管理 ---
-                                                                             function updateDockVisibility() {
-                                                                                 const minimizedWindows = Array.from(openWindows.values()).filter(w => w.state === 'minimized');
-                                                                                 if (minimizedWindows.length > 0) {
-                                                                                     dockContainer.classList.add('visible');
-                                                                                 } else {
-                                                                                     dockContainer.classList.remove('visible');
                                                                                  }
-                                                                             }
 
-                                                                             function bringToFront(windowEl) {
-                                                                                 if (parseInt(windowEl.style.zIndex) < zIndexCounter) {
-                                                                                     zIndexCounter++;
-                                                                                     windowEl.style.zIndex = zIndexCounter;
-                                                                                 }
-                                                                             }
-
-                                                                             function closeWindowWithAnimation(windowEl, pageUrl) {
-                                                                                 if (!windowEl || windowEl.classList.contains('is-closing')) return;
-                                                                                 const windowData = openWindows.get(pageUrl);
-                                                                                 if (windowData && windowData.dockItem) {
-                                                                                     windowData.dockItem.remove();
-                                                                                 }
-                                                                                 windowEl.classList.add('is-closing');
-                                                                                 windowEl.addEventListener('animationend', () => {
-                                                                                     windowEl.remove();
-                                                                                     openWindows.delete(pageUrl);
-                                                                                     if (windowData) {
-                                                                                         document.querySelectorAll(`[data-dynamic-style-for="${windowData.id}"]`).forEach(s => s.remove());
+                                                                                 function bringToFront(windowEl) {
+                                                                                     if (parseInt(windowEl.style.zIndex) < zIndexCounter) {
+                                                                                         zIndexCounter++;
+                                                                                         windowEl.style.zIndex = zIndexCounter;
                                                                                      }
-                                                                                     updateDockVisibility();
-                                                                                 }, { once: true });
-                                                                             }
-                                                                             
-                                                                             // --- 核心功能：创建、最小化、恢复窗口 ---
-                                                                             async function createWindow(pageUrl, titleText) {
-                                                                                 if (openWindows.has(pageUrl)) {
+                                                                                 }
+
+                                                                                 function closeWindowWithAnimation(windowEl, pageUrl) {
+                                                                                     if (!windowEl || windowEl.classList.contains('is-closing')) return;
                                                                                      const windowData = openWindows.get(pageUrl);
-                                                                                     if (windowData.state === 'minimized') {
-                                                                                         restoreWindow(pageUrl);
-                                                                                     } else {
-                                                                                         bringToFront(windowData.element);
+                                                                                     if (windowData && windowData.dockItem) {
+                                                                                         windowData.dockItem.remove();
                                                                                      }
-                                                                                     return;
+                                                                                     windowEl.classList.add('is-closing');
+                                                                                     windowEl.addEventListener('animationend', () => {
+                                                                                         windowEl.remove();
+                                                                                         openWindows.delete(pageUrl);
+                                                                                         if (windowData) {
+                                                                                             document.querySelectorAll(`[data-dynamic-style-for="${windowData.id}"]`).forEach(s => s.remove());
+                                                                                         }
+                                                                                         updateDockVisibility();
+                                                                                     }, {
+                                                                                         once: true
+                                                                                     });
                                                                                  }
 
-                                                                                 windowIdCounter++;
-                                                                                 const windowId = `dynamic-window-${windowIdCounter}`;
-                                                                                 const windowEl = document.createElement('div');
-                                                                                 windowEl.id = windowId;
-                                                                                 windowEl.className = 'macos-window';
-                                                                                 
-                                                                                 const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                                                                                 if (isDarkMode) windowEl.classList.add('theme-dark');
+                                                                                 // --- 核心功能：创建、最小化、恢复窗口 ---
+                async function createWindow(pageUrl, titleText) {
+                            // **修改点**: 检查窗口是否已存在
+                            if (openWindows.has(pageUrl)) {
+                                const windowData = openWindows.get(pageUrl);
+                                const windowEl = windowData.element;
 
-                                                                                 const offset = (openWindows.size % 10) * 30;
-                                                                                 windowEl.style.top = `${50 + offset}px`;
-                                                                                 windowEl.style.left = `${100 + offset}px`;
-                                                                                 zIndexCounter++;
-                                                                                 windowEl.style.zIndex = zIndexCounter;
+                                // 如果窗口已最小化，则恢复它
+                                if (windowData.state === 'minimized') {
+                                    restoreWindow(pageUrl);
+                                }
+                                // 如果窗口是当前最顶层的窗口，则关闭它
+                                else if (parseInt(windowEl.style.zIndex) === zIndexCounter) {
+                                    closeWindowWithAnimation(windowEl, pageUrl);
+                                }
+                                // 否则（窗口存在但不在最顶层），则把它带到最前
+                                else {
+                                    bringToFront(windowEl);
+                                }
+                                return; // 结束函数，不执行后面的创建逻辑
+                            }
 
-                                                                                 windowEl.innerHTML = `
-                                                                                     <div class="macos-window-header">
-                                                                                         <div class="macos-window-controls">
-                                                                                             <span class="control-btn control-close"></span>
-                                                                                             <span class="control-btn control-minimize"></span>
-                                                                                             <span class="control-btn control-maximize"></span>
-                                                                                         </div>
-                                                                                         <div class="macos-window-title">${titleText}</div>
-                                                                                     </div>
-                                                                                     <div class="macos-window-body">
-                                                                                         <div style="text-align:center; padding: 50px; font-size: 1.2rem;">正在加载...</div>
-                                                                                     </div>
-                                                                                 `;
-                                                                                 mainContentArea.appendChild(windowEl);
-                                                                                 
-                                                                                 const windowData = {
-                                                                                     id: windowId,
-                                                                                     element: windowEl,
-                                                                                     state: 'open',
-                                                                                     rect: null,
-                                                                                     dockItem: null,
-                                                                                     title: titleText,
-                                                                                 };
-                                                                                 openWindows.set(pageUrl, windowData);
+                            // --- 以下是创建新窗口的逻辑，保持不变 ---
 
-                                                                                 const header = windowEl.querySelector('.macos-window-header');
-                                                                                 const closeBtn = windowEl.querySelector('.control-close');
-                                                                                 const minimizeBtn = windowEl.querySelector('.control-minimize');
-                                                                                 const minWidth = parseInt(getComputedStyle(windowEl).minWidth);
-                                                                                 const minHeight = parseInt(getComputedStyle(windowEl).minHeight);
-                                                                                 const resizeBorderWidth = 10; // 边缘可调整大小的区域宽度
+                            windowIdCounter++;
+                            const windowId = `dynamic-window-${windowIdCounter}`;
+                            const windowEl = document.createElement('div');
+                            windowEl.id = windowId;
+                            windowEl.className = 'macos-window';
 
-                                                                                 closeBtn.onclick = (e) => { e.stopPropagation(); closeWindowWithAnimation(windowEl, pageUrl); };
-                                                                                 minimizeBtn.onclick = (e) => { e.stopPropagation(); minimizeWindow(pageUrl); };
+                            const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                            if (isDarkMode) windowEl.classList.add('theme-dark');
 
-                                                                                 // --- visionOS 风格的拖拽和缩放逻辑 ---
+                            const offset = (openWindows.size % 10) * 30;
+                            windowEl.style.top = `${50 + offset}px`;
+                            windowEl.style.left = `${100 + offset}px`;
+                            zIndexCounter++;
+                            windowEl.style.zIndex = zIndexCounter;
 
-                                                                                 let action = '';
-                                                                                 let startX, startY, startWidth, startHeight, startLeft, startTop;
-                                                                                 let resizeDirection = '';
+                            windowEl.innerHTML = `
+                                <div class="macos-window-header">
+                                    <div class="macos-window-controls">
+                                        <span class="control-btn control-close"></span>
+                                        <span class="control-btn control-minimize"></span>
+                                        <span class="control-btn control-maximize"></span>
+                                    </div>
+                                    <div class="macos-window-title">${titleText}</div>
+                                </div>
+                                <div class="macos-window-body">
+                                    </div>
+                            `;
+                            
+                            windowEl.style.visibility = 'hidden';
+                            
+                            mainContentArea.appendChild(windowEl);
 
-                                                                                 // 仅在窗口上移动时检查光标样式
-                                                                                 const handleMouseMoveForCursor = (e) => {
-                                                                                     if (action) return; // 如果正在进行拖拽或缩放，则不改变光标
+                            const windowData = {
+                                id: windowId,
+                                element: windowEl,
+                                state: 'open',
+                                rect: null,
+                                dockItem: null,
+                                title: titleText,
+                            };
+                            openWindows.set(pageUrl, windowData);
 
-                                                                                     const rect = windowEl.getBoundingClientRect();
-                                                                                     const onTopEdge = e.clientY >= rect.top && e.clientY <= rect.top + resizeBorderWidth;
-                                                                                     const onBottomEdge = e.clientY <= rect.bottom && e.clientY >= rect.bottom - resizeBorderWidth;
-                                                                                     const onLeftEdge = e.clientX >= rect.left && e.clientX <= rect.left + resizeBorderWidth;
-                                                                                     const onRightEdge = e.clientX <= rect.right && e.clientX >= rect.right - resizeBorderWidth;
+                            const header = windowEl.querySelector('.macos-window-header');
+                            const closeBtn = windowEl.querySelector('.control-close');
+                            const minimizeBtn = windowEl.querySelector('.control-minimize');
+                            const minWidth = parseInt(getComputedStyle(windowEl).minWidth);
+                            const minHeight = parseInt(getComputedStyle(windowEl).minHeight);
+                            const resizeBorderWidth = 10;
 
-                                                                                     let newCursor = 'default';
-                                                                                     let currentResizeDir = '';
+                            closeBtn.onclick = (e) => {
+                                e.stopPropagation();
+                                closeWindowWithAnimation(windowEl, pageUrl);
+                            };
+                            minimizeBtn.onclick = (e) => {
+                                e.stopPropagation();
+                                minimizeWindow(pageUrl);
+                            };
 
-                                                                                     if (onTopEdge) { currentResizeDir += 'n'; newCursor = 'ns-resize'; }
-                                                                                     if (onBottomEdge) { currentResizeDir += 's'; newCursor = 'ns-resize'; }
-                                                                                     if (onLeftEdge) { currentResizeDir += 'w'; newCursor = 'ew-resize'; }
-                                                                                     if (onRightEdge) { currentResizeDir += 'e'; newCursor = 'ew-resize'; }
+                            let action = '';
+                            let startX, startY, startWidth, startHeight, startLeft, startTop;
+                            let resizeDirection = '';
 
-                                                                                     if (currentResizeDir === 'nw' || currentResizeDir === 'se') newCursor = 'nwse-resize';
-                                                                                     if (currentResizeDir === 'ne' || currentResizeDir === 'sw') newCursor = 'nesw-resize';
-                                                                                     
-                                                                                     windowEl.style.cursor = newCursor;
-                                                                                     // 将检测到的方向存储在元素上，以便 mousedown 时读取
-                                                                                     windowEl.dataset.resizeDirection = currentResizeDir;
-                                                                                 }
+                            const handleMouseMoveForCursor = (e) => {
+                                if (action) return;
 
-                                                                                 windowEl.addEventListener('mousemove', handleMouseMoveForCursor);
-                                                                                 
-                                                                                 const handleWindowInteraction = (e) => {
-                                                                                     // 阻止在控制按钮上开始拖拽/缩放
-                                                                                     if (e.target.classList.contains('control-btn') || e.target.closest('.macos-window-body')) return;
+                                const rect = windowEl.getBoundingClientRect();
+                                const onTopEdge = e.clientY >= rect.top && e.clientY <= rect.top + resizeBorderWidth;
+                                const onBottomEdge = e.clientY <= rect.bottom && e.clientY >= rect.bottom - resizeBorderWidth;
+                                const onLeftEdge = e.clientX >= rect.left && e.clientX <= rect.left + resizeBorderWidth;
+                                const onRightEdge = e.clientX <= rect.right && e.clientX >= rect.right - resizeBorderWidth;
 
-                                                                                     e.preventDefault();
-                                                                                     bringToFront(windowEl);
+                                let newCursor = 'default';
+                                let currentResizeDir = '';
 
-                                                                                     startX = e.clientX;
-                                                                                     startY = e.clientY;
-                                                                                     startWidth = windowEl.offsetWidth;
-                                                                                     startHeight = windowEl.offsetHeight;
-                                                                                     startLeft = windowEl.offsetLeft;
-                                                                                     startTop = windowEl.offsetTop;
-                                                                                     
-                                                                                     resizeDirection = windowEl.dataset.resizeDirection || '';
+                                if (onTopEdge) { currentResizeDir += 'n'; newCursor = 'ns-resize'; }
+                                if (onBottomEdge) { currentResizeDir += 's'; newCursor = 'ns-resize'; }
+                                if (onLeftEdge) { currentResizeDir += 'w'; newCursor = 'ew-resize'; }
+                                if (onRightEdge) { currentResizeDir += 'e'; newCursor = 'ew-resize'; }
 
-                                                                                     // 判断是缩放还是拖拽
-                                                                                     if (resizeDirection) {
-                                                                                         action = 'resizing';
-                                                                                     } else if (e.target.closest('.macos-window-header')) {
-                                                                                         action = 'dragging';
-                                                                                         header.style.cursor = 'grabbing';
-                                                                                     }
+                                if (currentResizeDir === 'nw' || currentResizeDir === 'se') newCursor = 'nwse-resize';
+                                if (currentResizeDir === 'ne' || currentResizeDir === 'sw') newCursor = 'nesw-resize';
 
-                                                                                     if (action) {
-                                                                                         document.addEventListener('mousemove', performInteraction);
-                                                                                         document.addEventListener('mouseup', stopInteraction);
-                                                                                     }
-                                                                                 };
+                                windowEl.style.cursor = newCursor;
+                                windowEl.dataset.resizeDirection = currentResizeDir;
+                            }
 
-                                                                                 windowEl.addEventListener('mousedown', handleWindowInteraction);
+                            windowEl.addEventListener('mousemove', handleMouseMoveForCursor);
 
-                                                                                 const performInteraction = (e) => {
-                                                                                     if (action === 'dragging') {
-                                                                                         drag(e);
-                                                                                     } else if (action === 'resizing') {
-                                                                                         resize(e);
-                                                                                     }
-                                                                                 };
+                            const handleWindowInteraction = (e) => {
+                                if (e.target.classList.contains('control-btn') || e.target.closest('.macos-window-body')) return;
 
-                                                                                 const drag = (e) => {
-                                                                                     const newX = startLeft + e.clientX - startX;
-                                                                                     const newY = startTop + e.clientY - startY;
-                                                                                     windowEl.style.left = `${newX}px`;
-                                                                                     windowEl.style.top = `${newY}px`;
-                                                                                 };
+                                e.preventDefault();
+                                bringToFront(windowEl);
 
-                                                                                 const resize = (e) => {
-                                                                                     const deltaX = e.clientX - startX;
-                                                                                     const deltaY = e.clientY - startY;
+                                startX = e.clientX;
+                                startY = e.clientY;
+                                startWidth = windowEl.offsetWidth;
+                                startHeight = windowEl.offsetHeight;
+                                startLeft = windowEl.offsetLeft;
+                                startTop = windowEl.offsetTop;
 
-                                                                                     let newWidth = startWidth;
-                                                                                     let newHeight = startHeight;
-                                                                                     let newLeft = startLeft;
-                                                                                     let newTop = startTop;
+                                resizeDirection = windowEl.dataset.resizeDirection || '';
 
-                                                                                     if (resizeDirection.includes('e')) {
-                                                                                         newWidth = startWidth + deltaX;
-                                                                                     }
-                                                                                     if (resizeDirection.includes('w')) {
-                                                                                         newWidth = startWidth - deltaX;
-                                                                                         newLeft = startLeft + deltaX;
-                                                                                     }
-                                                                                     if (resizeDirection.includes('s')) {
-                                                                                         newHeight = startHeight + deltaY;
-                                                                                     }
-                                                                                     if (resizeDirection.includes('n')) {
-                                                                                         newHeight = startHeight - deltaY;
-                                                                                         newTop = startTop + deltaY;
-                                                                                     }
+                                if (resizeDirection) {
+                                    action = 'resizing';
+                                } else if (e.target.closest('.macos-window-header')) {
+                                    action = 'dragging';
+                                    header.style.cursor = 'grabbing';
+                                }
 
-                                                                                     if (newWidth >= minWidth) {
-                                                                                         windowEl.style.width = `${newWidth}px`;
-                                                                                         windowEl.style.left = `${newLeft}px`;
-                                                                                     }
-                                                                                     if (newHeight >= minHeight) {
-                                                                                         windowEl.style.height = `${newHeight}px`;
-                                                                                         windowEl.style.top = `${newTop}px`;
-                                                                                     }
-                                                                                 };
-                                                                                 
-                                                                                 const stopInteraction = () => {
-                                                                                     action = '';
-                                                                                     header.style.cursor = 'move';
-                                                                                     windowEl.style.cursor = 'default';
-                                                                                     windowEl.dataset.resizeDirection = '';
-                                                                                     document.removeEventListener('mousemove', performInteraction);
-                                                                                     document.removeEventListener('mouseup', stopInteraction);
-                                                                                 };
+                                if (action) {
+                                    document.addEventListener('mousemove', performInteraction);
+                                    document.addEventListener('mouseup', stopInteraction);
+                                }
+                            };
 
-                                                                                 // --- 异步加载内容 ---
-                                                                                 const windowBody = windowEl.querySelector('.macos-window-body');
-                                                                                 try {
-                                                                                     const response = await fetch(pageUrl);
-                                                                                     if (!response.ok) throw new Error(`网络请求失败: ${response.status}`);
-                                                                                     const htmlText = await response.text();
-                                                                                     const parser = new DOMParser();
-                                                                                     const doc = parser.parseFromString(htmlText, 'text/html');
-                                                                                     const newContent = doc.querySelector('.cd-products-comparison-table');
+                            windowEl.addEventListener('mousedown', handleWindowInteraction);
 
-                                                                                     if (newContent) {
-                                                                                         const baseUrl = response.url;
-                                                                                         newContent.querySelectorAll('img').forEach(img => {
-                                                                                             const relativeSrc = img.getAttribute('src');
-                                                                                             if (relativeSrc) img.setAttribute('src', new URL(relativeSrc, baseUrl).href);
-                                                                                         });
-                                                                                         newContent.querySelectorAll('*').forEach(el => {
-                                                                                             if (el.hasAttribute('style')) {
-                                                                                                 let inlineStyle = el.getAttribute('style');
-                                                                                                 let processedStyle = convertRemToPx(inlineStyle);
-                                                                                                 el.setAttribute('style', processedStyle);
-                                                                                             }
-                                                                                         });
-                                                                                         const processAndInjectCss = async (cssText, cssBaseUrl, forWindowId) => {
-                                                                                             let processedCss = convertRemToPx(cssText);
-                                                                                             processedCss = rewriteCssUrls(processedCss, cssBaseUrl);
-                                                                                             const scopeSelector = `#${forWindowId} .macos-window-body`;
-                                                                                             let finalScopedCss;
-                                                                                             if (processedCss.includes('@media (prefers-color-scheme: dark)')) {
-                                                                                                 const startIndex = processedCss.indexOf('{');
-                                                                                                 const endIndex = processedCss.lastIndexOf('}');
-                                                                                                 const darkStyles = processedCss.substring(startIndex + 1, endIndex);
-                                                                                                 finalScopedCss = scopeCss(darkStyles, `#${forWindowId}.theme-dark .macos-window-body`);
-                                                                                             } else {
-                                                                                                 finalScopedCss = scopeCss(processedCss, scopeSelector);
-                                                                                             }
-                                                                                             const styleTag = document.createElement('style');
-                                                                                             styleTag.textContent = finalScopedCss;
-                                                                                             styleTag.setAttribute('data-dynamic-style-for', forWindowId);
-                                                                                             document.head.appendChild(styleTag);
+                            const performInteraction = (e) => {
+                                if (action === 'dragging') { drag(e); } 
+                                else if (action === 'resizing') { resize(e); }
+                            };
+
+                            const drag = (e) => {
+                                const newX = startLeft + e.clientX - startX;
+                                const newY = startTop + e.clientY - startY;
+                                windowEl.style.left = `${newX}px`;
+                                windowEl.style.top = `${newY}px`;
+                            };
+
+                            const resize = (e) => {
+                                const deltaX = e.clientX - startX;
+                                const deltaY = e.clientY - startY;
+
+                                let newWidth = startWidth;
+                                let newHeight = startHeight;
+                                let newLeft = startLeft;
+                                let newTop = startTop;
+
+                                if (resizeDirection.includes('e')) { newWidth = startWidth + deltaX; }
+                                if (resizeDirection.includes('w')) { newWidth = startWidth - deltaX; newLeft = startLeft + deltaX; }
+                                if (resizeDirection.includes('s')) { newHeight = startHeight + deltaY; }
+                                if (resizeDirection.includes('n')) { newHeight = startHeight - deltaY; newTop = startTop + deltaY; }
+
+                                if (newWidth >= minWidth) {
+                                    windowEl.style.width = `${newWidth}px`;
+                                    windowEl.style.left = `${newLeft}px`;
+                                }
+                                if (newHeight >= minHeight) {
+                                    windowEl.style.height = `${newHeight}px`;
+                                    windowEl.style.top = `${newTop}px`;
+                                }
+                            };
+
+                            const stopInteraction = () => {
+                                action = '';
+                                header.style.cursor = 'move';
+                                windowEl.style.cursor = 'default';
+                                windowEl.dataset.resizeDirection = '';
+                                document.removeEventListener('mousemove', performInteraction);
+                                document.removeEventListener('mouseup', stopInteraction);
+                            };
+
+                            const windowBody = windowEl.querySelector('.macos-window-body');
+                            try {
+                                const response = await fetch(pageUrl);
+                                if (!response.ok) throw new Error(`网络请求失败: ${response.status}`);
+                                const htmlText = await response.text();
+                                const parser = new DOMParser();
+                                const doc = parser.parseFromString(htmlText, 'text/html');
+                                const newContent = doc.querySelector('.cd-products-comparison-table');
+
+                                if (newContent) {
+                                    const baseUrl = response.url;
+                                    newContent.querySelectorAll('img').forEach(img => {
+                                        const relativeSrc = img.getAttribute('src');
+                                        if (relativeSrc) img.setAttribute('src', new URL(relativeSrc, baseUrl).href);
+                                    });
+                                    newContent.querySelectorAll('*').forEach(el => {
+                                        if (el.hasAttribute('style')) {
+                                            let inlineStyle = el.getAttribute('style');
+                                            let processedStyle = convertRemToPx(inlineStyle);
+                                            el.setAttribute('style', processedStyle);
+                                        }
+                                    });
+                                    const processAndInjectCss = async (cssText, cssBaseUrl, forWindowId) => {
+                                        let processedCss = convertRemToPx(cssText);
+                                        processedCss = rewriteCssUrls(processedCss, cssBaseUrl);
+                                        const scopeSelector = `#${forWindowId} .macos-window-body`;
+                                        let finalScopedCss;
+                                        if (processedCss.includes('@media (prefers-color-scheme: dark)')) {
+                                            const startIndex = processedCss.indexOf('{');
+                                            const endIndex = processedCss.lastIndexOf('}');
+                                            const darkStyles = processedCss.substring(startIndex + 1, endIndex);
+                                            finalScopedCss = scopeCss(darkStyles, `#${forWindowId}.theme-dark .macos-window-body`);
+                                        } else {
+                                            finalScopedCss = scopeCss(processedCss, scopeSelector);
+                                        }
+                                        const styleTag = document.createElement('style');
+                                        styleTag.textContent = finalScopedCss;
+                                        styleTag.setAttribute('data-dynamic-style-for', forWindowId);
+                                        document.head.appendChild(styleTag);
+                                    };
+                                    for (const link of doc.querySelectorAll('link[rel="stylesheet"]')) {
+                                        const absoluteUrl = new URL(link.getAttribute('href'), baseUrl).href;
+                                        const cssResponse = await fetch(absoluteUrl);
+                                        const cssText = await cssResponse.text();
+                                        await processAndInjectCss(cssText, absoluteUrl, windowId);
+                                    }
+                                    for (const style of doc.querySelectorAll('style')) {
+                                        await processAndInjectCss(style.textContent, baseUrl, windowId);
+                                    }
+                                    
+                                    windowBody.appendChild(newContent);
+
+                                } else {
+                                    throw new Error('无法在目标页面找到所需内容。');
+                                }
+                            } catch (error) {
+                                console.error('加载窗口内容时出错:', error);
+                                windowBody.innerHTML = `<div style="color:red; text-align:center; padding: 50px;">内容加载失败。</div>`;
+                            } finally {
+                                windowEl.style.visibility = 'visible';
+                            }
+                        }
+                                                                                 function minimizeWindow(pageUrl) {
+                                                                                     const windowData = openWindows.get(pageUrl);
+                                                                                     if (!windowData || windowData.state !== 'open') return;
+                                                                                     const windowEl = windowData.element;
+                                                                                     const dockItem = document.createElement('div');
+                                                                                     dockItem.className = 'dock-item';
+                                                                                     dockItem.title = windowData.title;
+                                                                                     dockItem.style.backgroundImage = `url('./public-static/img/apple-touch-icon.jpg?2556')`;
+                                                                                     dockItem.onclick = () => restoreWindow(pageUrl);
+                                                                                     windowData.dockItem = dockItem;
+                                                                                     dockContainer.appendChild(dockItem);
+                                                                                     windowData.state = 'minimized';
+                                                                                     windowData.rect = windowEl.getBoundingClientRect();
+                                                                                     updateDockVisibility();
+                                                                                     requestAnimationFrame(() => {
+                                                                                         const startRect = windowData.rect;
+                                                                                         const endRect = dockItem.getBoundingClientRect();
+                                                                                         const parentRect = mainContentArea.getBoundingClientRect();
+                                                                                         const startX = startRect.left - parentRect.left;
+                                                                                         const startY = startRect.top - parentRect.top;
+                                                                                         const endX = endRect.left - parentRect.left + (endRect.width / 2);
+                                                                                         const endY = endRect.top - parentRect.top + (endRect.height / 2);
+                                                                                         const controlX1 = startX;
+                                                                                         const controlY1 = startY + (endY - startY) * 0.8;
+                                                                                         const controlX2 = endX;
+                                                                                         const controlY2 = endY;
+                                                                                         const pathD = `M ${startX},${startY} C ${controlX1},${controlY1} ${controlX2},${controlY2} ${endX},${endY}`;
+                                                                                         svgContainer.innerHTML = `<path d="${pathD}" fill="none" stroke="none" />`;
+                                                                                         const ghost = document.createElement('div');
+                                                                                         ghost.className = 'window-ghost';
+                                                                                         ghost.style.top = `${startRect.top}px`;
+                                                                                         ghost.style.left = `${startRect.left}px`;
+                                                                                         ghost.style.width = `${startRect.width}px`;
+                                                                                         ghost.style.height = `${startRect.height}px`;
+                                                                                         ghost.style.backgroundColor = getComputedStyle(windowEl).backgroundColor;
+                                                                                         ghost.style.offsetPath = `path('${pathD}')`;
+                                                                                         ghost.style.animationName = 'genie-minimize';
+                                                                                         document.body.appendChild(ghost);
+                                                                                         windowEl.style.display = 'none';
+                                                                                         ghost.onanimationend = () => {
+                                                                                             ghost.remove();
+                                                                                             svgContainer.innerHTML = '';
                                                                                          };
-                                                                                         for (const link of doc.querySelectorAll('link[rel="stylesheet"]')) {
-                                                                                             const absoluteUrl = new URL(link.getAttribute('href'), baseUrl).href;
-                                                                                             const cssResponse = await fetch(absoluteUrl);
-                                                                                             const cssText = await cssResponse.text();
-                                                                                             await processAndInjectCss(cssText, absoluteUrl, windowId);
-                                                                                         }
-                                                                                         for (const style of doc.querySelectorAll('style')) {
-                                                                                             await processAndInjectCss(style.textContent, baseUrl, windowId);
-                                                                                         }
-                                                                                         windowBody.innerHTML = '';
-                                                                                         windowBody.appendChild(newContent);
-                                                                                     } else {
-                                                                                         throw new Error('无法在目标页面找到所需内容。');
-                                                                                     }
-                                                                                 } catch (error) {
-                                                                                     console.error('加载窗口内容时出错:', error);
-                                                                                     windowBody.innerHTML = `<div style="color:red; text-align:center; padding: 50px;">内容加载失败。</div>`;
+                                                                                     });
                                                                                  }
-                                                                             }
 
-                                                                             function minimizeWindow(pageUrl) {
-                                                                                 const windowData = openWindows.get(pageUrl);
-                                                                                 if (!windowData || windowData.state !== 'open') return;
-                                                                                 const windowEl = windowData.element;
-                                                                                 const dockItem = document.createElement('div');
-                                                                                 dockItem.className = 'dock-item';
-                                                                                 dockItem.title = windowData.title;
-                                                                                 dockItem.style.backgroundImage = `url('./public-static/img/apple-touch-icon.jpg?2556')`;
-                                                                                 dockItem.onclick = () => restoreWindow(pageUrl);
-                                                                                 windowData.dockItem = dockItem;
-                                                                                 dockContainer.appendChild(dockItem);
-                                                                                 windowData.state = 'minimized';
-                                                                                 windowData.rect = windowEl.getBoundingClientRect();
-                                                                                 updateDockVisibility();
-                                                                                 requestAnimationFrame(() => {
-                                                                                     const startRect = windowData.rect;
-                                                                                     const endRect = dockItem.getBoundingClientRect();
+                                                                                 function restoreWindow(pageUrl) {
+                                                                                     const windowData = openWindows.get(pageUrl);
+                                                                                     if (!windowData || windowData.state !== 'minimized') return;
+                                                                                     const windowEl = windowData.element;
+                                                                                     const dockItem = windowData.dockItem;
+                                                                                     const startRect = dockItem.getBoundingClientRect();
+                                                                                     const endRect = windowData.rect;
                                                                                      const parentRect = mainContentArea.getBoundingClientRect();
-                                                                                     const startX = startRect.left - parentRect.left;
-                                                                                     const startY = startRect.top - parentRect.top;
-                                                                                     const endX = endRect.left - parentRect.left + (endRect.width / 2);
-                                                                                     const endY = endRect.top - parentRect.top + (endRect.height / 2);
-                                                                                     const controlX1 = startX;
-                                                                                     const controlY1 = startY + (endY - startY) * 0.8;
-                                                                                     const controlX2 = endX;
-                                                                                     const controlY2 = endY;
-                                                                                     const pathD = `M ${startX},${startY} C ${controlX1},${controlY1} ${controlX2},${controlY2} ${endX},${endY}`;
+                                                                                     const startX = startRect.left - parentRect.left + (startRect.width / 2);
+                                                                                     const startY = startRect.top - parentRect.top + (startRect.height / 2);
+                                                                                     const endX = endRect.left - parentRect.left;
+                                                                                     const endY = endRect.top - parentRect.top;
+                                                                                     const controlX1 = endX;
+                                                                                     const controlY1 = endY;
+                                                                                     const controlX2 = startX;
+                                                                                     const controlY2 = startY + (endY - startY) * 0.2;
+                                                                                     const pathD = `M ${endX},${endY} C ${controlX2},${controlY2} ${controlX1},${controlY1} ${startX},${startY}`;
                                                                                      svgContainer.innerHTML = `<path d="${pathD}" fill="none" stroke="none" />`;
                                                                                      const ghost = document.createElement('div');
                                                                                      ghost.className = 'window-ghost';
-                                                                                     ghost.style.top = `${startRect.top}px`;
-                                                                                     ghost.style.left = `${startRect.left}px`;
-                                                                                     ghost.style.width = `${startRect.width}px`;
-                                                                                     ghost.style.height = `${startRect.height}px`;
+                                                                                     ghost.style.top = `${endRect.top}px`;
+                                                                                     ghost.style.left = `${endRect.left}px`;
+                                                                                     ghost.style.width = `${endRect.width}px`;
+                                                                                     ghost.style.height = `${endRect.height}px`;
                                                                                      ghost.style.backgroundColor = getComputedStyle(windowEl).backgroundColor;
                                                                                      ghost.style.offsetPath = `path('${pathD}')`;
-                                                                                     ghost.style.animationName = 'genie-minimize';
+                                                                                     ghost.style.animationName = 'genie-restore';
+                                                                                     ghost.style.animationDirection = 'reverse'; // Reverse restore animation
                                                                                      document.body.appendChild(ghost);
-                                                                                     windowEl.style.display = 'none';
+                                                                                     dockItem.remove();
+                                                                                     windowData.dockItem = null;
+                                                                                     windowData.state = 'open';
+                                                                                     updateDockVisibility();
                                                                                      ghost.onanimationend = () => {
+                                                                                         windowEl.style.display = 'flex';
+                                                                                         bringToFront(windowEl);
                                                                                          ghost.remove();
                                                                                          svgContainer.innerHTML = '';
                                                                                      };
+                                                                                 }
+
+                                                                                 // --- 页面初始化逻辑 ---
+
+                                                                                 // 菜单折叠功能
+                                                                                 document.querySelectorAll('.sidebar-menu li').forEach(li => {
+                                                                                     if (li.querySelector('ul')) li.classList.add('has-submenu');
                                                                                  });
-                                                                             }
-
-                                                                             function restoreWindow(pageUrl) {
-                                                                                 const windowData = openWindows.get(pageUrl);
-                                                                                 if (!windowData || windowData.state !== 'minimized') return;
-                                                                                 const windowEl = windowData.element;
-                                                                                 const dockItem = windowData.dockItem;
-                                                                                 const startRect = dockItem.getBoundingClientRect();
-                                                                                 const endRect = windowData.rect;
-                                                                                 const parentRect = mainContentArea.getBoundingClientRect();
-                                                                                 const startX = startRect.left - parentRect.left + (startRect.width / 2);
-                                                                                 const startY = startRect.top - parentRect.top + (startRect.height / 2);
-                                                                                 const endX = endRect.left - parentRect.left;
-                                                                                 const endY = endRect.top - parentRect.top;
-                                                                                 const controlX1 = endX;
-                                                                                 const controlY1 = endY;
-                                                                                 const controlX2 = startX;
-                                                                                 const controlY2 = startY + (endY - startY) * 0.2;
-                                                                                 const pathD = `M ${endX},${endY} C ${controlX2},${controlY2} ${controlX1},${controlY1} ${startX},${startY}`;
-                                                                                 svgContainer.innerHTML = `<path d="${pathD}" fill="none" stroke="none" />`;
-                                                                                 const ghost = document.createElement('div');
-                                                                                 ghost.className = 'window-ghost';
-                                                                                 ghost.style.top = `${endRect.top}px`;
-                                                                                 ghost.style.left = `${endRect.left}px`;
-                                                                                 ghost.style.width = `${endRect.width}px`;
-                                                                                 ghost.style.height = `${endRect.height}px`;
-                                                                                 ghost.style.backgroundColor = getComputedStyle(windowEl).backgroundColor;
-                                                                                 ghost.style.offsetPath = `path('${pathD}')`;
-                                                                                 ghost.style.animationName = 'genie-restore';
-                                                                                 ghost.style.animationDirection = 'reverse'; // Reverse restore animation
-                                                                                 document.body.appendChild(ghost);
-                                                                                 dockItem.remove();
-                                                                                 windowData.dockItem = null;
-                                                                                 windowData.state = 'open';
-                                                                                 updateDockVisibility();
-                                                                                 ghost.onanimationend = () => {
-                                                                                     windowEl.style.display = 'flex';
-                                                                                     bringToFront(windowEl);
-                                                                                     ghost.remove();
-                                                                                     svgContainer.innerHTML = '';
-                                                                                 };
-                                                                             }
-
-                                                                             // --- 页面初始化逻辑 ---
-                                                                             
-                                                                             // 菜单折叠功能
-                                                                             document.querySelectorAll('.sidebar-menu li').forEach(li => {
-                                                                                 if (li.querySelector('ul')) li.classList.add('has-submenu');
-                                                                             });
-                                                                             document.querySelectorAll('.sidebar-menu li.has-submenu > a').forEach(menuItem => {
-                                                                                 menuItem.addEventListener('click', (e) => {
-                                                                                     e.preventDefault();
-                                                                                     const parentLi = menuItem.parentElement;
-                                                                                     parentLi.classList.toggle('open');
-                                                                                     const submenu = parentLi.querySelector('ul');
-                                                                                     if (submenu) {
-                                                                                         if (parentLi.classList.contains('open')) {
-                                                                                             submenu.style.maxHeight = submenu.scrollHeight + "px";
-                                                                                         } else {
-                                                                                             submenu.style.maxHeight = null;
+                                                                                 document.querySelectorAll('.sidebar-menu li.has-submenu > a').forEach(menuItem => {
+                                                                                     menuItem.addEventListener('click', (e) => {
+                                                                                         e.preventDefault();
+                                                                                         const parentLi = menuItem.parentElement;
+                                                                                         parentLi.classList.toggle('open');
+                                                                                         const submenu = parentLi.querySelector('ul');
+                                                                                         if (submenu) {
+                                                                                             if (parentLi.classList.contains('open')) {
+                                                                                                 submenu.style.maxHeight = submenu.scrollHeight + "px";
+                                                                                             } else {
+                                                                                                 submenu.style.maxHeight = null;
+                                                                                             }
                                                                                          }
+                                                                                     });
+                                                                                 });
+
+                                                                                 // 侧边栏链接点击处理
+                                                                                 document.querySelectorAll('.sidebar-menu a[href]').forEach(link => {
+                                                                                     const href = link.getAttribute('href');
+                                                                                     if (href && href !== '#' && !href.startsWith('http') && !href.startsWith('javascript:')) {
+                                                                                         link.onclick = (event) => {
+                                                                                             event.preventDefault();
+                                                                                             event.stopPropagation();
+                                                                                             createWindow(href, link.textContent.trim());
+                                                                                         };
                                                                                      }
                                                                                  });
-                                                                             });
 
-                                                                             // 侧边栏链接点击处理
-                                                                             document.querySelectorAll('.sidebar-menu a[href]').forEach(link => {
-                                                                                 const href = link.getAttribute('href');
-                                                                                 if (href && href !== '#' && !href.startsWith('http') && !href.startsWith('javascript:')) {
-                                                                                     link.onclick = (event) => {
-                                                                                         event.preventDefault();
-                                                                                         event.stopPropagation();
-                                                                                         createWindow(href, link.textContent.trim());
-                                                                                     };
+                                                                                 // "加载更多" 按钮
+                                                                                 const updatesList = document.getElementById('update-history-list');
+                                                                                 const showMoreBtn = document.getElementById('show-more-updates');
+                                                                                 const moreButtonListItem = document.querySelector('.more-btn-li');
+                                                                                 const template = document.getElementById('more-updates-template');
+                                                                                 if (updatesList && showMoreBtn && moreButtonListItem && template) {
+                                                                                     if (!template.content.firstElementChild) {
+                                                                                         moreButtonListItem.style.display = 'none';
+                                                                                     } else {
+                                                                                         const updateCollapsedHeight = () => {
+                                                                                             if (updatesList.classList.contains('expanded')) return;
+                                                                                             let initialHeight = 0;
+                                                                                             updatesList.querySelectorAll('li:not(.more-btn-li)').forEach(li => {
+                                                                                                 initialHeight += li.offsetHeight;
+                                                                                             });
+                                                                                             initialHeight += moreButtonListItem.offsetHeight;
+                                                                                             updatesList.style.height = initialHeight + 'px';
+                                                                                         };
+                                                                                         updateCollapsedHeight();
+                                                                                         window.addEventListener('resize', updateCollapsedHeight);
+                                                                                         showMoreBtn.addEventListener('click', (e) => {
+                                                                                             e.preventDefault();
+                                                                                             window.removeEventListener('resize', updateCollapsedHeight);
+                                                                                             updatesList.classList.add('expanded');
+                                                                                             updatesList.insertBefore(template.content.cloneNode(true), moreButtonListItem);
+                                                                                             updatesList.style.height = updatesList.scrollHeight + 'px';
+                                                                                             moreButtonListItem.remove();
+                                                                                             updatesList.addEventListener('transitionend', () => {
+                                                                                                 updatesList.style.height = 'auto';
+                                                                                             }, {
+                                                                                                 once: true
+                                                                                             });
+                                                                                         });
+                                                                                     }
                                                                                  }
-                                                                             });
 
-                                                                             // "加载更多" 按钮
-                                                                             const updatesList = document.getElementById('update-history-list');
-                                                                             const showMoreBtn = document.getElementById('show-more-updates');
-                                                                             const moreButtonListItem = document.querySelector('.more-btn-li');
-                                                                             const template = document.getElementById('more-updates-template');
-                                                                             if (updatesList && showMoreBtn && moreButtonListItem && template) {
-                                                                                 if (!template.content.firstElementChild) {
-                                                                                     moreButtonListItem.style.display = 'none';
-                                                                                 } else {
-                                                                                     const updateCollapsedHeight = () => {
-                                                                                         if (updatesList.classList.contains('expanded')) return;
-                                                                                         let initialHeight = 0;
-                                                                                         updatesList.querySelectorAll('li:not(.more-btn-li)').forEach(li => { initialHeight += li.offsetHeight; });
-                                                                                         initialHeight += moreButtonListItem.offsetHeight;
-                                                                                         updatesList.style.height = initialHeight + 'px';
-                                                                                     };
-                                                                                     updateCollapsedHeight();
-                                                                                     window.addEventListener('resize', updateCollapsedHeight);
-                                                                                     showMoreBtn.addEventListener('click', (e) => {
-                                                                                         e.preventDefault();
-                                                                                         window.removeEventListener('resize', updateCollapsedHeight);
-                                                                                         updatesList.classList.add('expanded');
-                                                                                         updatesList.insertBefore(template.content.cloneNode(true), moreButtonListItem);
-                                                                                         updatesList.style.height = updatesList.scrollHeight + 'px';
-                                                                                         moreButtonListItem.remove();
-                                                                                         updatesList.addEventListener('transitionend', () => { updatesList.style.height = 'auto'; }, { once: true });
-                                                                                     });
+                                                                                 // 倒计时功能
+                                                                                 const interval = 1000;
+
+                                                                                 function ShowCountDown(year, month, day, hh, mm, ss, divname) {
+                                                                                     const now = new Date();
+                                                                                     const endDate = new Date(year, month - 1, day, hh, mm, ss);
+                                                                                     const leftTime = endDate.getTime() - now.getTime();
+                                                                                     const div1 = document.getElementById("divdown1");
+                                                                                     const div2 = document.getElementById(divname);
+                                                                                     if (leftTime > 0 && div1 && div2) {
+                                                                                         div1.style.display = 'block';
+                                                                                         div2.style.display = 'block';
+                                                                                         const leftsecond = parseInt(leftTime / 1000);
+                                                                                         const day1 = Math.floor(leftsecond / (60 * 60 * 24));
+                                                                                         const hour = Math.floor((leftsecond - day1 * 24 * 60 * 60) / 3600);
+                                                                                         const minute = Math.floor((leftsecond - day1 * 24 * 60 * 60 - hour * 3600) / 60);
+                                                                                         const second = Math.floor(leftsecond - day1 * 24 * 60 * 60 - hour * 3600 - minute * 60);
+                                                                                         div2.innerHTML = "倒计时：" + day1 + " 天 " + hour + " 小时 " + minute + " 分 " + second + " 秒";
+                                                                                     } else if (div1 && div2) {
+                                                                                         div1.style.display = 'none';
+                                                                                         div2.style.display = 'none';
+                                                                                     }
                                                                                  }
-                                                                             }
-
-                                                                             // 倒计时功能
-                                                                             const interval = 1000;
-                                                                             function ShowCountDown(year, month, day, hh, mm, ss, divname) {
-                                                                                 const now = new Date();
-                                                                                 const endDate = new Date(year, month - 1, day, hh, mm, ss);
-                                                                                 const leftTime = endDate.getTime() - now.getTime();
-                                                                                 const div1 = document.getElementById("divdown1");
-                                                                                 const div2 = document.getElementById(divname);
-                                                                                 if (leftTime > 0 && div1 && div2) {
-                                                                                     div1.style.display = 'block';
-                                                                                     div2.style.display = 'block';
-                                                                                     const leftsecond = parseInt(leftTime / 1000);
-                                                                                     const day1 = Math.floor(leftsecond / (60 * 60 * 24));
-                                                                                     const hour = Math.floor((leftsecond - day1 * 24 * 60 * 60) / 3600);
-                                                                                     const minute = Math.floor((leftsecond - day1 * 24 * 60 * 60 - hour * 3600) / 60);
-                                                                                     const second = Math.floor(leftsecond - day1 * 24 * 60 * 60 - hour * 3600 - minute * 60);
-                                                                                     div2.innerHTML = "倒计时：" + day1 + " 天 " + hour + " 小时 " + minute + " 分 " + second + " 秒";
-                                                                                 } else if (div1 && div2) {
-                                                                                     div1.style.display = 'none';
-                                                                                     div2.style.display = 'none';
-                                                                                 }
-                                                                             }
-                                                                             window.setInterval(() => ShowCountDown(2025, 6, 10, 1, 0, 0, 'divdown2'), interval);
+                                                                                 window.setInterval(() => ShowCountDown(2025, 6, 10, 1, 0, 0, 'divdown2'), interval);
 
 
-                                                                             // =======================================================
-                                                                             // 新增：Dock 图标悬停预览逻辑
-                                                                             // =======================================================
-                                                                             dockContainer.addEventListener('mouseover', (e) => {
-                                                                                 const hoveredItem = e.target.closest('.dock-item');
-                                                                                 if (!hoveredItem || !dockPreview) return;
+                                                                                 // =======================================================
+                                                                                 // 新增：Dock 图标悬停预览逻辑
+                                                                                 // =======================================================
+                                                                                 dockContainer.addEventListener('mouseover', (e) => {
+                                                                                     const hoveredItem = e.target.closest('.dock-item');
+                                                                                     if (!hoveredItem || !dockPreview) return;
 
-                                                                                 const title = hoveredItem.title;
-                                                                                 if (!title) return;
-                                                                                 dockPreview.textContent = title;
+                                                                                     const title = hoveredItem.title;
+                                                                                     if (!title) return;
+                                                                                     dockPreview.textContent = title;
 
-                                                                                 const itemRect = hoveredItem.getBoundingClientRect();
-                                                                                 const parentRect = mainContentArea.getBoundingClientRect();
-                                                                                 
-                                                                                 // 先让浏览器渲染一次，获取正确的尺寸
-                                                                                 dockPreview.style.opacity = '1';
-                                                                                 
-                                                                                 const top = (itemRect.top - parentRect.top) - dockPreview.offsetHeight - 10;
-                                                                                 const left = (itemRect.left - parentRect.left) + (itemRect.width / 2) - (dockPreview.offsetWidth / 2);
+                                                                                     const itemRect = hoveredItem.getBoundingClientRect();
+                                                                                     const parentRect = mainContentArea.getBoundingClientRect();
 
-                                                                                 dockPreview.style.top = `${top}px`;
-                                                                                 dockPreview.style.left = `${left}px`;
-                                                                                 
-                                                                                 dockPreview.style.transform = 'translateY(0)';
+                                                                                     dockPreview.style.opacity = '1';
+
+                                                                                     const top = (itemRect.top - parentRect.top) - dockPreview.offsetHeight - 10;
+                                                                                     const left = (itemRect.left - parentRect.left) + (itemRect.width / 2) - (dockPreview.offsetWidth / 2);
+
+                                                                                     dockPreview.style.top = `${top}px`;
+                                                                                     dockPreview.style.left = `${left}px`;
+
+                                                                                     dockPreview.style.transform = 'translateY(0)';
+                                                                                 });
+
+                                                                                 dockContainer.addEventListener('mouseout', (e) => {
+                                                                                     const hoveredItem = e.target.closest('.dock-item');
+                                                                                     if (!hoveredItem || !dockPreview) return;
+
+                                                                                     dockPreview.style.opacity = '0';
+                                                                                     dockPreview.style.transform = 'translateY(10px)';
+                                                                                 });
+
                                                                              });
-
-                                                                             dockContainer.addEventListener('mouseout', (e) => {
-                                                                                 const hoveredItem = e.target.closest('.dock-item');
-                                                                                 if (!hoveredItem || !dockPreview) return;
-                                                                                 
-                                                                                 dockPreview.style.opacity = '0';
-                                                                                 dockPreview.style.transform = 'translateY(10px)';
-                                                                             });
-                                                                             
-                                                                         });
                                                                          </script>
 </body>
 </html>
