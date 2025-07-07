@@ -478,17 +478,7 @@ Main Components
   border-top-width: 1px;
   border-right-width: 1px;
 }
-.cd-features-list li.rate {
-  /* rating stars */
-  padding: 21px 0;
-}
-.cd-features-list li.rate span {
-  display: inline-block;
-  height: 22px;
-  width: 110px;
-  background: url(../img/cd-star.svg);
-  color: transparent;
-}
+
 @media only screen and (min-width: 1170px) {
   .cd-features-list li:nth-of-type(odd) {
     font-size: 1.0rem;
