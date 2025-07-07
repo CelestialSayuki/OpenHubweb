@@ -4,8 +4,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>开源的 Apple 苹果产品参数中心 / OpenHubweb</title>
-    <meta name="description" content="一个收集 Apple 产品信息的现代化参数中心，通过参数对比，让您更了解苹果产品。">
-    <meta name="keywords" content="Apple,苹果产品参数,Apple Silicon,iPad,iPhone,Mac,AirPods,OpenHubweb">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8f9fa">
