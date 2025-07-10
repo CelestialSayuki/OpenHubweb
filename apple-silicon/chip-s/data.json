@@ -294,7 +294,7 @@
         "gyroAccel": "Bosch",
         "barometer": "-",
         "compass": "-",
-        "usedIn": "<div class=\"li-div-device li-div-device-b\">Apple Watch Series 7<br>HomePod <span style=\"font-size:1.0rem;\">(第 2 代,仅使用CPU)</span></div>"
+        "usedIn": "<div class=\"li-div-device li-div-device-b\">Apple Watch Series 7<br>HomePod (第 2 代,仅使用CPU)</span></div>"
       }
     },
     {
@@ -393,7 +393,7 @@
         "gyroAccel": "Bosch BMI282",
         "barometer": "-",
         "compass": "ALPS",
-        "usedIn": "<div class=\"li-div-device li-div-device-b\">Apple Watch Series 5<br>Apple Watch SE (第 1 代)<br>HomePod mini <span style=\"font-size:1.0rem;\">(仅使用CPU)</span></div>"
+        "usedIn": "<div class=\"li-div-device li-div-device-b\">Apple Watch Series 5<br>Apple Watch SE (第 1 代)<br>HomePod mini (仅使用CPU)</span></div>"
       }
     },
     {

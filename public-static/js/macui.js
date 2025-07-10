@@ -86,6 +86,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 核心功能：创建、最小化、恢复窗口 ---
     async function createWindow(pageUrl, titleText) {
+        // --- 沉浸式全屏逻辑 ---
+        let wasMaximized = false;
+        let maximizedWindowUrl = null;
+
+        for (const [url, data] of openWindows.entries()) {
+            if (data.element.classList.contains('is-maximized')) {
+                wasMaximized = true;
+                maximizedWindowUrl = url;
+                break;
+            }
+        }
+
+        // 如果处于全屏模式，并且要打开的是一个新窗口，则关闭旧的全屏窗口
+        if (wasMaximized && maximizedWindowUrl !== pageUrl) {
+            const windowToCloseData = openWindows.get(maximizedWindowUrl);
+            if (windowToCloseData) {
+                closeWindowWithAnimation(windowToCloseData.element, maximizedWindowUrl);
+            }
+        }
+        // --- 沉浸式全屏逻辑结束 ---
+
+
         // 1. 检查窗口是否已存在，并根据状态执行相应操作
         if (openWindows.has(pageUrl)) {
             const windowData = openWindows.get(pageUrl);
@@ -93,12 +115,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (windowData.state === 'minimized') {
                 restoreWindow(pageUrl);
             } else if (parseInt(windowEl.style.zIndex) === zIndexCounter) {
+                // 如果点击的已经是顶层窗口，则关闭它 (包括已最大化的窗口)
                 closeWindowWithAnimation(windowEl, pageUrl);
             } else {
                 bringToFront(windowEl);
             }
             return;
         }
+
 
         const isComparisonPage = pageUrl.includes('/apple-device/') || pageUrl.includes('/apple-silicon/');
 
@@ -142,26 +166,28 @@ document.addEventListener('DOMContentLoaded', () => {
         windowEl.style.visibility = 'hidden';
         mainContentArea.appendChild(windowEl);
 
-        const windowData = { id: windowId, element: windowEl, state: 'open', rect: null, dockItem: null, title: titleText };
+        const windowData = { id: windowId, element: windowEl, state: 'open', rect: null, preMaximizeRect: null, dockItem: null, title: titleText };
         openWindows.set(pageUrl, windowData);
         
         // 3. 为窗口绑定交互事件
         const header = windowEl.querySelector('.macos-window-header');
         const closeBtn = windowEl.querySelector('.control-close');
         const minimizeBtn = windowEl.querySelector('.control-minimize');
+        const maximizeBtn = windowEl.querySelector('.control-maximize');
         const minWidth = parseInt(getComputedStyle(windowEl).minWidth);
         const minHeight = parseInt(getComputedStyle(windowEl).minHeight);
         const resizeBorderWidth = 10;
 
         closeBtn.onclick = (e) => { e.stopPropagation(); closeWindowWithAnimation(windowEl, pageUrl); };
         minimizeBtn.onclick = (e) => { e.stopPropagation(); minimizeWindow(pageUrl); };
+        maximizeBtn.onclick = (e) => { e.stopPropagation(); toggleMaximize(pageUrl); };
 
         let action = '';
         let startX, startY, startWidth, startHeight, startLeft, startTop;
         let resizeDirection = '';
 
         const handleMouseMoveForCursor = (e) => {
-            if (action) return;
+            if (action || windowEl.classList.contains('is-maximized')) return;
             const rect = windowEl.getBoundingClientRect();
             const onTopEdge = e.clientY >= rect.top && e.clientY <= rect.top + resizeBorderWidth;
             const onBottomEdge = e.clientY <= rect.bottom && e.clientY >= rect.bottom - resizeBorderWidth;
@@ -181,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         windowEl.addEventListener('mousemove', handleMouseMoveForCursor);
 
         const handleWindowInteraction = (e) => {
+            if (windowEl.classList.contains('is-maximized')) return;
             if (e.target.classList.contains('control-btn') || e.target.closest('.macos-window-body')) return;
             e.preventDefault();
             bringToFront(windowEl);
@@ -330,6 +357,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (windowEl.style.visibility === 'hidden') {
                windowEl.style.visibility = 'visible';
             }
+            // 如果之前是全屏模式，则自动最大化新窗口
+            if (wasMaximized) {
+                // 使用微小的延迟确保窗口已渲染，避免动画问题
+                setTimeout(() => toggleMaximize(pageUrl), 50);
+            }
         }
     }
 
@@ -379,6 +411,55 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function toggleMaximize(pageUrl) {
+        const windowData = openWindows.get(pageUrl);
+        if (!windowData) return;
+        const windowEl = windowData.element;
+
+        if (windowEl.classList.contains('is-maximized')) {
+            // --- 恢复窗口 ---
+            windowEl.classList.remove('is-maximized');
+            const preMaximizeRect = windowData.preMaximizeRect;
+            if (preMaximizeRect) {
+                windowEl.style.top = preMaximizeRect.top;
+                windowEl.style.left = preMaximizeRect.left;
+                windowEl.style.width = preMaximizeRect.width;
+                windowEl.style.height = preMaximizeRect.height;
+            }
+        } else {
+            // --- 最大化窗口 ---
+            
+            // 修复冲突：先检查是否已有窗口正在关闭中
+            let aWindowIsClosing = false;
+            for (const data of openWindows.values()) {
+                if (data.element.classList.contains('is-closing')) {
+                    aWindowIsClosing = true;
+                    break;
+                }
+            }
+
+            // 只有在没有窗口正在关闭（即不是沉浸式切换）时，才最小化其他窗口
+            if (!aWindowIsClosing) {
+                for (const [otherUrl, otherData] of openWindows.entries()) {
+                    if (otherUrl !== pageUrl && otherData.state === 'open') {
+                        minimizeWindow(otherUrl);
+                    }
+                }
+            }
+            
+            // 保存当前状态，以便恢复
+            windowData.preMaximizeRect = {
+                top: windowEl.style.top,
+                left: windowEl.style.left,
+                width: `${windowEl.offsetWidth}px`,
+                height: `${windowEl.offsetHeight}px`
+            };
+            
+            // 仅添加CSS类，由CSS文件负责具体的样式
+            windowEl.classList.add('is-maximized');
+        }
+    }
+    
     function restoreWindow(pageUrl) {
         const windowData = openWindows.get(pageUrl);
         if (!windowData || windowData.state !== 'minimized') return;
