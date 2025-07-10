@@ -22,6 +22,19 @@ document.addEventListener('DOMContentLoaded', () => {
     darkModeMatcher.addEventListener('change', e => {
         updateAllWindowsTheme(e.matches);
     });
+    
+    // --- 滚动锁定辅助函数 ---
+    function updateScrollLock() {
+        let shouldLock = false;
+        // 检查是否有任何一个“打开的”窗口处于最大化状态
+        for (const data of openWindows.values()) {
+            if (data.element.classList.contains('is-maximized') && data.state === 'open') {
+                shouldLock = true;
+                break;
+            }
+        }
+        mainContentArea.classList.toggle('main-content-locked', shouldLock);
+    }
 
     // --- 辅助函数 ---
     function convertRemToPx(cssText, baseFontSize = 10) {
@@ -81,41 +94,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelectorAll(`[data-dynamic-style-for="${windowData.id}"]`).forEach(s => s.remove());
             }
             updateDockVisibility();
+            updateScrollLock();
         }, { once: true });
     }
 
     // --- 核心功能：创建、最小化、恢复窗口 ---
     async function createWindow(pageUrl, titleText) {
-        // --- 沉浸式全屏逻辑 ---
         let wasMaximized = false;
         let maximizedWindowUrl = null;
 
         for (const [url, data] of openWindows.entries()) {
-            if (data.element.classList.contains('is-maximized')) {
+            if (data.element.classList.contains('is-maximized') && data.state === 'open') {
                 wasMaximized = true;
                 maximizedWindowUrl = url;
                 break;
             }
         }
 
-        // 如果处于全屏模式，并且要打开的是一个新窗口，则关闭旧的全屏窗口
         if (wasMaximized && maximizedWindowUrl !== pageUrl) {
             const windowToCloseData = openWindows.get(maximizedWindowUrl);
             if (windowToCloseData) {
                 closeWindowWithAnimation(windowToCloseData.element, maximizedWindowUrl);
             }
         }
-        // --- 沉浸式全屏逻辑结束 ---
-
-
-        // 1. 检查窗口是否已存在，并根据状态执行相应操作
+        
         if (openWindows.has(pageUrl)) {
             const windowData = openWindows.get(pageUrl);
             const windowEl = windowData.element;
             if (windowData.state === 'minimized') {
                 restoreWindow(pageUrl);
             } else if (parseInt(windowEl.style.zIndex) === zIndexCounter) {
-                // 如果点击的已经是顶层窗口，则关闭它 (包括已最大化的窗口)
                 closeWindowWithAnimation(windowEl, pageUrl);
             } else {
                 bringToFront(windowEl);
@@ -123,9 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-
         const isComparisonPage = pageUrl.includes('/apple-device/') || pageUrl.includes('/apple-silicon/');
-
         if (isComparisonPage) {
             const styleId = 'comparison-ui-style';
             if (!document.getElementById(styleId)) {
@@ -137,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 2. 创建新窗口的基本DOM结构和状态
         windowIdCounter++;
         const windowId = `dynamic-window-${windowIdCounter}`;
         const windowEl = document.createElement('div');
@@ -169,15 +174,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const windowData = { id: windowId, element: windowEl, state: 'open', rect: null, preMaximizeRect: null, dockItem: null, title: titleText };
         openWindows.set(pageUrl, windowData);
         
-        // 3. 为窗口绑定交互事件
         const header = windowEl.querySelector('.macos-window-header');
         const closeBtn = windowEl.querySelector('.control-close');
         const minimizeBtn = windowEl.querySelector('.control-minimize');
         const maximizeBtn = windowEl.querySelector('.control-maximize');
-        const minWidth = parseInt(getComputedStyle(windowEl).minWidth);
-        const minHeight = parseInt(getComputedStyle(windowEl).minHeight);
-        const resizeBorderWidth = 10;
-
+        
         closeBtn.onclick = (e) => { e.stopPropagation(); closeWindowWithAnimation(windowEl, pageUrl); };
         minimizeBtn.onclick = (e) => { e.stopPropagation(); minimizeWindow(pageUrl); };
         maximizeBtn.onclick = (e) => { e.stopPropagation(); toggleMaximize(pageUrl); };
@@ -185,6 +186,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let action = '';
         let startX, startY, startWidth, startHeight, startLeft, startTop;
         let resizeDirection = '';
+        const resizeBorderWidth = 10;
+        const minWidth = parseInt(getComputedStyle(windowEl).minWidth);
+        const minHeight = parseInt(getComputedStyle(windowEl).minHeight);
 
         const handleMouseMoveForCursor = (e) => {
             if (action || windowEl.classList.contains('is-maximized')) return;
@@ -243,14 +247,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (resizeDirection.includes('w')) { newWidth = startWidth - deltaX; newLeft = startLeft + deltaX; }
                 if (resizeDirection.includes('s')) newHeight = startHeight + deltaY;
                 if (resizeDirection.includes('n')) { newHeight = startHeight - deltaY; newTop = startTop + deltaY; }
-                if (newWidth >= minWidth) {
-                    windowEl.style.width = `${newWidth}px`;
-                    windowEl.style.left = `${newLeft}px`;
-                }
-                if (newHeight >= minHeight) {
-                    windowEl.style.height = `${newHeight}px`;
-                    windowEl.style.top = `${newTop}px`;
-                }
+                if (newWidth >= minWidth) { windowEl.style.width = `${newWidth}px`; windowEl.style.left = `${newLeft}px`; }
+                if (newHeight >= minHeight) { windowEl.style.height = `${newHeight}px`; windowEl.style.top = `${newTop}px`; }
             }
         };
 
@@ -263,7 +261,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.removeEventListener('mouseup', stopInteraction);
         };
 
-        // 4. 加载并注入内容
         const windowBody = windowEl.querySelector('.macos-window-body');
         try {
             if (isComparisonPage) {
@@ -299,23 +296,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     };
 
-                    // 使用事件委托，为整个表格容器设置唯一的点击监听器
                     gridContainer.addEventListener('click', (e) => {
-                        // 查找被点击元素最近的.product-column父元素
                         const product = e.target.closest('.product-column');
-                        
-                        // 如果没点在任何一个产品卡片内，则什么也不做
                         if (!product) return;
-
-                        // 如果点击的是链接元素，阻止其默认行为，并且不进行选中操作
-                        if (e.target.closest('a')) {
-                            e.preventDefault();
-                            return;
-                        }
-                        
-                        // 对其他所有在卡片内的有效点击，执行选中/取消选中
+                        if (e.target.closest('a')) { e.preventDefault(); return; }
                         product.classList.toggle('selected');
-                        // 每次点击后都立即更新“比较”按钮的状态
                         updateFilterState();
                     });
 
@@ -357,9 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (windowEl.style.visibility === 'hidden') {
                windowEl.style.visibility = 'visible';
             }
-            // 如果之前是全屏模式，则自动最大化新窗口
             if (wasMaximized) {
-                // 使用微小的延迟确保窗口已渲染，避免动画问题
                 setTimeout(() => toggleMaximize(pageUrl), 50);
             }
         }
@@ -379,6 +362,8 @@ document.addEventListener('DOMContentLoaded', () => {
         windowData.state = 'minimized';
         windowData.rect = windowEl.getBoundingClientRect();
         updateDockVisibility();
+        updateScrollLock();
+        
         requestAnimationFrame(() => {
             const startRect = windowData.rect;
             const endRect = dockItem.getBoundingClientRect();
@@ -417,7 +402,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const windowEl = windowData.element;
 
         if (windowEl.classList.contains('is-maximized')) {
-            // --- 恢复窗口 ---
             windowEl.classList.remove('is-maximized');
             const preMaximizeRect = windowData.preMaximizeRect;
             if (preMaximizeRect) {
@@ -427,9 +411,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 windowEl.style.height = preMaximizeRect.height;
             }
         } else {
-            // --- 最大化窗口 ---
+            mainContentArea.scrollTop = 0; // 新增：在最大化前，将底层滚动到顶部
             
-            // 修复冲突：先检查是否已有窗口正在关闭中
             let aWindowIsClosing = false;
             for (const data of openWindows.values()) {
                 if (data.element.classList.contains('is-closing')) {
@@ -437,8 +420,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 }
             }
-
-            // 只有在没有窗口正在关闭（即不是沉浸式切换）时，才最小化其他窗口
             if (!aWindowIsClosing) {
                 for (const [otherUrl, otherData] of openWindows.entries()) {
                     if (otherUrl !== pageUrl && otherData.state === 'open') {
@@ -446,18 +427,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-            
-            // 保存当前状态，以便恢复
             windowData.preMaximizeRect = {
                 top: windowEl.style.top,
                 left: windowEl.style.left,
                 width: `${windowEl.offsetWidth}px`,
                 height: `${windowEl.offsetHeight}px`
             };
-            
-            // 仅添加CSS类，由CSS文件负责具体的样式
             windowEl.classList.add('is-maximized');
         }
+        updateScrollLock();
     }
     
     function restoreWindow(pageUrl) {
@@ -493,16 +471,22 @@ document.addEventListener('DOMContentLoaded', () => {
         windowData.dockItem = null;
         windowData.state = 'open';
         updateDockVisibility();
+        
         ghost.onanimationend = () => {
             windowEl.style.display = 'flex';
             bringToFront(windowEl);
             ghost.remove();
             svgContainer.innerHTML = '';
+
+            // 新增：如果恢复的是一个最大化的窗口，确保底层也滚动到顶部
+            if (windowEl.classList.contains('is-maximized')) {
+                mainContentArea.scrollTop = 0;
+            }
+            updateScrollLock();
         };
     }
 
     // --- 页面初始化逻辑 ---
-    // (此部分无改动)
     document.querySelectorAll('.sidebar-menu li').forEach(li => {
         if (li.querySelector('ul')) li.classList.add('has-submenu');
     });

@@ -2,6 +2,10 @@
     position: relative;
 }
 
+.main-content.main-content-locked {
+    overflow-y: hidden;
+}
+
 .dock-container {
     position: absolute;
     right: 20px;
@@ -148,7 +152,6 @@
     min-height: 300px;
     animation: shrink-and-settle 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid var(--light-border, rgba(0, 0, 0, 0.1));
-    transition: width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out, left 0.3s ease-in-out;
 }
 
 @media (prefers-color-scheme: dark) {
