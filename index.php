@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>开源的 Apple 苹果产品参数中心 / OpenHubweb</title>
+    <title>开源的 Apple 苹果产品参数中心 / Project Mammoth</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8f9fa">
@@ -227,7 +227,7 @@
                 <a href="#">
                     <img src="./public-static/img/logo.png?5224" height="30px" width="30px">
                 </a>
-                <div class="top_title" id="top_title">OpenHubweb / 苹果参数中心</div>
+                <div class="top_title" id="top_title">Project Mammoth / 苹果参数中心</div>
             </div>
             <div class="top_right_menu">
                 <a href="https://www.github.com/CelestialSayuki/OpenHubweb">源码</a>
@@ -246,7 +246,7 @@
             <div class="title">
                 <strong>未来工作</strong>
                 <br>
-                <span>说明：针对 OpenHubweb 的改造，以求与原网站功能形成区分。</span>
+                <span>说明：针对 Project Mammoth 的改造，以求与hubweb功能形成区分。</span>
             </div>
             <div class="card">
                 <ul>
@@ -263,9 +263,6 @@
                         <span>增加Speedometer测试</span>
                     </li>
                     <li>
-                        <span>完善系统支持性页面</span>
-                    </li>
-                    <li>
                         <span>提供部分测试工具的下载</span>
                     </li>
                 </ul>
@@ -277,6 +274,9 @@
             </div>
             <div class="card">
                 <ul id="update-history-list">
+                    <li>
+                        <span>2025.07.08：重写了比较页面</span>
+                    </li>
                     <li>
                         <span>2025.07.07：移除依赖 hubweb.cn 的支持文件</span>
                     </li>
@@ -314,6 +314,7 @@
                 <b style="font-style:oblique;">维护者Telegram：</b>
                 <a href="https://t.me/CelestialSayuki">@CelestialSayuki</a>
                 <br>
+            </div>
             <div style="text-align: center; margin-top: 50px; padding-bottom: 30px;">
                 <spen class="spen_ab">数据参考来源：Apple、Intel、Sony、Geekbench、Anandtech、Wikipedia 等</spen>
                 <br>
@@ -324,6 +325,7 @@
             <div id="dock-preview" class="dock-preview"></div> <div id="dock-container" class="dock-container"></div>
         </main>
     </div>
+    <script src="./public-static/js/table-generator.js"></script>
     <script src="./public-static/js/macui.js"></script>
 </body>
 </html>

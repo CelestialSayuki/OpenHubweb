@@ -160,10 +160,6 @@
         border-bottom-color: var(--dark-border, rgba(255, 255, 255, 0.12));
     }
 
-    .macos-window-body {
-        background-color: var(--dark-glass-bg, rgba(30, 30, 30, 0.8));
-    }
-
     .macos-window-title {
         color: var(--dark-text-secondary);
     }
@@ -220,7 +216,6 @@
 .macos-window-body {
     flex-grow: 1;
     overflow-y: auto;
-    background-color: var(--light-glass-bg, rgba(255, 255, 255, 0.7));
     margin: 0 5px 5px 5px;
     border-radius: 8px;
 }
@@ -553,7 +548,7 @@ ul {
     height: 350px;
     border-radius: var(--border-radius);
     margin-bottom: 40px;
-    background-image: url('/public-static/img/2025-hubweb-devices.webp');
+    background-image: url('/public-static/img/2025-devices.webp');
     background-size: cover;
     background-position: center;
     display: flex;

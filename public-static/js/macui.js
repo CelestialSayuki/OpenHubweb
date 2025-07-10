@@ -86,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 核心功能：创建、最小化、恢复窗口 ---
     async function createWindow(pageUrl, titleText) {
+        // 1. 检查窗口是否已存在，并根据状态执行相应操作
         if (openWindows.has(pageUrl)) {
             const windowData = openWindows.get(pageUrl);
             const windowEl = windowData.element;
@@ -99,17 +100,33 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const isComparisonPage = pageUrl.includes('/apple-device/') || pageUrl.includes('/apple-silicon/');
+
+        if (isComparisonPage) {
+            const styleId = 'comparison-ui-style';
+            if (!document.getElementById(styleId)) {
+                const link = document.createElement('link');
+                link.id = styleId;
+                link.rel = 'stylesheet';
+                link.href = './public-static/css/comparison-table-ui.css';
+                document.head.appendChild(link);
+            }
+        }
+
+        // 2. 创建新窗口的基本DOM结构和状态
         windowIdCounter++;
         const windowId = `dynamic-window-${windowIdCounter}`;
         const windowEl = document.createElement('div');
         windowEl.id = windowId;
         windowEl.className = 'macos-window';
         if (darkModeMatcher.matches) windowEl.classList.add('theme-dark');
+        
         const offset = (openWindows.size % 10) * 30;
         windowEl.style.top = `${mainContentArea.scrollTop + 50 + offset}px`;
         windowEl.style.left = `${100 + offset}px`;
         zIndexCounter++;
         windowEl.style.zIndex = zIndexCounter;
+
         windowEl.innerHTML = `
             <div class="macos-window-header">
                 <div class="macos-window-controls">
@@ -118,13 +135,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="control-btn control-maximize"></span>
                 </div>
                 <div class="macos-window-title">${titleText}</div>
+                <div class="header-actions"></div> 
             </div>
             <div class="macos-window-body"></div>`;
+
         windowEl.style.visibility = 'hidden';
         mainContentArea.appendChild(windowEl);
+
         const windowData = { id: windowId, element: windowEl, state: 'open', rect: null, dockItem: null, title: titleText };
         openWindows.set(pageUrl, windowData);
         
+        // 3. 为窗口绑定交互事件
         const header = windowEl.querySelector('.macos-window-header');
         const closeBtn = windowEl.querySelector('.control-close');
         const minimizeBtn = windowEl.querySelector('.control-minimize');
@@ -156,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentResizeDir === 'ne' || currentResizeDir === 'sw') newCursor = 'nesw-resize';
             windowEl.style.cursor = newCursor;
             windowEl.dataset.resizeDirection = currentResizeDir;
-        }
+        };
         windowEl.addEventListener('mousemove', handleMouseMoveForCursor);
 
         const handleWindowInteraction = (e) => {
@@ -184,35 +205,25 @@ document.addEventListener('DOMContentLoaded', () => {
         windowEl.addEventListener('mousedown', handleWindowInteraction);
 
         const performInteraction = (e) => {
-            if (action === 'dragging') { drag(e); }
-            else if (action === 'resizing') { resize(e); }
-        };
-
-        const drag = (e) => {
-            const newX = startLeft + e.clientX - startX;
-            const newY = startTop + e.clientY - startY;
-            windowEl.style.left = `${newX}px`;
-            windowEl.style.top = `${newY}px`;
-        };
-
-        const resize = (e) => {
-            const deltaX = e.clientX - startX;
-            const deltaY = e.clientY - startY;
-            let newWidth = startWidth;
-            let newHeight = startHeight;
-            let newLeft = startLeft;
-            let newTop = startTop;
-            if (resizeDirection.includes('e')) { newWidth = startWidth + deltaX; }
-            if (resizeDirection.includes('w')) { newWidth = startWidth - deltaX; newLeft = startLeft + deltaX; }
-            if (resizeDirection.includes('s')) { newHeight = startHeight + deltaY; }
-            if (resizeDirection.includes('n')) { newHeight = startHeight - deltaY; newTop = startTop + deltaY; }
-            if (newWidth >= minWidth) {
-                windowEl.style.width = `${newWidth}px`;
-                windowEl.style.left = `${newLeft}px`;
-            }
-            if (newHeight >= minHeight) {
-                windowEl.style.height = `${newHeight}px`;
-                windowEl.style.top = `${newTop}px`;
+            if (action === 'dragging') {
+                windowEl.style.left = `${startLeft + e.clientX - startX}px`;
+                windowEl.style.top = `${startTop + e.clientY - startY}px`;
+            } else if (action === 'resizing') {
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                let newWidth = startWidth, newHeight = startHeight, newLeft = startLeft, newTop = startTop;
+                if (resizeDirection.includes('e')) newWidth = startWidth + deltaX;
+                if (resizeDirection.includes('w')) { newWidth = startWidth - deltaX; newLeft = startLeft + deltaX; }
+                if (resizeDirection.includes('s')) newHeight = startHeight + deltaY;
+                if (resizeDirection.includes('n')) { newHeight = startHeight - deltaY; newTop = startTop + deltaY; }
+                if (newWidth >= minWidth) {
+                    windowEl.style.width = `${newWidth}px`;
+                    windowEl.style.left = `${newLeft}px`;
+                }
+                if (newHeight >= minHeight) {
+                    windowEl.style.height = `${newHeight}px`;
+                    windowEl.style.top = `${newTop}px`;
+                }
             }
         };
 
@@ -225,81 +236,100 @@ document.addEventListener('DOMContentLoaded', () => {
             document.removeEventListener('mouseup', stopInteraction);
         };
 
+        // 4. 加载并注入内容
         const windowBody = windowEl.querySelector('.macos-window-body');
-
         try {
-            const response = await fetch(pageUrl);
-            if (!response.ok) throw new Error(`网络请求失败: ${response.status}`);
-            const htmlText = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(htmlText, 'text/html');
+            if (isComparisonPage) {
+                windowBody.classList.add('comparison-container');
+                windowBody.innerHTML = `<div style="text-align:center; padding:50px; color: var(--light-text-secondary);">正在加载...</div>`;
+                windowEl.style.visibility = 'visible';
+                
+                const actionsContainer = header.querySelector('.header-actions');
+                const resetButton = document.createElement('a');
+                resetButton.href = '#';
+                resetButton.className = 'header-btn reset-btn';
+                resetButton.textContent = '重置';
+                
+                const filterButton = document.createElement('a');
+                filterButton.href = '#';
+                filterButton.className = 'header-btn filter-btn';
+                filterButton.textContent = '比较';
 
-            // ====================== 【核心修改点】 ======================
-            // 1. 抓取逻辑恢复为只处理两种已知页面类型
-            let newContent = doc.querySelector('.cd-products-comparison-table') || doc.querySelector('.container');
+                actionsContainer.appendChild(resetButton);
+                actionsContainer.appendChild(filterButton);
 
-            if (newContent) {
-                // 2. 根据内容类型，决定是否添加内边距
-                if (newContent.classList.contains('container')) {
-                    // 仅当内容是 .container 时，添加内边距并清理其自身样式
-                    windowBody.style.padding = '25px';
-                    newContent.style.marginTop = '0';
-                    newContent.style.minWidth = 'auto';
-                    newContent.style.padding = '0';
-                } else {
-                    // 其他情况（如对比表格页），不加内边距
-                    windowBody.style.padding = '0';
-                }
-            // ==========================================================
+                const jsonUrl = pageUrl + 'data.json';
+                const gridContainer = await renderComparisonTable(jsonUrl, windowBody, pageUrl);
 
-                const baseUrl = response.url;
-                newContent.querySelectorAll('img').forEach(img => {
-                    const relativeSrc = img.getAttribute('src');
-                    if (relativeSrc) img.setAttribute('src', new URL(relativeSrc, baseUrl).href);
-                });
-                newContent.querySelectorAll('*').forEach(el => {
-                    if (el.hasAttribute('style')) {
-                        let inlineStyle = el.getAttribute('style');
-                        let processedStyle = convertRemToPx(inlineStyle);
-                        el.setAttribute('style', processedStyle);
-                    }
-                });
-                const processAndInjectCss = async (cssText, cssBaseUrl, forWindowId) => {
-                    let processedCss = convertRemToPx(cssText);
-                    processedCss = rewriteCssUrls(processedCss, cssBaseUrl);
-                    const scopeSelector = `#${forWindowId} .macos-window-body`;
-                    let finalScopedCss;
-                    if (processedCss.includes('@media (prefers-color-scheme: dark)')) {
-                        const startIndex = processedCss.indexOf('{');
-                        const endIndex = processedCss.lastIndexOf('}');
-                        const darkStyles = processedCss.substring(startIndex + 1, endIndex);
-                        finalScopedCss = scopeCss(darkStyles, `#${forWindowId}.theme-dark .macos-window-body`);
-                    } else {
-                        finalScopedCss = scopeCss(processedCss, scopeSelector);
-                    }
-                    const styleTag = document.createElement('style');
-                    styleTag.textContent = finalScopedCss;
-                    styleTag.setAttribute('data-dynamic-style-for', forWindowId);
-                    document.head.appendChild(styleTag);
-                };
-                for (const link of doc.querySelectorAll('link[rel="stylesheet"]')) {
-                    const absoluteUrl = new URL(link.getAttribute('href'), baseUrl).href;
-                    const cssResponse = await fetch(absoluteUrl);
-                    const cssText = await cssResponse.text();
-                    await processAndInjectCss(cssText, absoluteUrl, windowId);
+                if (gridContainer) {
+                    const updateFilterState = () => {
+                        const selectedCount = gridContainer.querySelectorAll('.product-column.selected').length;
+                        if (selectedCount > 0) {
+                            filterButton.classList.add('active');
+                        } else {
+                            filterButton.classList.remove('active');
+                            gridContainer.classList.remove('is-filtering');
+                        }
+                    };
+
+                    // 使用事件委托，为整个表格容器设置唯一的点击监听器
+                    gridContainer.addEventListener('click', (e) => {
+                        // 查找被点击元素最近的.product-column父元素
+                        const product = e.target.closest('.product-column');
+                        
+                        // 如果没点在任何一个产品卡片内，则什么也不做
+                        if (!product) return;
+
+                        // 如果点击的是链接元素，阻止其默认行为，并且不进行选中操作
+                        if (e.target.closest('a')) {
+                            e.preventDefault();
+                            return;
+                        }
+                        
+                        // 对其他所有在卡片内的有效点击，执行选中/取消选中
+                        product.classList.toggle('selected');
+                        // 每次点击后都立即更新“比较”按钮的状态
+                        updateFilterState();
+                    });
+
+                    filterButton.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        if (filterButton.classList.contains('active')) {
+                            gridContainer.classList.add('is-filtering');
+                        }
+                    });
+
+                    resetButton.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        gridContainer.classList.remove('is-filtering');
+                        gridContainer.querySelectorAll('.product-column').forEach(p => p.classList.remove('selected'));
+                        updateFilterState();
+                    });
+
+                    updateFilterState();
+                    syncRowHeights(gridContainer);
                 }
-                for (const style of doc.querySelectorAll('style')) {
-                    await processAndInjectCss(style.textContent, baseUrl, windowId);
-                }
-                windowBody.appendChild(newContent);
+
             } else {
-                throw new Error('无法在目标页面找到 .cd-products-comparison-table 或 .container 容器。');
+               const response = await fetch(pageUrl);
+               if (!response.ok) throw new Error(`网络请求失败: ${response.status}`);
+               const htmlText = await response.text();
+               const parser = new DOMParser();
+               const doc = parser.parseFromString(htmlText, 'text/html');
+               const content = doc.body.firstElementChild;
+               if(content) {
+                    windowBody.appendChild(content);
+               } else {
+                    windowBody.innerHTML = `<div style="padding: 20px;">无法加载内容或页面为空。</div>`;
+               }
             }
         } catch (error) {
             console.error('加载窗口内容时出错:', error);
-            windowBody.innerHTML = `<div style="color:red; text-align:center; padding: 50px;">内容加载失败。</div>`;
+            windowBody.innerHTML = `<div style="color:red; text-align:center; padding: 50px;">内容加载失败。<br>${error.message}</div>`;
         } finally {
-            windowEl.style.visibility = 'visible';
+            if (windowEl.style.visibility === 'hidden') {
+               windowEl.style.visibility = 'visible';
+            }
         }
     }
 
@@ -391,8 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 页面初始化逻辑 ---
-
-    // 高级菜单折叠功能
+    // (此部分无改动)
     document.querySelectorAll('.sidebar-menu li').forEach(li => {
         if (li.querySelector('ul')) li.classList.add('has-submenu');
     });
@@ -447,7 +476,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 链接绑定逻辑
     document.querySelectorAll('.sidebar-menu a[href]').forEach(link => {
         const href = link.getAttribute('href');
         if (href && href !== '#' && !href.startsWith('http') && !href.startsWith('javascript:')) {
@@ -459,7 +487,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // "加载更多" 按钮
     const updatesList = document.getElementById('update-history-list');
     const showMoreBtn = document.getElementById('show-more-updates');
     const moreButtonListItem = document.querySelector('.more-btn-li');
@@ -493,7 +520,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 倒计时功能
     const interval = 1000;
     function ShowCountDown(year, month, day, hh, mm, ss, divname) {
         const now = new Date();
@@ -517,7 +543,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     window.setInterval(() => ShowCountDown(2025, 6, 10, 1, 0, 0, 'divdown2'), interval);
 
-    // Dock 图标悬停预览逻辑
     dockContainer.addEventListener('mouseover', (e) => {
         const hoveredItem = e.target.closest('.dock-item');
         if (!hoveredItem || !dockPreview) return;
