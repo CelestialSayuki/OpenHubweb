@@ -229,6 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 header.style.cursor = 'grabbing';
             }
             if (action) {
+                windowEl.style.transition = 'none'; // --[FIX]-- Disable transition on drag start
                 document.addEventListener('mousemove', performInteraction);
                 document.addEventListener('mouseup', stopInteraction);
             }
@@ -253,6 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const stopInteraction = () => {
+            windowEl.style.transition = ''; // --[FIX]-- Re-enable transition on drag end
             action = '';
             header.style.cursor = 'move';
             windowEl.style.cursor = 'default';
