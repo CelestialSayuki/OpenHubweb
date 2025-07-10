@@ -235,6 +235,34 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+/* --- 用于多列数据项（如电池、GPU）的方块样式 --- */
+
+/* 仅当 li 元素内部包含特定子元素时，才应用以下flex布局 */
+.data-list li:has(.li-div-score),
+.data-list li:has(.li-div-gpu),
+.data-list li:has(.li-div-cpu),
+.data-list li:has(.li-div-npu) {
+    justify-content: space-around;
+    gap: 5px;
+    padding: 8px;
+}
+
+/* 定义方块本身的外观 */
+.li-div-score,
+.li-div-gpu,
+.li-div-cpu,
+.li-div-npu {
+    flex: 1;
+    background-color: rgba(120, 120, 128, 0.12);
+    border-radius: 6px;
+    padding: 8px 4px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.4;
+    border: 1px solid transparent;
+}
+
+
 @media (prefers-color-scheme: dark) {
     .macos-window-body.comparison-container::-webkit-scrollbar-thumb {
         background-color: rgba(100,100,100,0.7);
@@ -273,5 +301,13 @@
     }
     .swatch {
         border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* --- 多列数据项在暗色模式下的样式 --- */
+    .li-div-score,
+    .li-div-gpu,
+    .li-div-cpu,
+    .li-div-npu {
+        background-color: rgba(84, 84, 88, 0.24);
     }
 }

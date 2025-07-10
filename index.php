@@ -165,13 +165,7 @@
                             <a href="./apple-tools/os-version/">系统发布历史</a>
                         </li>
                         <li>
-                            <a href="./apple-tools/price/">设备发售价格</a>
-                        </li>
-                        <li>
                             <a href="./apple-tools/document/">苹果文档汇总</a>
-                        </li>
-                        <li>
-                            <a href="https://checkcoverage.apple.com">官网序列号查询</a>
                         </li>
                         <li>
                             <a href="./apple-tools/memory-latency/">内存延迟测试</a>
@@ -274,6 +268,9 @@
             </div>
             <div class="card">
                 <ul id="update-history-list">
+                    <li>
+                        <span>2025.07.10：删除设备发售价格，官网序列号查询</span>
+                    </li>
                     <li>
                         <span>2025.07.08：重写了比较页面</span>
                     </li>
