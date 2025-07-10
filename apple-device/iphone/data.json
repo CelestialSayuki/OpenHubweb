@@ -1924,7 +1924,7 @@
         "unlockMethod": "触控 ID",
         "batteryCapacity": "6.91Wh (1810mAh)",
         "chargeMethod": "闪电接口",
-        "batteryLife": "<div class=\"li-div-score li-div-score-c\">视频<br>11小时</div>\n\t\t\t\t\t\t\t<div class=\"li-div-score li-div-score-c\">互联网<br>10小时</div>\n\t\t\t\t\t\t\t<div class=\"li-div-score li-div-score-c\">音频<br>50小时</div>",
+        "batteryLife": "视频<br>11小时</div>\n\t\t\t\t\t\t\t<div class=\"li-div-score li-div-score-c\">互联网<br>10小时</div>\n\t\t\t\t\t\t\t<div class=\"li-div-score li-div-score-c\">音频<br>50小时</div>",
         "audioIO": "麦克风 ×3 + 扬声器 ×1",
         "dimensionsWeight": "67×138.1×6.9mm, 129g",
         "sim": "单卡",

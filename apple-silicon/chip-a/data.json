@@ -1,0 +1,218 @@
+{
+  "title": "苹果 A 系列参数对比",
+  "lastUpdated": "2025.06.16",
+  "featureGroups": [
+    {
+      "groupName": "基础",
+      "features": [
+        { "id": "displayType", "name": "型号展示" },
+        { "id": "slogan", "name": "宣传口号" },
+        { "id": "releaseDate", "name": "发布时间" }
+      ]
+    },
+    {
+      "groupName": "概要",
+      "features": [
+        { "id": "processTech", "name": "技术工艺" },
+        { "id": "transistorCount", "name": "晶体管数" },
+        { "id": "dieSize", "name": "裸片尺寸" }
+      ]
+    },
+    {
+      "groupName": "CPU",
+      "features": [
+        { "id": "cpuSpec", "name": "CPU规格" },
+        { "id": "coreArchitecture", "name": "内核架构" },
+        { "id": "microArchitecture", "name": "微架构<br>(解码发射)" },
+        { "id": "l1iCache", "name": "L1指令缓存" },
+        { "id": "l1dCache", "name": "L1数据缓存" },
+        { "id": "l2Cache", "name": "L2共享缓存" },
+        { "id": "mlAccelerator", "name": "ML加速器" }
+      ]
+    },
+    {
+      "groupName": "GPU",
+      "features": [
+        { "id": "gpuSpec", "name": "GPU规格" },
+        { "id": "gpuModel", "name": "GPU型号" },
+        { "id": "gpuFeatures", "name": "GPU特性" },
+        { "id": "gpuL2Cache", "name": "L2缓存" }
+      ]
+    },
+    {
+      "groupName": "ANE",
+      "features": [
+        { "id": "aneInfo", "name": "神经引擎" },
+        { "id": "aneCoreCache", "name": "核心缓存" },
+        { "id": "aneSram", "name": "SRAM" }
+      ]
+    },
+    {
+      "groupName": "引擎",
+      "features": [
+        { "id": "hardwareAccel", "name": "硬件加速" },
+        { "id": "mediaEngine", "name": "媒体引擎" }
+      ]
+    },
+    {
+      "groupName": "缓存",
+      "features": [
+        { "id": "l3Slc", "name": "L3/SLC" }
+      ]
+    },
+    {
+      "groupName": "接口",
+      "features": [
+        { "id": "internalIo", "name": "内置I/O" }
+      ]
+    },
+    {
+      "groupName": "RAM",
+      "features": [
+        { "id": "packaging", "name": "封装方式" },
+        { "id": "ramSpec", "name": "内存规格" },
+        { "id": "ramCapacity", "name": "RAM容量<br>(通道/带宽)" }
+      ]
+    },
+    {
+      "groupName": "ROM",
+      "features": [
+        { "id": "storageProtocol", "name": "传输协议" }
+      ]
+    },
+    {
+      "groupName": "其他",
+      "features": [
+        { "id": "usedIn", "name": "使用设备" }
+      ]
+    }
+  ],
+  "products": [
+    {
+      "name": "A18 Pro",
+      "generation": "(Tahiti, APL1V07-T8140)",
+      "image": "img/A18_Pro_APL1V07_temp.webp",
+      "images": {
+        "芯片图": "img/A18_Pro_APL1V07_temp.webp",
+        "宣传图": "img/A18_Pro_product.webp",
+        "结构图": "img/A18_Pro_structure.webp",
+        "Die": "img/die/die_shot_A18Pro_chipwise_temp.webp"
+      },
+      "data": {
+        "displayType": ["芯片图", "宣传图", "结构图", "Die"],
+        "slogan": "性能和能效双双逆天。",
+        "releaseDate": "2024.09",
+        "processTech": "TSMC N3E",
+        "transistorCount": "17.3~18.0 billion",
+        "dieSize": "8.44×13.00 (109.72mm²)",
+        "cpuSpec": "<div class=\"li-div-cpu li-div-cpu-b\">4.04GHz ×2<br>2.42GHz ×4</div>",
+        "coreArchitecture": "64-bit ARMv9.2-A",
+        "microArchitecture": "Everest (V3) + Sawtooth (V3)<br>(10-wide + 5-wide)",
+        "l1iCache": "2×192KB + 4×128KB",
+        "l1dCache": "2×128KB + 4×64KB",
+        "l2Cache": "大核 16MB + 小核 4MB",
+        "mlAccelerator": "SME + AMX Version 5",
+        "gpuSpec": "<div class=\"li-div-gpu li-div-gpu-b\">Apple ×6<br>96 EUs<br>768 ALUs<br>@1470MHz</div>",
+        "gpuModel": "Apple9 家族, Apple G17P",
+        "gpuFeatures": "硬件光线追踪, 支持 Metal 3 & 4",
+        "gpuL2Cache": "768KB (192KB × 4 组)",
+        "aneInfo": "<div class=\"li-div-npu li-div-npu-b\">H17_Theia_D9x<br>16 核 @ 35TOPS (FP16 稀疏化)<br>@2172MHz</div>",
+        "aneCoreCache": "64KB ×16 核",
+        "aneSram": "2MB ANE SRAM",
+        "hardwareAccel": "H.264, HEVC, ProRes",
+        "mediaEngine": "<div class=\"li-div-npu li-div-npu-b\">Video Decode ×1<br>Video Encode ×1<br>ProRes Encode/Decode ×1<br>AV1 Decode ×1</div>",
+        "l3Slc": "24MB System Level Cache",
+        "internalIo": "Camera Serial Interface ×13<br>PCIe ×(2+4) Lines",
+        "packaging": "PoP 叠层封装",
+        "ramSpec": "LPDDR5X-7500",
+        "ramCapacity": "<div class=\"li-div-score li-div-score-b\">8GB<br>总位宽 64-bit<br>60GB/s</div>",
+        "storageProtocol": "NVMe",
+        "usedIn": "<div class=\"li-div-device li-div-device-b\">iPhone 16 Pro<br>iPhone 16 Pro Max</div>"
+      }
+    },
+    {
+      "name": "A18",
+      "generation": "(Tupai, APL1V08-T8140)",
+      "image": "img/A18_APL1V08_temp.webp",
+      "images": {
+        "芯片图": "img/A18_APL1V08_temp.webp",
+        "宣传图": "img/A18_product.webp",
+        "结构图": "img/A18_structure.webp",
+        "Die": "img/die/die_shot_A18_chipwise_temp.webp"
+      },
+      "data": {
+        "displayType": ["芯片图", "宣传图", "结构图", "Die"],
+        "slogan": "畅行未来的快。",
+        "releaseDate": "2024.09",
+        "processTech": "TSMC N3E",
+        "transistorCount": "≈15.2 billion",
+        "dieSize": "7.84×11.79 (92.43mm²)",
+        "cpuSpec": "<div class=\"li-div-cpu li-div-cpu-b\">4.04GHz ×2<br>2.42GHz ×4</div>",
+        "coreArchitecture": "64-bit ARMv9.2-A",
+        "microArchitecture": "Everest (V3) + Sawtooth (V3)<br>(10-wide + 5-wide)",
+        "l1iCache": "2×192KB + 4×128KB",
+        "l1dCache": "2×128KB + 4×64KB",
+        "l2Cache": "大核 8MB + 小核 4MB",
+        "mlAccelerator": "SME + AMX Version 5",
+        "gpuSpec": "<div class=\"li-div-gpu li-div-gpu-a\">Apple ×4<br>64 EUs<br>512 ALUs<br>@1338MHz</div><div class=\"li-div-gpu li-div-gpu-a\">Apple ×5<br>80 EUs<br>640 ALUs<br>@1338MHz</div>",
+        "gpuModel": "Apple9 家族, Apple G17P",
+        "gpuFeatures": "硬件光线追踪, 支持 Metal 3 & 4",
+        "gpuL2Cache": "768KB (192KB × 4 组)",
+        "aneInfo": "<div class=\"li-div-npu li-div-npu-b\">H17_Theia_D9x<br>16 核 @ 35TOPS (FP16 稀疏化)<br>@2172MHz</div>",
+        "aneCoreCache": "64KB ×16 核",
+        "aneSram": "2MB ANE SRAM",
+        "hardwareAccel": "H.264, HEVC, ProRes",
+        "mediaEngine": "<div class=\"li-div-npu li-div-npu-b\">Video Decode ×1<br>Video Encode ×1<br>AV1 Decode ×1<br><br></div>",
+        "l3Slc": "12MB System Level Cache",
+        "internalIo": "Camera Serial Interface ×8<br>PCIe ×3 Lines",
+        "packaging": "PoP 叠层封装",
+        "ramSpec": "LPDDR5X-7500",
+        "ramCapacity": "<div class=\"li-div-score li-div-score-b\">8GB<br>总位宽 64-bit<br>60GB/s</div>",
+        "storageProtocol": "NVMe",
+        "usedIn": "<div class=\"li-div-device li-div-device-b\">iPhone 16<br>iPhone 16 Plus<br>iPhone 16e</div>"
+      }
+    },
+    {
+        "name": "A17 Pro",
+        "generation": "(Coll, APL1V02-T8130)",
+        "image": "img/A17_Pro_APL1V02_temp.png",
+        "images": {
+            "芯片图": "img/A17_Pro_APL1V02_temp.png",
+            "宣传图": "img/A17_Pro_product.webp",
+            "结构图": "img/A17_Pro_structure.webp",
+            "Die": "img/die/die_shot_A17_Techinsights_temp.webp"
+        },
+        "data": {
+            "displayType": ["芯片图", "宣传图", "结构图", "Die"],
+            "slogan": "性能直接逆天。",
+            "releaseDate": "2023.09",
+            "processTech": "TSMC N3B",
+            "transistorCount": "19.0 billion",
+            "dieSize": "8.58×13.26 (113.77mm²)",
+            "cpuSpec": "<div class=\"li-div-cpu li-div-cpu-b\">3.78GHz ×2<br>2.11GHz ×4</div>",
+            "coreArchitecture": "64-bit ARMv8.6-A",
+            "microArchitecture": "Everest (V2) + Sawtooth (V2)<br>(9-wide + 5-wide)",
+            "l1iCache": "2×192KB + 4×128KB",
+            "l1dCache": "2×128KB + 4×64KB",
+            "l2Cache": "大核 16MB + 小核 4MB",
+            "mlAccelerator": "AMX Version 4",
+            "gpuSpec": "<div class=\"li-div-gpu li-div-gpu-a\">Apple ×5<br>80 EUs<br>640 ALUs<br>@1338MHz</div><div class=\"li-div-gpu li-div-gpu-a\">Apple ×6<br>96 EUs<br>768 ALUs<br>@1338MHz</div>",
+            "gpuModel": "Apple9 家族, Apple G16P",
+            "gpuFeatures": "硬件光线追踪, 支持 Metal 3 & 4",
+            "gpuL2Cache": "768KB (192KB × 4 组)",
+            "aneInfo": "<div class=\"li-div-npu li-div-npu-b\">H16x_Iaso_D8x<br>16 核 @ 35TOPS (FP16 稀疏化)<br>@2160MHz</div>",
+            "aneCoreCache": "64KB ×16 核",
+            "aneSram": "2MB ANE SRAM",
+            "hardwareAccel": "H.264, HEVC, ProRes",
+            "mediaEngine": "<div class=\"li-div-npu li-div-npu-b\">Video Decode ×1<br>Video Encode ×1<br>ProRes Encode/Decode ×1<br>AV1 Decode ×1</div>",
+            "l3Slc": "24MB System Level Cache",
+            "internalIo": "Camera Serial Interface ×12<br>PCIe ×(2+4) Lines",
+            "packaging": "PoP 叠层封装",
+            "ramSpec": "LPDDR5-6400",
+            "ramCapacity": "<div class=\"li-div-score li-div-score-b\">8GB<br>总位宽 64-bit<br>51.2GB/s</div>",
+            "storageProtocol": "NVMe",
+            "usedIn": "<div class=\"li-div-device li-div-device-b\">iPhone 15 Pro<br>iPhone 15 Pro Max<br>iPad mini (A17 Pro)</div>"
+        }
+    }
+  ]
+}
