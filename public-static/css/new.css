@@ -170,6 +170,33 @@
     }
 }
 
+@media (prefers-color-scheme: dark) {
+    .macos-window-body .category-switcher a {
+        color: var(--dark-text-secondary, #8b949e);
+    }
+    .macos-window-body .category-switcher a.active {
+        color: var(--dark-text, #c9d1d9);
+    }
+
+    .macos-window-body .table {
+        color: var(--dark-text, #c9d1d9);
+    }
+
+    .macos-window-body .table th,
+    .macos-window-body .table td {
+        border-bottom-color: var(--dark-border, rgba(255, 255, 255, 0.15));
+    }
+
+    .macos-window-body .table thead th {
+        background: var(--dark-glass-bg, rgba(30, 30, 30, 0.7));
+        border-bottom-color: var(--dark-border, rgba(255, 255, 255, 0.2));
+    }
+
+    .macos-window-body .table-hover tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+    }
+}
+
 .macos-window-header {
     height: 40px;
     display: flex;

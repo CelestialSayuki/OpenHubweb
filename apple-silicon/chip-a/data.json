@@ -799,7 +799,7 @@
         "processTech": "TSMC 20nm",
         "transistorCount": "≈2 billion",
         "dieSize": "8.51×10.51 (89.44mm²)",
-        "cpuSpec": "<div class=\"li-div-cpu li-div-cpu-c\">1.10GHz<br>×2</div><div class=\"li-div-cpu li-div-cpu-c\">1.40GHz<br>×2</div><div class=\"li-div-cpu li-div-cpu-c\">1.50GHz<br>×2</div>",
+        "cpuSpec": "<div class=\"li-div-cpu li-div-cpu-c\">1.10G ×2</div><div class=\"li-div-cpu li-div-cpu-c\">1.40G ×2</div><div class=\"li-div-cpu li-div-cpu-c\">1.50G ×2</div>",
         "coreArchitecture": "64-bit ARMv8.0-A",
         "microArchitecture": "Typhoon<br>(6-wide)",
         "l1iCache": "2×64KB",
